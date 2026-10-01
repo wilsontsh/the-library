@@ -29,36 +29,42 @@
   --f-type:"Courier Prime","Courier New",monospace;
   color-scheme:dark;
 }
-html,body{height:100%;margin:0;background:var(--surround);color:var(--text);font-family:var(--f-ui);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
-.viewport{position:fixed;inset:0;overflow:hidden;background:var(--surround);touch-action:manipulation}
-.stage{position:absolute;left:0;top:0;width:1180px;height:820px;transform-origin:0 0;overflow:hidden;background:#0b0c0c}
+html,body{height:100%;margin:0;background:var(--surround);color:var(--text);font-family:var(--f-ui);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;overscroll-behavior:none;overflow:hidden}
+.viewport{position:fixed;inset:0;overflow:hidden;background:radial-gradient(120% 90% at 50% 40%,#16120e 0,#0a0908 60%,#060606 100%);touch-action:manipulation}
+.stage{position:absolute;left:0;top:0;width:1180px;height:820px;transform-origin:0 0;overflow:hidden;background:#0b0c0c;will-change:transform;box-shadow:0 0 80px 30px rgba(0,0,0,.55)}
+.stage.pan{transition:transform .62s cubic-bezier(.22,.72,.18,1)}
+.view.wallview{touch-action:none}
+.ui{position:fixed;inset:0;z-index:50;pointer-events:none}
+.ui .topbar,.ui .bottombar,#chrome{pointer-events:none}
+.ui .topbar>*,.ui .bottombar>*,.ui .scrim,.ui .toast,.ui .arrange-banner,.ui .empty-note,.ui .pscroll,.ui .pcat,.ui .card-nav{pointer-events:auto}
+button,.pick,.spine,.icon-btn,.primary,.menu-item{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 button{font:inherit;color:inherit}
 button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--gilt);outline-offset:2px}
 .view{position:absolute;inset:0}
 .bg{position:absolute;left:0;top:0;width:1180px;height:820px;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
 
 /* ---------- quiet chrome ---------- */
-.topbar{position:absolute;left:0;right:0;top:0;height:84px;display:flex;align-items:center;gap:12px;padding:0 28px;box-sizing:border-box;background:linear-gradient(180deg,rgba(6,7,7,.55),rgba(6,7,7,0));z-index:40}
+.topbar{position:absolute;left:0;right:0;top:0;height:calc(84px + env(safe-area-inset-top));display:flex;align-items:center;gap:12px;padding:env(safe-area-inset-top) max(28px,env(safe-area-inset-right)) 0 max(28px,env(safe-area-inset-left));box-sizing:border-box;background:linear-gradient(180deg,rgba(6,7,7,.62),rgba(6,7,7,0));z-index:40}
 .wordmark{display:flex;flex-direction:column;margin-right:auto;gap:2px}
 .wordmark b{font-family:var(--f-display);font-weight:600;font-size:27px;letter-spacing:.01em;color:var(--gilt);line-height:1}
 .wordmark span{font-size:12px;color:var(--muted);letter-spacing:.02em}
 .search{position:relative;display:flex;align-items:center;gap:8px;width:300px;height:44px;padding:0 14px;box-sizing:border-box;border-radius:22px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.search input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--text);font:15px var(--f-ui)}
+.search input{flex:1;min-width:0;background:none;border:0;outline:none;color:var(--text);font:16px var(--f-ui)}
 .search input::placeholder{color:var(--faint)}
 .icon-btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:44px;min-width:44px;padding:0 12px;box-sizing:border-box;border-radius:22px;background:var(--glass);border:1px solid var(--line);color:var(--text);font-size:14px;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.icon-btn:hover{background:var(--glass-hi)}
+@media (hover:hover){.icon-btn:hover{background:var(--glass-hi)}.ghost:hover{color:var(--text)}.result:hover{background:rgba(212,185,122,.1)}}
+.icon-btn:active,.pick:active,.cand:active,.menu-item:active,.seg button:active{filter:brightness(1.25)}
 .icon-btn svg{flex-shrink:0}
 .primary{display:inline-flex;align-items:center;justify-content:center;gap:7px;height:44px;padding:0 6px;box-sizing:border-box;border-style:solid;border-width:12px 16px;border-image:url(ui_brass.png) 62 70 fill / 12px 16px stretch;background:none;color:#2a1c09;font:600 15px var(--f-ui);text-shadow:0 1px 0 rgba(255,240,205,.5);cursor:pointer;white-space:nowrap}
 .primary:active{filter:brightness(.92)}
 .ghost{background:none;border:0;color:var(--muted);font-size:14px;cursor:pointer;padding:10px 8px;min-height:44px}
-.ghost:hover{color:var(--text)}
 .results{position:absolute;top:52px;right:0;width:360px;max-height:420px;overflow:auto;border-radius:12px;background:rgba(14,16,15,.94);border:1px solid var(--line);box-shadow:0 20px 50px rgba(0,0,0,.6);padding:6px;z-index:60}
 .result{display:flex;align-items:center;gap:12px;width:100%;padding:10px;border:0;border-radius:8px;background:none;text-align:left;cursor:pointer}
-.result:hover,.result:focus{background:rgba(212,185,122,.1)}
+.result:focus{background:rgba(212,185,122,.1)}
 .result .sw{width:10px;height:34px;border-radius:2px;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.5)}
 .result b{display:block;font:500 16px var(--f-book);color:var(--text)}
 .result small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-.bottombar{position:absolute;left:0;right:0;bottom:0;height:110px;display:flex;align-items:center;justify-content:space-between;padding:22px 28px 0;box-sizing:border-box;z-index:30}
+.bottombar{position:absolute;left:0;right:0;bottom:0;height:calc(92px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:space-between;padding:0 max(28px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(28px,env(safe-area-inset-left));box-sizing:border-box;z-index:30;background:linear-gradient(0deg,rgba(6,7,7,.5),rgba(6,7,7,0))}
 .pager{display:flex;align-items:center;gap:10px}
 .pager .where{font-size:13px;color:var(--muted);min-width:170px;text-align:center}
 .cases{display:flex;gap:6px;align-items:flex-end}
@@ -67,7 +73,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .case-dot.on{border-color:var(--gilt);box-shadow:0 0 8px rgba(212,185,122,.35)}
 .reading{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
 .reading b{font:500 15px var(--f-book);color:var(--text)}
-.toast{position:absolute;left:50%;bottom:120px;transform:translateX(-50%);padding:11px 18px;border-radius:22px;background:rgba(14,16,15,.92);border:1px solid var(--line);font-size:14px;color:var(--text);z-index:90;transition:opacity .3s}
+.toast{position:absolute;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));max-width:calc(100vw - 40px);box-sizing:border-box;text-align:center;transform:translateX(-50%);padding:11px 18px;border-radius:22px;background:rgba(14,16,15,.92);border:1px solid var(--line);font-size:14px;color:var(--text);z-index:90;transition:opacity .3s}
 
 /* ---------- the wall ---------- */
 .wall{position:absolute;inset:0;transform-origin:0 0;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
@@ -89,8 +95,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .drag-ghost{position:absolute;z-index:200;pointer-events:none;transform:rotate(6deg);box-shadow:16px 22px 26px rgba(0,0,0,.65)}
 .insert{position:absolute;width:4px;border-radius:2px;background:linear-gradient(#fff3cf,#d4b97a);box-shadow:0 0 12px 4px rgba(255,214,140,.55);z-index:150;pointer-events:none}
 .wall.zoomed .shelf:not(.z){filter:brightness(.4)}.wall.zoomed .plate{opacity:.4}.shelf{transition:filter .4s}
-.arrange-banner{position:absolute;left:50%;top:92px;transform:translateX(-50%);display:flex;align-items:center;gap:14px;padding:6px 6px 6px 18px;border-radius:26px;background:rgba(14,16,15,.9);border:1px solid var(--line);z-index:45;font-size:14px;color:var(--text)}
-.empty-note{position:absolute;left:50%;top:360px;transform:translateX(-50%);width:420px;text-align:center;padding:26px;border-radius:14px;background:rgba(10,11,10,.82);border:1px solid var(--line);z-index:10}
+.arrange-banner{position:absolute;left:50%;top:calc(92px + env(safe-area-inset-top));max-width:calc(100vw - 24px);box-sizing:border-box;transform:translateX(-50%);display:flex;align-items:center;gap:14px;padding:6px 6px 6px 18px;border-radius:26px;background:rgba(14,16,15,.9);border:1px solid var(--line);z-index:45;font-size:14px;color:var(--text)}
+.empty-note{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,calc(100vw - 40px));box-sizing:border-box;text-align:center;padding:26px;border-radius:14px;background:rgba(10,11,10,.82);border:1px solid var(--line);z-index:10}
 .empty-note h2{margin:0 0 8px;font:600 26px var(--f-display);color:var(--gilt)}
 .empty-note p{margin:0 0 16px;font:17px/1.5 var(--f-book);color:var(--text)}
 
@@ -126,7 +132,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .lined{background:repeating-linear-gradient(180deg,transparent 0 33px,rgba(60,45,30,.16) 33px 34px);line-height:34px}
 .quote{padding:8px 0 8px 16px;border-left:2px solid rgba(122,42,31,.5);margin:10px 0}
 .quote textarea{font:italic 18px/1.5 var(--f-book)}
-.quote input{width:120px;border:0;background:none;font:12px var(--f-ui);color:var(--ink-muted);outline:none}
+.quote input{width:120px;border:0;background:none;font:16px var(--f-ui);color:var(--ink-muted);outline:none}
 .pg-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 12px;border-radius:18px;border:1px solid var(--ink-line);background:none;color:var(--ink-muted);font:13px var(--f-ui);cursor:pointer}
 .cover{position:relative;width:150px;height:225px;border-radius:1px 4px 4px 1px;box-shadow:3px 6px 12px rgba(60,40,20,.4);overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center}
 .cover::before{content:"";position:absolute;inset:9px;border:1px solid rgba(212,185,122,.7);box-shadow:inset 0 0 0 4px transparent,inset 0 0 0 5px rgba(212,185,122,.35)}
@@ -137,12 +143,17 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .saved{font:12px var(--f-ui);color:var(--ink-muted)}
 
 /* ---------- sheets (menu, add, ledger) ---------- */
-.scrim{position:absolute;inset:0;background:rgba(4,5,5,.6);z-index:100;display:flex;align-items:center;justify-content:center}
-.sheet{position:relative;box-sizing:border-box;border-style:solid;border-width:26px;border-image:url(ui_leather.png) 58 fill / 26px stretch;color:var(--text);max-height:780px;overflow:auto;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.scrim{position:absolute;inset:0;background:rgba(4,5,5,.58);z-index:100;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 12px);box-sizing:border-box}
+.scrim.enter{animation:fade .28s ease-out}.scrim.enter .sheet{animation:rise .42s cubic-bezier(.2,.8,.2,1)}
+@keyframes fade{from{opacity:0}}@keyframes rise{from{transform:translateY(28px) scale(.985);opacity:0}}
+.sheet{position:relative;box-sizing:border-box;border-style:solid;border-width:26px;border-image:url(ui_leather.png) 58 fill / 26px stretch;color:var(--text);max-width:100%;max-height:100%;overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;box-shadow:0 30px 60px rgba(0,0,0,.6)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.add-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:26px;margin-top:16px}
+.feel-row{display:flex;gap:10px;align-items:flex-start}.feel-row>.note{width:84px;flex-shrink:0;padding-top:8px}.feel-row>div{display:flex;flex-wrap:wrap;gap:6px;flex:1}
 .sheet h2{margin:0;font:600 28px var(--f-display);color:var(--gilt)}
 .sheet .lede{margin:4px 0 0;font:16px/1.45 var(--f-book);color:var(--muted)}
 .sheet label.f{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
-.sheet input[type=text],.sheet input[type=search],.sheet input[type=number],.sheet input[type=month],.sheet select,.sheet textarea{box-sizing:border-box;width:100%;min-height:42px;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--text);font:15px var(--f-ui);outline:none}
+.sheet input[type=text],.sheet input[type=search],.sheet input[type=number],.sheet input[type=month],.sheet select,.sheet textarea{box-sizing:border-box;width:100%;min-height:42px;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--text);font:16px var(--f-ui);outline:none;-webkit-appearance:none;appearance:none}
 .sheet textarea{font:16px/1.5 var(--f-book);resize:vertical}
 .sheet .row{display:flex;gap:10px;align-items:center}
 .seg{display:inline-flex;padding:3px;border-radius:22px;border:1px solid var(--line);background:rgba(0,0,0,.25)}
@@ -171,13 +182,88 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .cardtext .zh{font-family:"PingFang TC","Noto Sans TC",sans-serif;font-size:12px}
 .card-nav{position:absolute;display:flex;align-items:center;gap:10px;z-index:5}
 
-@media (prefers-reduced-motion:reduce){.wall,.spine,.ribbon{transition:none}}
+
+/* ---------- portrait / phone ---------- */
+.lbl{white-space:nowrap}
+.search-toggle{display:none}
+body.compact .topbar{height:auto;min-height:calc(60px + env(safe-area-inset-top));flex-wrap:wrap;gap:8px;padding:calc(env(safe-area-inset-top) + 8px) max(14px,env(safe-area-inset-right)) 10px max(14px,env(safe-area-inset-left));background:linear-gradient(180deg,rgba(6,7,7,.86),rgba(6,7,7,.6) 70%,rgba(6,7,7,0))}
+body.compact .wordmark{min-width:0;flex:1 1 0}
+body.compact .wordmark span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.compact .wordmark b{font-size:23px}
+body.compact .wordmark span{font-size:11.5px}
+body.compact .topbar .lbl{display:none}
+body.compact .icon-btn{padding:0;width:44px}
+body.compact .primary.addbtn{padding:0 2px;min-width:44px}
+body.compact .search-toggle{display:inline-flex}
+body.compact .topbar .search{order:20;width:100%;display:none}
+body.compact .topbar .search.open{display:flex}
+body.compact .results{position:fixed;top:auto;left:12px;right:12px;width:auto;margin-top:10px}
+body.compact .bottombar{height:calc(76px + env(safe-area-inset-bottom));padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}
+body.compact .reading{display:none}
+body.portrait .bottombar .cases{display:none}
+.bayname{display:none;flex-direction:column;align-items:center;gap:6px}
+body.portrait .bayname{display:flex}
+body.portrait .pager .where{display:none}
+body.portrait .pager{flex:1;justify-content:space-between}
+.bayname b{font:600 17px var(--f-display);color:var(--gilt);letter-spacing:.02em}
+.bayname span{font-size:12px;color:var(--muted)}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;max-width:220px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(212,185,122,.25)}
+.dots i.on{background:var(--gilt);box-shadow:0 0 6px rgba(212,185,122,.6)}
+body.compact .scrim{align-items:flex-end;padding:calc(env(safe-area-inset-top) + 8px) 0 0}
+body.compact .sheet{width:100%!important;border-width:20px 16px calc(20px + env(safe-area-inset-bottom));border-image:url(ui_leather.png) 58 fill / 20px 16px stretch;max-height:100%}
+body.compact .scrim.enter .sheet{animation:riseUp .42s cubic-bezier(.2,.8,.2,1)}
+@keyframes riseUp{from{transform:translateY(60%)}}
+body.compact .sheet h2{font-size:25px}
+body.compact .grid2{grid-template-columns:1fr}
+body.compact .add-grid{grid-template-columns:1fr;gap:18px}
+body.compact .feel-row{flex-direction:column;gap:6px}body.compact .feel-row>.note{width:auto;padding-top:0}
+body.compact .pick{min-height:36px;font-size:15px}
+body.compact .catseg{order:20;width:100%;justify-content:space-between;box-sizing:border-box}body.compact .catseg button{flex:1;padding:0 6px}
+body.compact .arrange-banner{top:auto;bottom:calc(84px + env(safe-area-inset-bottom));font-size:13px;padding-left:14px}
+
+/* phone: the open book becomes one long parchment page */
+.pscroll{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:calc(env(safe-area-inset-top) + 70px) 10px calc(env(safe-area-inset-bottom) + 24px);box-sizing:border-box}
+.pb{position:relative;max-width:760px;margin:0 auto;color:var(--ink);background:url(parchment.jpg) 0 0/100% auto repeat-y,#e9dcc0;border-radius:3px 6px 6px 3px;box-shadow:inset 0 0 40px rgba(120,86,40,.35),inset 14px 0 18px -10px rgba(80,55,25,.45),0 18px 40px rgba(0,0,0,.6);padding:26px 22px 30px}
+.pb .head{display:flex;gap:16px;align-items:flex-start}
+.pb .cover{width:104px;height:156px;flex-shrink:0;gap:6px}
+.pb .cover b{font-size:11.5px;padding:0 10px}.pb .cover small{font-size:8px}
+.pb .btitle{font-size:29px}
+.pb .ribbons{position:sticky;top:-26px;left:auto;margin:22px -22px 0;padding:0 16px;gap:8px;background:linear-gradient(180deg,rgba(233,220,192,.96) 60%,rgba(233,220,192,0));z-index:3;height:70px;align-items:flex-start}
+.pb .ribbon{width:auto;flex:1;height:58px!important;padding-top:14px;font-size:13px}
+.pb .ribbon[aria-selected=true]{height:68px!important}
+.pb .tabbody{margin-top:6px;min-height:240px}
+.pb .meta{margin-top:20px}
+.pb .foot{margin-top:22px;padding-top:12px;border-top:1px solid var(--ink-line);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pb .plate-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:22px;gap:12px}
+
+/* phone: card catalogue */
+.pcat{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:calc(env(safe-area-inset-top) + 120px) 14px calc(env(safe-area-inset-bottom) + 24px);box-sizing:border-box;background:linear-gradient(180deg,rgba(8,7,6,.55),rgba(8,7,6,.35) 40%,rgba(8,7,6,.7))}
+.pcat>*{max-width:720px;margin-left:auto;margin-right:auto}
+.drawers{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.drawer{position:relative;height:62px;border-radius:3px;border:0;padding:0;cursor:pointer;background:linear-gradient(180deg,#5b3b22,#43291a 60%,#3a2416);box-shadow:inset 0 1px 0 rgba(255,220,170,.18),inset 0 -2px 4px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.45)}
+.drawer .lab{position:absolute;left:50%;top:7px;transform:translateX(-50%);width:86%;height:26px;display:flex;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,#efe3c6,#d9c9a2);border:2px solid #b8924d;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.5);font:600 10px/1.05 var(--f-ui);color:#2b2219;overflow:hidden;padding:0 3px;box-sizing:border-box}
+.drawer .pull{position:absolute;left:50%;bottom:7px;transform:translateX(-50%);width:26px;height:10px;border-radius:0 0 13px 13px;border:2px solid #c9a35a;border-top:0;box-sizing:border-box}
+.drawer .n{position:absolute;right:6px;bottom:4px;font-size:10px;color:rgba(240,220,180,.6)}
+.drawer.on{box-shadow:0 0 0 2px rgba(240,212,150,.9),0 0 18px 3px rgba(240,200,120,.35)}
+.drawer.empty{opacity:.45}
+.icard{position:relative;margin:20px auto 0;max-width:420px;aspect-ratio:5/3;background:#f5efe2 url(parchment.jpg) 0 0/180% auto;border-radius:3px;box-shadow:0 14px 30px rgba(0,0,0,.6);padding:10px 14px;box-sizing:border-box;font:12.5px/19px var(--f-type);color:#26211c;background-blend-mode:multiply;overflow:hidden}
+.icard::before{content:"";position:absolute;left:0;right:0;top:38px;height:1px;background:rgba(170,40,40,.55)}
+.icard::after{content:"";position:absolute;left:50%;bottom:12px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#2a221a;box-shadow:inset 0 1px 2px rgba(0,0,0,.8)}
+body:not(.compact) .pscroll{padding-top:calc(env(safe-area-inset-top) + 100px);padding-left:40px;padding-right:40px}
+body:not(.compact) .pcat{padding-top:calc(env(safe-area-inset-top) + 104px)}
+body:not(.compact) .icard{max-width:540px;font-size:14px;line-height:22px}
+body:not(.compact) .pb{padding:40px 44px}
+.icard .zh{font-family:"PingFang TC","Noto Sans TC",sans-serif;font-size:12px}
+
+@media (prefers-reduced-motion:reduce){.wall,.spine,.ribbon,.stage.pan{transition:none!important}.scrim.enter,.scrim.enter .sheet{animation:none!important}}
 </style>
 
 
 </head>
 <body>
 <div class="viewport" id="vp"><div class="stage" id="stage"></div></div>
+<div class="ui" id="ui"><div id="chrome"></div></div>
 
 <script>
 const GEO = {"shelves": [{"bay": 0, "shelf": 0, "x0": 56.9, "x1": 389.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 0, "shelf": 1, "x0": 56.9, "x1": 389.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 0, "shelf": 2, "x0": 56.9, "x1": 389.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}, {"bay": 1, "shelf": 0, "x0": 423.9, "x1": 756.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 1, "shelf": 1, "x0": 423.9, "x1": 756.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 1, "shelf": 2, "x0": 423.9, "x1": 756.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}, {"bay": 2, "shelf": 0, "x0": 790.9, "x1": 1123.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 2, "shelf": 1, "x0": 790.9, "x1": 1123.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 2, "shelf": 2, "x0": 790.9, "x1": 1123.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}], "plates": [{"x": 141.6, "y": 93.2, "w": 157.3, "h": 22.7}, {"x": 511.4, "y": 93.2, "w": 157.3, "h": 22.7}, {"x": 881.2, "y": 93.2, "w": 157.3, "h": 22.7}]};
@@ -197,10 +283,13 @@ const COLORS = SPR.colors;          // binding colours, same order as the sprite
 const STYLES = SPR.styles;          // antique | smooth | label
 const PXM = GEO.shelves[0].pxm;     // css px per metre at the spine plane
 
-const S = { books: [], settings: {}, ready: false, view: 'wall', page: 0, zoom: null, q: '', found: null, arrange: false,
+const S = { books: [], settings: {}, ready: false, view: 'wall', page: 0, bay: 0, zoom: null, q: '', found: null, arrange: false, searchOpen: false, compact: false, portrait: false, scale: 1, cam: { s: 1, tx: 0, ty: 0 }, vis: { x0: 0, y0: 0, x1: 1180, y1: 820 },
   sheet: null, book: null, tab: 'review', catMode: 'genre', catDrawer: 0, catCard: 0, toast: '', noteMode: false };
 let DB = null, SAMPLE = null, DOWN = null, ASSETS = null, COMMENTS = null;
 const stage = document.getElementById('stage');
+const ui = document.getElementById('ui');
+const chrome = document.getElementById('chrome');
+function keepScroll(id, fn) { const o = document.getElementById(id); const top = o ? o.scrollTop : null; fn(); const n = document.getElementById(id); if (n && top != null) n.scrollTop = top; }
 
 /* ---------------- utils ---------------- */
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -218,6 +307,7 @@ const ICON = {
   plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   left: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>',
   right: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>',
+  more: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5.5" cy="12" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="18.5" cy="12" r="1.7"/></svg>',
   close: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
 };
 
@@ -341,32 +431,63 @@ function renderWall() {
     }
   }
   html += `</div>`;
-  // chrome
+  const scene = html; html = '';
+  // chrome (screen space, not scaled)
   const n = S.books.length;
   const reading = S.books.filter((b) => b.status === 'reading');
   html += `<header class="topbar">
     <div class="wordmark"><b>The Library</b><span>${S.settings.owner ? esc(S.settings.owner) + '’s books' : 'Great Hall'} · ${n} ${n === 1 ? 'book' : 'books'} · <span id="sync" data-act="settings" style="cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px"></span></span></div>
-    <label class="search" for="q">${ICON.search}<input id="q" type="search" autocomplete="off" placeholder="Find a title, author or feeling" value="${esc(S.q)}" aria-label="Search the library"><div id="results"></div></label>
-    <button class="icon-btn" data-act="go-cat" aria-label="Card catalogue">${ICON.drawers}<span>Catalogue</span></button>
-    <button class="primary" data-act="add">${ICON.plus} Add a book</button>
+    <button class="icon-btn search-toggle" data-act="search-toggle" aria-label="Search" aria-expanded="${S.searchOpen || !!S.q}">${ICON.search}</button>
+    <label class="search ${S.searchOpen || S.q ? 'open' : ''}" for="q">${ICON.search}<input id="q" type="search" autocomplete="off" enterkeyhint="search" placeholder="Find a title, author or feeling" value="${esc(S.q)}" aria-label="Search the library"><div id="results"></div></label>
+    <button class="icon-btn" data-act="go-cat" aria-label="Card catalogue">${ICON.drawers}<span class="lbl">Catalogue</span></button>
+    <button class="primary addbtn" data-act="add" aria-label="Add a book">${ICON.plus}<span class="lbl"> Add a book</span></button>
     <button class="icon-btn" data-act="menu" aria-label="More">${ICON.menu}</button>
   </header>`;
   if (S.arrange) html += `<div class="arrange-banner"><span>Arranging · drag a book to a new place, or tap a brass plate to sort</span><button class="primary" data-act="arrange-done">Done</button></div>`;
   html += `<footer class="bottombar">
     <div class="pager">
-      <button class="icon-btn" data-act="page-prev" aria-label="Previous bookcases" ${S.page <= 0 ? 'disabled style="opacity:.35"' : ''}>${ICON.left}</button>
+      <button class="icon-btn" data-act="page-prev" aria-label="Previous bookcase" ${canStep(L, -1) ? '' : 'disabled style="opacity:.35"'}>${ICON.left}</button>
       <span class="where">Bookcases ${S.page * 3 + 1}–${Math.min(L.cases.length, S.page * 3 + 3) || 1} of ${Math.max(1, L.cases.length)}</span>
-      <button class="icon-btn" data-act="page-next" aria-label="Next bookcases" ${S.page >= L.pages - 1 ? 'disabled style="opacity:.35"' : ''}>${ICON.right}</button>
+      <div class="bayname" aria-live="polite"><b>${esc(bayTitle(L, S.page * 3 + S.bay))}</b><span>Bookcase ${S.page * 3 + S.bay + 1} of ${Math.max(1, L.cases.length)}</span><div class="dots" aria-hidden="true">${(L.cases.length ? L.cases : [0]).map((c, i) => `<i class="${i === S.page * 3 + S.bay ? 'on' : ''}"></i>`).join('')}</div></div>
+      <button class="icon-btn" data-act="page-next" aria-label="Next bookcase" ${canStep(L, 1) ? '' : 'disabled style="opacity:.35"'}>${ICON.right}</button>
     </div>
     <div class="cases" role="group" aria-label="All bookcases">${L.cases.map((c, i) => `<button class="case-dot ${Math.floor(i / 3) === S.page ? 'on' : ''}" data-act="page" data-page="${Math.floor(i / 3)}" aria-label="Bookcase ${i + 1}: ${esc([...new Set(c.map((s) => s.genre))].join(', '))}"><i style="top:12px"></i><i style="top:24px"></i></button>`).join('')}</div>
     <div class="reading">${reading.length ? `Reading now · <b>${esc(reading[0].title)}</b>${reading.length > 1 ? ` +${reading.length - 1}` : ''}` : '<span>Nothing on the reading desk</span>'}</div>
   </footer>`;
   if (S.ready && n === 0) html += `<div class="empty-note"><h2>The shelves are waiting</h2><p>Add the first book you have read and it will be bound and shelved for you.</p><button class="primary" data-act="add">${ICON.plus} Add a book</button></div>`;
   if (!S.ready) html += `<div class="empty-note"><h2>Opening the library</h2><p><span class="spin"></span>&nbsp; Fetching your books…</p></div>`;
-  stage.innerHTML = `<section class="view" aria-label="Library wall">${html}</section>`;
+  stage.innerHTML = `<section class="view wallview" aria-label="Library wall">${scene}</section>`;
+  chrome.innerHTML = html;
   applyZoom(false);
   renderResults();
   bindSearch();
+}
+function bayTitle(L, ci) {
+  const sh = L.cases[ci] || []; const m = {};
+  sh.forEach((s) => { m[s.genre] = (m[s.genre] || 0) + s.items.length; });
+  return Object.keys(m).sort((a, b) => m[b] - m[a])[0] || 'An empty bookcase';
+}
+function canStep(L, dir) {
+  if (S.portrait) { const c = S.page * 3 + S.bay + dir; return c >= 0 && c < Math.max(1, L.cases.length); }
+  const p = S.page + dir; return p >= 0 && p < L.pages;
+}
+function step(dir) {
+  const L = layout();
+  if (!canStep(L, dir)) { const w = document.getElementById('wall'); if (w && w.animate) w.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${-dir * 18}px)` }, { transform: 'translateX(0)' }], { duration: 380, easing: 'ease-out' }); return; }
+  S.zoom = null; S.found = null;
+  if (S.portrait) {
+    const c = S.page * 3 + S.bay + dir, np = Math.floor(c / 3);
+    S.bay = c % 3;
+    if (np === S.page) { render({ pan: true }); return; }
+    S.page = np; render(); booksIn(dir); return;
+  }
+  S.page += dir; render(); booksIn(dir);
+}
+function booksIn(dir) {
+  // the cabinets stay where they are; only the books change, sliding in like a new aisle
+  document.querySelectorAll('#wall .shelf, #wall .plate').forEach((el, i) => {
+    if (el.animate) el.animate([{ transform: `translateX(${dir * 46}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 520, delay: (i % 3) * 40, easing: 'cubic-bezier(.2,.75,.2,1)', fill: 'backwards' });
+  });
 }
 function applyZoom(animate) {
   const w = document.getElementById('wall');
@@ -374,9 +495,16 @@ function applyZoom(animate) {
   if (!animate) w.style.transition = 'none';
   if (S.zoom) {
     const g = GEO.shelves[S.zoom.bay * 3 + S.zoom.shelf];
-    const k = 1.75;
-    const cx = (g.x0 + g.x1) / 2, cy = (g.yt + g.yb) / 2 + 6;
-    const tx = Math.min(0, Math.max(1180 - 1180 * k, 590 - cx * k)), ty = Math.min(0, Math.max(820 - 820 * k, 440 - cy * k));
+    const V = S.vis, vw = V.x1 - V.x0, vh = V.y1 - V.y0;
+    const sw = g.x1 - g.x0;
+    const k = S.compact ? Math.min(2.1, (vh * 0.9) / (g.yb - g.yt + 30)) : Math.max(1.3, Math.min(1.75, (vw - 24) / (sw + 16)));
+    S.zoom.k = k;
+    const hw = vw / 2 / k;
+    let cx = (g.x0 + g.x1) / 2;
+    if (hw * 2 < sw + 20) { const fx = S.zoom.fx != null ? S.zoom.fx : cx; cx = Math.max(g.x0 - 8 + hw, Math.min(g.x1 + 8 - hw, fx)); S.zoom.fx = cx; }
+    const cy = (g.yt + g.yb) / 2 + 6;
+    const vx = (V.x0 + V.x1) / 2, vy = (V.y0 + V.y1) / 2;
+    const tx = Math.min(Math.max(V.x0, 0), Math.max(Math.min(V.x1, 1180) - 1180 * k, vx - cx * k)), ty = Math.min(Math.max(V.y0, 0), Math.max(Math.min(V.y1, 820) - 820 * k, vy - cy * k));
     w.style.transform = `translate(${tx}px, ${ty}px) scale(${k})`;
     w.classList.add('zoomed');
     w.querySelectorAll('.shelf').forEach((el) => el.classList.toggle('z', +el.dataset.bay === S.zoom.bay && +el.dataset.shelf === S.zoom.shelf));
@@ -412,7 +540,10 @@ function refreshSpines() {
 }
 function gotoBook(id) {
   const l = locate(id); if (!l) return;
-  S.page = l.page; S.found = id; S.resultsHidden = true; S.zoom = { bay: l.bay, shelf: l.shelf };
+  S.view = 'wall'; S.page = l.page; S.bay = l.bay; S.found = id; S.resultsHidden = true; S.searchOpen = false;
+  const it = layout().cases[l.page * 3 + l.bay][l.shelf].items; let x = GEO.shelves[l.bay * 3 + l.shelf].x0 + 4;
+  for (let i = 0; i < l.idx; i++) x += it[i].d.w + 1;
+  S.zoom = { bay: l.bay, shelf: l.shelf, fx: x + it[l.idx].d.w / 2 };
   render();
   requestAnimationFrame(() => applyZoom(true));
 }
@@ -435,6 +566,7 @@ function renderBook() {
   const order = layout().shelves.flatMap((s) => s.items.map((it) => it.b.id));
   const ix = order.indexOf(b.id);
   const prev = order[ix - 1], next = order[ix + 1];
+  S.bookNav = { prev, next };
   const tabBody = {
     review: `<div class="sec-h"><h2>My review</h2><span class="saved" id="saved">${b.sample ? 'Example book' : ''}</span></div>
       <textarea class="inkarea pull" id="f-pull" rows="2" placeholder="One line you would say about it…" style="margin-top:12px">${esc(b.pullLine || '')}</textarea>
@@ -448,48 +580,67 @@ function renderBook() {
       <textarea class="inkarea lined" id="f-notes" rows="9" placeholder="Thoughts, questions, things for book club…" style="margin-top:14px">${esc(b.notes || '')}</textarea>`
   };
   const links = (b.links || []).map((id) => S.books.find((x) => x.id === id)).filter(Boolean);
-  const html = `<img class="bg" src="desk.jpg" alt="">
-  <div class="topbar" style="background:none">
-    <button class="icon-btn" data-act="back">${ICON.left}<span>Back to the shelf</span></button>
-    <span style="margin:0 auto;font-size:13px;color:var(--muted)">${esc(locText(b.id))}</span>
-    <button class="icon-btn" data-act="open" data-id="${esc(prev || '')}" ${prev ? '' : 'disabled style="opacity:.35"'} aria-label="Previous book on the shelf">${ICON.left}</button>
-    <button class="icon-btn" data-act="open" data-id="${esc(next || '')}" ${next ? '' : 'disabled style="opacity:.35"'} aria-label="Next book on the shelf">${ICON.right}</button>
-    <button class="icon-btn" data-act="book-more">Binding &amp; details</button>
-  </div>
-  <div class="page" style="left:${L.x}px;top:${L.y}px;width:${L.w}px;height:${L.h}px">
-    <div style="position:absolute;left:50px;top:46px;width:150px">
-      <div class="cover" style="background:linear-gradient(90deg,rgba(0,0,0,.4),rgba(255,255,255,.05) 8%,rgba(0,0,0,0) 22%,rgba(0,0,0,.25)),${col}">
+  const cover = `<div class="cover" style="background:linear-gradient(90deg,rgba(0,0,0,.4),rgba(255,255,255,.05) 8%,rgba(0,0,0,0) 22%,rgba(0,0,0,.25)),${col}">
         <small>${esc(b.author || '')}</small><b>${esc(b.title)}</b>${b.coverUrl ? `<img src="${esc(b.coverUrl)}" alt="Cover of ${esc(b.title)}" onerror="this.remove()">` : ''}
-      </div>
-      ${ASSETS ? `<label class="pg-btn" style="margin-top:10px;cursor:pointer">Photograph the cover<input type="file" accept="image/*" id="f-cover" hidden></label>` : ''}
-    </div>
-    <div class="multiply" style="position:absolute;left:224px;right:38px;top:44px">
-      <div class="kicker">${esc([b.genre, b.subgenre].filter(Boolean).join(' · '))}</div>
+      </div>`;
+  const titleBlock = `<div class="kicker">${esc([b.genre, b.subgenre].filter(Boolean).join(' · '))}</div>
       <h1 class="btitle">${esc(b.title)}</h1>
       ${b.titleAlt ? `<div class="bzh">${esc(b.titleAlt)}</div>` : ''}
-      <div class="bsub">${esc(b.author || '')}</div>
+      <div class="bsub">${esc(b.author || '')}</div>`;
+  const starsRow = `<div style="display:flex;align-items:center;gap:10px">${starsHTML(r, false)}<span style="font:600 20px var(--f-display);color:#3b2a16">${r != null ? r.toFixed(1) : ''}</span></div>`;
+  const feelChips = `${(b.feelings || []).map((f) => `<span class="chip on">${esc(f)}</span>`).join('')}<button class="chip add" data-act="feelings">${(b.feelings || []).length ? 'Edit' : '+ How it felt'}</button>`;
+  const metaHTML = meta.map((m) => `<div><dt>${m[0]}</dt><dd>${esc(m[1])}</dd></div>`).join('');
+  const ribbonHTML = ribbons.map((t) => `<button class="ribbon" role="tab" aria-selected="${S.tab === t[0]}" data-act="tab" data-tab="${t[0]}" style="height:${S.tab === t[0] ? 92 : 62}px;background-color:${t[2]}">${t[1]}</button>`).join('');
+  const linksHTML = `<span class="kicker" style="margin-right:4px">Reminds me of</span>
+      ${links.map((x) => `<button class="chip" data-act="open" data-id="${esc(x.id)}">${esc(x.title)}</button>`).join('')}
+      <button class="chip add" data-act="link">+ Link a book</button>`;
+  const plate = `<img src="exlibris.jpg" alt="Bookplate" style="width:176px;height:120px;display:block;box-shadow:1px 2px 3px rgba(60,40,20,.3)"><div class="plate-name">${esc(S.settings.owner || '')}</div>`;
+  const top = `<div class="topbar" style="background:${S.compact ? '' : 'none'}">
+    <button class="icon-btn" data-act="back" aria-label="Back to the shelf">${ICON.left}<span class="lbl">Back to the shelf</span></button>
+    <span class="lbl" style="margin:0 auto;font-size:13px;color:var(--muted)">${esc(locText(b.id))}</span>
+    ${S.compact ? '<span style="margin:0 auto"></span>' : ''}
+    <button class="icon-btn" data-act="open" data-id="${esc(prev || '')}" ${prev ? '' : 'disabled style="opacity:.35"'} aria-label="Previous book on the shelf">${ICON.left}</button>
+    <button class="icon-btn" data-act="open" data-id="${esc(next || '')}" ${next ? '' : 'disabled style="opacity:.35"'} aria-label="Next book on the shelf">${ICON.right}</button>
+    <button class="icon-btn" data-act="book-more" aria-label="Binding and details">${S.compact ? ICON.more : ''}<span class="lbl">Binding &amp; details</span></button>
+  </div>`;
+  if (S.single) {
+    stage.innerHTML = `<section class="view"><img class="bg" src="desk.jpg" alt="" style="filter:blur(3px) brightness(.5)"></section>`;
+    keepScroll('pscroll', () => {
+      chrome.innerHTML = top + `<div class="pscroll" id="pscroll"><article class="pb" aria-label="${esc(b.title)}">
+        <div class="head"><div>${cover}</div><div class="multiply" style="min-width:0;flex:1">${titleBlock}</div></div>
+        <div style="margin-top:16px">${starsRow}</div>
+        <div class="multiply" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">${feelChips}</div>
+        <div class="ribbons" role="tablist" aria-label="Sections">${ribbonHTML}</div>
+        <div class="tabbody multiply">${tabBody[S.tab]}</div>
+        <div class="foot multiply">${linksHTML}</div>
+        <dl class="meta multiply">${metaHTML}</dl>
+        <div class="plate-row"><div class="multiply" style="position:relative;width:176px;height:120px;transform:rotate(-1.4deg)">${plate}</div><button class="pg-btn" data-act="show-shelf">Show on the shelf</button></div>
+      </article></div>`;
+    });
+    bindBookFields(b);
+    return;
+  }
+  const html = `<img class="bg" src="desk.jpg" alt="">
+  <div class="page" style="left:${L.x}px;top:${L.y}px;width:${L.w}px;height:${L.h}px">
+    <div style="position:absolute;left:50px;top:46px;width:150px">${cover}
+      ${ASSETS ? `<label class="pg-btn" style="margin-top:10px;cursor:pointer">Photograph the cover<input type="file" accept="image/*" id="f-cover" hidden></label>` : ''}
     </div>
+    <div class="multiply" style="position:absolute;left:224px;right:38px;top:44px">${titleBlock}</div>
     <div style="position:absolute;left:224px;right:38px;top:${b.titleAlt ? 214 : 190}px">
-      <div style="display:flex;align-items:center;gap:10px">${starsHTML(r, false)}<span style="font:600 20px var(--f-display);color:#3b2a16">${r != null ? r.toFixed(1) : ''}</span></div>
-      <div class="multiply" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">${(b.feelings || []).map((f) => `<span class="chip on">${esc(f)}</span>`).join('')}<button class="chip add" data-act="feelings">${(b.feelings || []).length ? 'Edit' : '+ How it felt'}</button></div>
+      ${starsRow}
+      <div class="multiply" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">${feelChips}</div>
     </div>
-    <dl class="meta multiply" style="position:absolute;left:50px;right:38px;top:330px">${meta.map((m) => `<div><dt>${m[0]}</dt><dd>${esc(m[1])}</dd></div>`).join('')}</dl>
-    <div class="multiply" style="position:absolute;left:50px;bottom:40px;width:176px;height:120px;transform:rotate(-1.4deg)">
-      <img src="exlibris.jpg" alt="Bookplate" style="width:176px;height:120px;display:block;box-shadow:1px 2px 3px rgba(60,40,20,.3)">
-      <div class="plate-name">${esc(S.settings.owner || '')}</div>
-    </div>
+    <dl class="meta multiply" style="position:absolute;left:50px;right:38px;top:330px">${metaHTML}</dl>
+    <div class="multiply" style="position:absolute;left:50px;bottom:40px;width:176px;height:120px;transform:rotate(-1.4deg)">${plate}</div>
     <button class="pg-btn" data-act="show-shelf" style="position:absolute;right:38px;bottom:44px">Show on the shelf</button>
   </div>
   <div class="page" style="left:${R.x}px;top:${R.y}px;width:${R.w}px;height:${R.h}px">
-    <div class="ribbons" role="tablist" aria-label="Sections">${ribbons.map((t) => `<button class="ribbon" role="tab" aria-selected="${S.tab === t[0]}" data-act="tab" data-tab="${t[0]}" style="height:${S.tab === t[0] ? 92 : 62}px;background-color:${t[2]}">${t[1]}</button>`).join('')}</div>
-    <div class="multiply" style="position:absolute;left:46px;right:44px;top:100px;bottom:92px;overflow:auto">${tabBody[S.tab]}</div>
-    <div class="multiply" style="position:absolute;left:46px;right:44px;bottom:40px;padding-top:10px;border-top:1px solid var(--ink-line);display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-      <span class="kicker" style="margin-right:4px">Reminds me of</span>
-      ${links.map((x) => `<button class="chip" data-act="open" data-id="${esc(x.id)}">${esc(x.title)}</button>`).join('')}
-      <button class="chip add" data-act="link">+ Link a book</button>
-    </div>
+    <div class="ribbons" role="tablist" aria-label="Sections">${ribbonHTML}</div>
+    <div class="multiply" id="tabbody" style="position:absolute;left:46px;right:44px;top:100px;bottom:92px;overflow:auto">${tabBody[S.tab]}</div>
+    <div class="multiply" style="position:absolute;left:46px;right:44px;bottom:40px;padding-top:10px;border-top:1px solid var(--ink-line);display:flex;align-items:center;gap:8px;flex-wrap:wrap">${linksHTML}</div>
   </div>`;
-  stage.innerHTML = `<section class="view" aria-label="${esc(b.title)}">${html}</section>`;
+  stage.innerHTML = `<section class="view bookview" aria-label="${esc(b.title)}">${html}</section>`;
+  chrome.innerHTML = top;
   bindBookFields(b);
 }
 function starsHTML(r, dark) {
@@ -607,19 +758,40 @@ function renderCat() {
     <button class="icon-btn" data-act="card-next" aria-label="Next card" ${S.catCard >= books.length - 1 ? 'disabled style="opacity:.35"' : ''}>${ICON.right}</button>
     ${b ? `<button class="primary" data-act="open" data-id="${esc(b.id)}">Open the book</button>` : ''}
   </div>`;
-  html += `<header class="topbar">
-    <button class="icon-btn" data-act="back">${ICON.left}<span>Shelves</span></button>
+  const top = `<header class="topbar">
+    <button class="icon-btn" data-act="back" aria-label="Back to the shelves">${ICON.left}<span class="lbl">Shelves</span></button>
     <div class="wordmark" style="margin:0 auto;align-items:center"><b>Card Catalogue</b><span>Pick a drawer, then leaf through the cards</span></div>
-    <div class="seg" role="group" aria-label="Arrange drawers by">${[['genre', 'Genre'], ['author', 'Author'], ['title', 'Title'], ['year', 'Year read']].map((m) => `<button class="${S.catMode === m[0] ? 'on' : ''}" aria-pressed="${S.catMode === m[0]}" data-act="cat-mode" data-mode="${m[0]}">${m[1]}</button>`).join('')}</div>
+    ${S.compact ? '<span style="width:44px"></span>' : ''}
+    <div class="seg catseg" role="group" aria-label="Arrange drawers by">${[['genre', 'Genre'], ['author', 'Author'], ['title', 'Title'], ['year', 'Year read']].map((m) => `<button class="${S.catMode === m[0] ? 'on' : ''}" aria-pressed="${S.catMode === m[0]}" data-act="cat-mode" data-mode="${m[0]}">${m[1]}</button>`).join('')}</div>
   </header>`;
+  if (S.single) {
+    stage.innerHTML = `<section class="view"><img class="bg" src="catalogue.jpg" alt="" style="filter:blur(2px) brightness(.7)"></section>`;
+    const drawersHTML = labels.map((l, i) => ({ l, i })).filter((x) => x.l).map(({ l, i }) => { const n = drawerBooks(S.catMode, l).length; return `<button class="drawer ${i === S.catDrawer ? 'on' : ''} ${n ? '' : 'empty'}" data-act="drawer" data-i="${i}" aria-label="${esc(l)}, ${n} ${n === 1 ? 'card' : 'cards'}" aria-pressed="${i === S.catDrawer}"><span class="lab">${esc(l)}</span><span class="pull"></span><span class="n">${n || ''}</span></button>`; }).join('');
+    keepScroll('pcat', () => {
+      chrome.innerHTML = top + `<div class="pcat" id="pcat"><div class="drawers" role="group" aria-label="Drawers">${drawersHTML}</div>
+        <div class="icard" id="icard" ${b ? `data-act="open" data-id="${esc(b.id)}" role="button" aria-label="Open ${esc(b.title)}"` : ''}>${lines}</div>
+        <div class="row" style="display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:420px;margin:14px auto 0">
+          <button class="icon-btn" data-act="card-prev" aria-label="Previous card" ${S.catCard <= 0 ? 'disabled style="opacity:.35"' : ''}>${ICON.left}</button>
+          <span style="font-size:13px;color:var(--muted)">${books.length ? `Card ${S.catCard + 1} of ${books.length}` : 'Empty drawer'}</span>
+          <button class="icon-btn" data-act="card-next" aria-label="Next card" ${S.catCard >= books.length - 1 ? 'disabled style="opacity:.35"' : ''}>${ICON.right}</button>
+        </div>
+        ${b ? `<div style="text-align:center;margin-top:14px"><button class="primary" data-act="open" data-id="${esc(b.id)}">Open the book</button></div>` : ''}
+      </div>`;
+    });
+    return;
+  }
   stage.innerHTML = `<section class="view" aria-label="Card catalogue">${html}</section>`;
+  chrome.innerHTML = top;
 }
 
 /* ---------------- sheets ---------------- */
-function sheetWrap(inner, w) { return `<div class="scrim" data-act="sheet-bg"><div class="sheet" role="dialog" aria-modal="true" style="width:${w}px" data-stop="1">${inner}</div></div>`; }
+function sheetWrap(inner, w) { return `<div class="scrim ${renderSheet.enter ? 'enter' : ''}" data-act="sheet-bg"><div class="sheet" role="dialog" aria-modal="true" style="width:${w}px" data-stop="1">${inner}</div></div>`; }
 function renderSheet() {
-  const old = document.getElementById('sheet'); if (old) old.remove();
+  const old = document.getElementById('sheet');
+  const oldKind = old ? old.dataset.kind : null; const oldTop = old && old.querySelector('.sheet') ? old.querySelector('.sheet').scrollTop : 0;
+  if (old) old.remove();
   if (!S.sheet) return;
+  renderSheet.enter = oldKind !== S.sheet.kind;
   const el = document.createElement('div'); el.id = 'sheet';
   const sh = S.sheet;
   let inner = '';
@@ -638,13 +810,13 @@ function renderSheet() {
     const b = S.books.find((x) => x.id === S.book); const cur = new Set(b.feelings || []);
     inner = `<div class="row" style="justify-content:space-between"><h2>How it felt</h2><button class="ghost" data-act="close" aria-label="Close">${ICON.close}</button></div>
       <p class="lede">Tap all that fit. They show on the page and in search.</p>
-      <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">${FEELINGS.map((g) => `<div class="row" style="align-items:flex-start"><span class="note" style="width:96px;padding-top:8px">${g[0]}</span><div style="display:flex;flex-wrap:wrap;gap:6px;flex:1">${g[1].map((f) => `<button class="pick ${cur.has(f) ? 'on' : ''}" data-act="toggle-feel" data-f="${esc(f)}" aria-pressed="${cur.has(f)}">${f}</button>`).join('')}</div></div>`).join('')}</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">${FEELINGS.map((g) => `<div class="feel-row"><span class="note">${g[0]}</span><div>${g[1].map((f) => `<button class="pick ${cur.has(f) ? 'on' : ''}" data-act="toggle-feel" data-f="${esc(f)}" aria-pressed="${cur.has(f)}">${f}</button>`).join('')}</div></div>`).join('')}</div>
       <div class="row" style="justify-content:flex-end;margin-top:18px"><button class="primary" data-act="close">Done</button></div>`;
     el.innerHTML = sheetWrap(inner, 640);
   } else if (sh.kind === 'more') {
     const b = S.books.find((x) => x.id === S.book); const bd = binding(b);
     inner = `<div class="row" style="justify-content:space-between"><h2>Binding &amp; details</h2><button class="ghost" data-act="close" aria-label="Close">${ICON.close}</button></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
+      <div class="grid2" style="margin-top:16px">
         <label class="f">Title<input type="text" id="m-title" value="${esc(b.title)}"></label>
         <label class="f">Author<input type="text" id="m-author" value="${esc(b.author || '')}"></label>
         <label class="f">Original or Chinese title<input type="text" id="m-alt" value="${esc(b.titleAlt || '')}"></label>
@@ -676,7 +848,7 @@ function renderSheet() {
       <label class="f" style="margin-top:14px">Name on the bookplate<div class="row"><input type="text" id="s-owner" value="${esc(S.settings.owner || '')}" placeholder="Your name"><button class="primary" data-act="s-save">Save</button></div></label>
       <h3 style="margin:22px 0 4px;font:600 20px var(--f-display);color:var(--gilt)">Keep iPad and computer in step</h3>
       <p class="lede" style="font-size:15px">Your books are saved on this device and copied to your private GitHub repository, so every device shows the same library. ${Store.connected() ? `<b style="color:var(--text)">${esc({ synced: 'Synced.', error: 'Not synced.', syncing: 'Syncing…', pending: 'Saving…', local: '' }[Store.status] || '')}</b> ${esc(Store.error)}` : ''}</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+      <div class="grid2" style="margin-top:10px">
         <label class="f">Data repository<input type="text" id="s-repo" value="${esc(gh.repo)}" placeholder="owner/name" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
         <label class="f">Access key from GitHub<input type="password" id="s-token" value="${esc(gh.token)}" placeholder="github_pat_…" autocapitalize="off" autocorrect="off" spellcheck="false"></label>
       </div>
@@ -705,7 +877,9 @@ function renderSheet() {
       <div style="margin-top:12px">${[['author', 'Author, A to Z'], ['title', 'Title, A to Z'], ['year', 'Year published'], ['read', 'Date I read it'], ['rating', 'My rating, highest first'], ['colour', 'Colour of the binding'], ['height', 'Height, tallest first']].map((o) => `<button class="menu-item" data-act="do-sort" data-by="${o[0]}">${o[1]}</button>`).join('')}</div>`;
     el.innerHTML = sheetWrap(inner, 460);
   }
-  stage.appendChild(el);
+  el.dataset.kind = sh.kind;
+  ui.appendChild(el);
+  if (!renderSheet.enter) { const s2 = el.querySelector('.sheet'); if (s2) s2.scrollTop = oldTop; }
   const lq = document.getElementById('l-q'); if (lq) { lq.addEventListener('input', () => { S.sheet.q = lq.value; renderSheet(); const n = document.getElementById('l-q'); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }); }
   bindAddFields();
   const imp = document.getElementById('s-import'); if (imp) imp.addEventListener('change', importBackup);
@@ -724,7 +898,7 @@ function ledgerHTML() {
   const reading = S.books.filter((b) => b.status === 'reading');
   return `<div class="row" style="justify-content:space-between"><h2>Reading ledger</h2><button class="ghost" data-act="close" aria-label="Close">${ICON.close}</button></div>
     <p class="lede" style="font-size:19px;color:var(--text);margin-top:10px">${thisYear.length ? `This year you have finished ${thisYear.length} ${thisYear.length === 1 ? 'book' : 'books'}.` : 'No finished books dated this year yet.'} ${feel.length ? `Most often, a book left you feeling <i>${esc(feel[0][0].toLowerCase())}</i>.` : ''}</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18px">
+    <div class="grid2" style="gap:20px;margin-top:18px">
       <div><div class="note">Shelves you return to</div>${gen.slice(0, 5).map((g) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(212,185,122,.12);font:16px var(--f-book)"><span>${esc(g[0])}</span><span style="color:var(--muted);font-variant-numeric:tabular-nums">${g[1]}</span></div>`).join('')}</div>
       <div><div class="note">Writers you keep coming back to</div>${authors.filter((a) => a[1] > 1).slice(0, 5).map((g) => `<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(212,185,122,.12);font:16px var(--f-book)"><span>${esc(g[0])}</span><span style="color:var(--muted);font-variant-numeric:tabular-nums">${g[1]}</span></div>`).join('') || '<p class="note" style="margin-top:8px">No writer twice yet.</p>'}</div>
     </div>
@@ -743,7 +917,7 @@ function addSheet() {
   if (a.cands && a.cands.length) left += `<div style="display:flex;flex-direction:column;gap:6px;margin-top:12px">${a.cands.map((x, i) => `<button class="cand ${a.pick === i ? 'on' : ''}" data-act="pick" data-i="${i}">${x.coverUrl ? `<img src="${esc(x.coverUrl)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" style="width:38px;height:56px;object-fit:cover;border-radius:1px 3px 3px 1px;flex-shrink:0;box-shadow:2px 3px 6px rgba(0,0,0,.5)">` : '<span style="width:38px;height:56px;flex-shrink:0;border-radius:2px;background:rgba(212,185,122,.12)"></span>'}<span><b>${esc(x.title)}</b><small>${esc([x.author, x.year, x.pages ? x.pages + ' pages' : ''].filter(Boolean).join(' · '))}</small><small style="opacity:.7">${esc(x.src)}</small></span></button>`).join('')}</div>`;
   if (c || a.manual) {
     const d = c || a.manualData || {};
-    left += `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+    left += `<div class="grid2" style="gap:10px;margin-top:14px">
       <label class="f">Title<input type="text" id="a-title" value="${esc(d.title || a.q || '')}"></label>
       <label class="f">Author<input type="text" id="a-author" value="${esc(d.author || '')}"></label>
       <label class="f">Original or Chinese title<input type="text" id="a-alt" value="${esc(d.titleAlt || '')}"></label>
@@ -758,13 +932,13 @@ function addSheet() {
       <span class="row" style="gap:8px">${starsHTML(a.rating, true).replace(/data-act="rate"/g, 'data-act="a-rate"')}<span style="font:600 20px var(--f-display);color:var(--text);min-width:28px">${a.rating != null ? a.rating.toFixed(1) : ''}</span></span>
     </div>
     <div class="note" style="margin-top:16px">In a word… tap all that fit</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">${FEELINGS.map((g) => `<div class="row" style="align-items:flex-start"><span class="note" style="width:84px;padding-top:8px;flex-shrink:0">${g[0]}</span><div style="display:flex;flex-wrap:wrap;gap:6px">${g[1].map((f) => `<button class="pick ${feel.has(f) ? 'on' : ''}" data-act="a-feel" data-f="${esc(f)}" aria-pressed="${feel.has(f)}">${f}</button>`).join('')}</div></div>`).join('')}</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">${FEELINGS.map((g) => `<div class="feel-row"><span class="note">${g[0]}</span><div>${g[1].map((f) => `<button class="pick ${feel.has(f) ? 'on' : ''}" data-act="a-feel" data-f="${esc(f)}" aria-pressed="${feel.has(f)}">${f}</button>`).join('')}</div></div>`).join('')}</div>
     <label class="f" style="margin-top:14px">A line or two (optional)<textarea id="a-line" rows="2" placeholder="What stayed with you?">${esc(a.line || '')}</textarea></label>
     <div class="row" style="margin-top:12px"><label class="f" style="flex:1">Finished<input type="month" id="a-date" value="${esc(a.date || '')}"></label></div>`;
   return `<div class="row" style="justify-content:space-between;align-items:flex-start">
       <div><h2>Add a book</h2><p class="lede">Type a title, author or ISBN. The details and cover are filled in, and the book is bound and shelved for you.</p></div>
       <button class="ghost" data-act="close" aria-label="Close">${ICON.close}</button></div>
-    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:26px;margin-top:16px">
+    <div class="add-grid">
       <div style="min-width:0">${left}</div><div style="min-width:0">${right}</div>
     </div>
     <div class="row" style="justify-content:flex-end;margin-top:18px;gap:14px">
@@ -836,6 +1010,11 @@ function startDrag(el, e) {
 }
 function moveDrag(e) {
   if (!drag) return;
+  if (S.portrait) {
+    const edge = e.clientX < 36 ? -1 : e.clientX > innerWidth - 36 ? 1 : 0;
+    if (edge && !drag.edgeT) drag.edgeT = setTimeout(() => { if (!drag) return; drag.edgeT = null; const nb = S.bay + edge; if (nb >= 0 && nb <= 2 && layout().cases[S.page * 3 + nb]) { S.bay = nb; fit(true); } }, 450);
+    if (!edge && drag.edgeT) { clearTimeout(drag.edgeT); drag.edgeT = null; }
+  }
   const p = toStage(e);
   drag.ghost.style.left = (p.x - drag.dx) + 'px'; drag.ghost.style.top = (p.y - drag.dy) + 'px';
   let hit = null;
@@ -913,17 +1092,87 @@ async function importBackup(ev) {
 }
 
 /* ---------------- render & events ---------------- */
-function renderToast() { let t = document.getElementById('toast'); if (!S.toast) { if (t) t.remove(); return; } if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; t.setAttribute('role', 'status'); stage.appendChild(t); } t.textContent = S.toast; }
-function render() {
+function renderToast() { let t = document.getElementById('toast'); if (!S.toast) { if (t) t.remove(); return; } if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; t.setAttribute('role', 'status'); ui.appendChild(t); } t.textContent = S.toast; }
+function render(opts) {
+  document.body.dataset.view = S.view;
+  fit(opts && opts.pan);
   if (S.view === 'book') renderBook(); else if (S.view === 'cat') renderCat(); else renderWall();
   renderSheet(); renderToast();
 }
 function toStage(e) { const sr = stage.getBoundingClientRect(); return { x: (e.clientX - sr.left) / S.scale, y: (e.clientY - sr.top) / S.scale }; }
-function fit() {
-  const W = innerWidth, H = innerHeight; const s = Math.min(W / 1180, H / 820);
-  S.scale = s; stage.style.transform = `translate(${(W - 1180 * s) / 2}px, ${(H - 820 * s) / 2}px) scale(${s})`;
+const SA = (() => { const d = document.createElement('div'); d.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0'; document.body.appendChild(d); return d; })();
+function bayRect(b) { const g0 = GEO.shelves[b * 3], g2 = GEO.shelves[b * 3 + 2], pl = GEO.plates[b]; return { x: g0.x0 - 22, y: pl.y - 16, w: g0.x1 - g0.x0 + 44, h: g2.yb + 26 - (pl.y - 16) }; }
+function updateMode() {
+  const W = innerWidth, H = innerHeight;
+  const c = Math.min(W, H) < 600, p = W < H * 0.95;
+  const changed = c !== S.compact || p !== S.portrait;
+  S.compact = c; S.portrait = p; S.single = c || p;
+  document.body.classList.toggle('compact', c); document.body.classList.toggle('portrait', p);
+  return changed;
 }
-addEventListener('resize', fit); fit();
+function fit(animate) {
+  const W = innerWidth, H = innerHeight;
+  const cs = getComputedStyle(SA); const st = parseFloat(cs.paddingTop) || 0, sb = parseFloat(cs.paddingBottom) || 0;
+  const topH = (S.compact ? 62 : 84) + st, botH = (S.compact ? 76 : 92) + sb;
+  let s, tx, ty;
+  if (S.view === 'wall' && S.portrait) {
+    const r = bayRect(S.bay);
+    const avH = H - topH - botH;
+    s = Math.min(W / r.w, avH / r.h);
+    tx = (W - r.w * s) / 2 - r.x * s; ty = topH + (avH - r.h * s) / 2 - r.y * s;
+  } else if (S.single && S.view !== 'wall') {
+    s = Math.max(W / 1180, H / 820); tx = (W - 1180 * s) / 2; ty = (H - 820 * s) / 2;
+  } else {
+    s = Math.min(Math.max(W / 1180, H / 820), W / 1100, H / 764);
+    tx = (W - 1180 * s) / 2; ty = (H - 820 * s) / 2;
+  }
+  S.scale = s; S.cam = { s, tx, ty };
+  S.vis = { x0: (0 - tx) / s, x1: (W - tx) / s, y0: (topH - ty) / s, y1: (H - botH - ty) / s };
+  stage.classList.toggle('pan', !!animate);
+  stage.style.transform = `translate(${tx.toFixed(2)}px, ${ty.toFixed(2)}px) scale(${s.toFixed(5)})`;
+  if (animate) { clearTimeout(fit._t); fit._t = setTimeout(() => stage.classList.remove('pan'), 700); }
+}
+updateMode();
+let rsz = null;
+addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(() => { if (updateMode()) render(); else { fit(false); if (S.zoom) applyZoom(false); } }, 60); });
+
+/* ---------------- touch: swipe between bookcases, pan a zoomed shelf, flick through cards ---------------- */
+let gest = null;
+document.addEventListener('pointerdown', (e) => {
+  if (drag || S.sheet || !e.isPrimary) return;
+  if (e.target.closest('input,textarea,select,.results,.topbar,.bottombar')) return;
+  const inVp = !!e.target.closest('#vp');
+  let kind = null;
+  if (S.view === 'wall' && inVp && !S.arrange) kind = 'wall';
+  else if (S.view === 'cat' && (e.target.closest('.icard') || (inVp && !S.compact))) kind = 'card';
+  else if (S.view === 'book' && (inVp || e.target.closest('.pscroll'))) kind = 'book';
+  if (!kind) return;
+  gest = { kind, x: e.clientX, y: e.clientY, t: Date.now(), fx: S.zoom && S.zoom.fx, panning: false, id: e.pointerId };
+});
+document.addEventListener('pointermove', (e) => {
+  if (!gest || e.pointerId !== gest.id) return;
+  const dx = e.clientX - gest.x, dy = e.clientY - gest.y;
+  if (gest.kind === 'wall' && S.zoom && S.zoom.fx != null && S.compact && (gest.panning || (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)))) {
+    gest.panning = true;
+    const w = document.getElementById('wall'); if (w) w.style.transition = 'none';
+    S.zoom.fx = gest.fx - dx / (S.scale * (S.zoom.k || 2)); applyZoom(false);
+  }
+});
+document.addEventListener('pointerup', (e) => {
+  if (!gest || e.pointerId !== gest.id) return;
+  const g = gest; gest = null;
+  const dx = e.clientX - g.x, dy = e.clientY - g.y, dt = Date.now() - g.t;
+  if (g.panning) { S.swipeAt = Date.now(); const w = document.getElementById('wall'); if (w) w.style.transition = ''; return; }
+  if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.4 || dt > 700) return;
+  const dir = dx < 0 ? 1 : -1;
+  S.swipeAt = Date.now();
+  if (g.kind === 'wall') step(dir);
+  else if (g.kind === 'card') { const n = S.catCard + dir; if (n >= 0 && n < drawerBooks(S.catMode, drawerSets()[S.catMode][S.catDrawer] || '').length) { S.catCard = n; renderCat(); cardIn(dir); } }
+  else if (g.kind === 'book' && S.bookNav) { const id = dir > 0 ? S.bookNav.next : S.bookNav.prev; if (id) { S.book = id; render(); pageIn(dir); } }
+});
+document.addEventListener('pointercancel', () => { gest = null; });
+function cardIn(dir) { const el = document.getElementById('icard') || document.querySelector('.cardtext'); if (el && el.animate) el.animate([{ transform: `translateX(${dir * 40}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' }); }
+function pageIn(dir) { const el = document.querySelector('.pb') || document.querySelector('.bookview'); if (el && el.animate) el.animate([{ transform: `translateX(${dir * 36}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 380, easing: 'cubic-bezier(.2,.7,.2,1)' }); }
 
 let press = null;
 stage.addEventListener('pointerdown', (e) => {
@@ -934,7 +1183,8 @@ stage.addEventListener('pointermove', (e) => { if (drag) moveDrag(e); });
 stage.addEventListener('pointerup', () => { if (drag) endDrag(); });
 stage.addEventListener('pointercancel', () => { if (drag) { drag.ghost.remove(); drag.marker.remove(); drag.el.classList.remove('dragging'); drag = null; } });
 
-stage.addEventListener('click', async (e) => {
+document.addEventListener('click', async (e) => {
+  if (S.swipeAt && Date.now() - S.swipeAt < 450) { e.preventDefault(); e.stopPropagation(); return; }
   if (S.noteMode && COMMENTS) {
     e.preventDefault(); e.stopPropagation();
     S.noteMode = false;
@@ -952,20 +1202,21 @@ stage.addEventListener('click', async (e) => {
     case 'spine': {
       if (S.arrange) return;
       const shelfEl = el.closest('.shelf'); const bay = +shelfEl.dataset.bay, shelf = +shelfEl.dataset.shelf;
-      if (!S.zoom || S.zoom.bay !== bay || S.zoom.shelf !== shelf) { S.zoom = { bay, shelf }; S.found = null; refreshSpines(); applyZoom(true); return; }
+      if (!S.zoom || S.zoom.bay !== bay || S.zoom.shelf !== shelf) { const g = GEO.shelves[bay * 3 + shelf]; S.zoom = { bay, shelf, fx: g.x0 + el.offsetLeft + el.offsetWidth / 2 }; S.found = null; refreshSpines(); applyZoom(true); return; }
       el.classList.add('lift');
       setTimeout(() => { S.book = el.dataset.id; S.view = 'book'; S.tab = 'review'; render(); }, 320);
       return;
     }
     case 'plate': { const L = layout(); const sh = L.cases[S.page * 3 + +el.dataset.bay] || []; const genres = [...new Set(sh.map((s) => s.genre))]; if (genres.length) { S.sheet = { kind: 'sort', genres }; renderSheet(); } return; }
     case 'goto': gotoBook(el.dataset.id); return;
-    case 'page': S.page = +el.dataset.page; S.zoom = null; render(); return;
-    case 'page-prev': S.page = Math.max(0, S.page - 1); S.zoom = null; render(); return;
-    case 'page-next': S.page = S.page + 1; S.zoom = null; render(); return;
+    case 'page': { const np = +el.dataset.page; if (np !== S.page) { const d = np > S.page ? 1 : -1; S.page = np; S.bay = 0; S.zoom = null; render(); booksIn(d); } return; }
+    case 'page-prev': step(-1); return;
+    case 'page-next': step(1); return;
+    case 'search-toggle': { S.searchOpen = !document.querySelector('.search.open'); const sEl = document.querySelector('.topbar .search'); if (sEl) sEl.classList.toggle('open', S.searchOpen); if (S.searchOpen) { const qi = document.getElementById('q'); if (qi) qi.focus(); } else { S.q = ''; const qi = document.getElementById('q'); if (qi) qi.value = ''; refreshSpines(); renderResults(); } return; }
     case 'go-cat': S.view = 'cat'; S.zoom = null; render(); return;
     case 'back': S.view = 'wall'; S.sheet = null; render(); return;
     case 'show-shelf': if (b) { S.view = 'wall'; gotoBook(b.id); } return;
-    case 'open': if (el.dataset.id) { S.book = el.dataset.id; S.view = 'book'; S.sheet = null; render(); } return;
+    case 'open': if (el.dataset.id) { const fromBook = S.view === 'book'; const d = fromBook && S.bookNav ? (el.dataset.id === S.bookNav.prev ? -1 : 1) : 0; S.book = el.dataset.id; S.view = 'book'; S.sheet = null; render(); if (fromBook) pageIn(d); } return;
     case 'menu': S.sheet = { kind: 'menu' }; renderSheet(); return;
     case 'add': S.sheet = { kind: 'add', q: '', status: 'read', rating: null, feelings: [] }; renderSheet(); setTimeout(() => { const q = document.getElementById('a-q'); if (q) q.focus(); }, 30); return;
     case 'close': S.sheet = null; renderSheet(); if (S.view === 'book') renderBook(); return;
@@ -993,8 +1244,8 @@ stage.addEventListener('click', async (e) => {
     case 'm-delete-yes': if (b) { try { await DB.collection('books').doc(b.id).delete(); S.books = S.books.filter((x) => x.id !== b.id); S.sheet = null; S.view = 'wall'; S.book = null; render(); toast('Removed from the library'); } catch (err) { toast('Couldn’t remove it. Try again.'); } } return;
     case 'cat-mode': S.catMode = el.dataset.mode; S.catDrawer = 0; S.catCard = 0; renderCat(); return;
     case 'drawer': S.catDrawer = +el.dataset.i; S.catCard = 0; renderCat(); return;
-    case 'card-prev': S.catCard = Math.max(0, S.catCard - 1); renderCat(); return;
-    case 'card-next': S.catCard = S.catCard + 1; renderCat(); return;
+    case 'card-prev': if (S.catCard > 0) { S.catCard--; renderCat(); cardIn(-1); } return;
+    case 'card-next': S.catCard = S.catCard + 1; renderCat(); cardIn(1); return;
     case 'lookup': lookup(); return;
     case 'manual': S.sheet.manual = true; S.sheet.manualData = { title: S.sheet.q || '' }; renderSheet(); return;
     case 'pick': S.sheet.pick = +el.dataset.i; renderSheet(); return;
