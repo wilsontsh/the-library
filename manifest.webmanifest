@@ -1,0 +1,1 @@
+{"name": "The Library", "short_name": "Library", "start_url": "./", "display": "standalone", "orientation": "any", "background_color": "#0b0c0c", "theme_color": "#0b0c0c", "icons": [{"src": "icon-180.png", "sizes": "180x180", "type": "image/png"}, {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}]}
