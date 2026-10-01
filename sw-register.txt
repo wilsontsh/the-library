@@ -1,0 +1,54 @@
+<script>
+/* Service worker registration for The Library. Paste just before </body>.
+ * When a new version is installed and waiting, this dispatches a window event
+ * "library:update-ready" (and calls window.onLibraryUpdateReady() if defined).
+ * Show a "New version — reload" control that calls window.applyUpdate().
+ */
+(function () {
+  if (!('serviceWorker' in navigator)) { window.applyUpdate = function () { location.reload(); }; return; }
+  var reg = null, notified = false, reloading = false, wantReload = false;
+
+  function notify() {
+    if (notified) return; notified = true;
+    window.libraryUpdateReady = true;
+    window.dispatchEvent(new CustomEvent('library:update-ready'));
+    if (typeof window.onLibraryUpdateReady === 'function') window.onLibraryUpdateReady();
+  }
+
+  window.applyUpdate = function () {
+    var w = reg && (reg.waiting || reg.installing);
+    if (!w) { location.reload(); return; }
+    wantReload = true;
+    w.postMessage({ type: 'SKIP_WAITING' });
+  };
+
+  // Only reload when the user asked for the update (not on the very first install's clients.claim()).
+  navigator.serviceWorker.addEventListener('controllerchange', function () {
+    if (!wantReload || reloading) return;
+    reloading = true;
+    location.reload();
+  });
+
+  navigator.serviceWorker.addEventListener('message', function (e) {
+    if (e.data && e.data.type === 'UPDATE_READY') notify();
+  });
+
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js', { scope: './', updateViaCache: 'none' }).then(function (r) {
+      reg = r;
+      if (r.waiting && navigator.serviceWorker.controller) notify();
+      r.addEventListener('updatefound', function () {
+        var nw = r.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', function () {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) notify();
+        });
+      });
+      // Home-screen PWAs rarely restart; check for a new version whenever the app is brought back.
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible') r.update().catch(function () {});
+      });
+    }).catch(function (err) { console.warn('SW registration failed', err); });
+  });
+})();
+</script>
