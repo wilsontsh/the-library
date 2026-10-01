@@ -19,9 +19,9 @@
 /* Layout: a fixed 1180×820 "room" stage scaled to the screen; the rendered room is the hero, UI recedes like museum labels. */
 :root{
   --surround:#070809;
-  --text:#ece3cf; --muted:#a59c88; --faint:#6f6858;
+  --text:#f3ecdc; --muted:#c2b8a2; --faint:#948b78;
   --gilt:#d4b97a; --gilt-deep:#9f7d3c; --line:rgba(212,185,122,.26);
-  --glass:rgba(14,16,15,.72); --glass-hi:rgba(28,30,28,.82);
+  --glass:rgba(48,40,32,.62); --glass-hi:rgba(66,56,44,.74);
   --ink:#2a1e14; --ink-muted:#6b5a42; --ink-red:#7a2a1f; --ink-line:rgba(70,50,30,.32);
   --f-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",sans-serif;
   --f-book:"EB Garamond","PingFang TC","Noto Sans TC",Georgia,serif;
@@ -73,8 +73,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .wall{position:absolute;inset:0;transform-origin:0 0;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
 .plate{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;font:600 12px var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:#2b1f0e;text-shadow:0 1px 0 rgba(255,236,190,.35),0 -1px 0 rgba(0,0,0,.35);white-space:nowrap;overflow:hidden;opacity:.92}
 .shelf{position:absolute;display:flex;align-items:flex-end;gap:1px;padding:0 4px;box-sizing:border-box}
-.shelf .genre-tag{z-index:6}.shelf::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.62) 0,rgba(0,0,0,.18) 30%,rgba(0,0,0,0) 55%,rgba(0,0,0,.14) 100%);z-index:3}
-.shelf .genre-tag{position:absolute;left:8px;bottom:-12px;font-size:10px;letter-spacing:.06em;color:rgba(212,185,122,.55);z-index:4;pointer-events:none}
+.shelf .genre-tag{z-index:6}.shelf::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.42) 0,rgba(0,0,0,.1) 30%,rgba(0,0,0,0) 55%,rgba(0,0,0,.08) 100%);z-index:3}
+.shelf .genre-tag{position:absolute;left:8px;bottom:-12px;font-size:10.5px;letter-spacing:.04em;color:rgba(240,222,180,.85);text-shadow:0 1px 2px rgba(0,0,0,.8);z-index:4;pointer-events:none}
 .spine{position:relative;flex-shrink:0;padding:0;border:0;cursor:pointer;background-repeat:no-repeat;border-radius:2px 2px 1px 1px;box-shadow:1px 0 1px rgba(0,0,0,.6),-1px 0 1px rgba(0,0,0,.35);transform-origin:50% 100%;transition:transform .35s cubic-bezier(.2,.7,.2,1),filter .3s,box-shadow .3s;z-index:1}
 .spine.lean{transform-origin:100% 100%}
 .spine .t{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;overflow:hidden;color:#d3b878;text-shadow:0 -.5px 0 rgba(0,0,0,.7),0 .5px 0 rgba(255,236,190,.18);pointer-events:none;line-height:1;white-space:nowrap}
@@ -142,13 +142,13 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .sheet h2{margin:0;font:600 28px var(--f-display);color:var(--gilt)}
 .sheet .lede{margin:4px 0 0;font:16px/1.45 var(--f-book);color:var(--muted)}
 .sheet label.f{display:flex;flex-direction:column;gap:5px;font-size:12px;color:var(--muted)}
-.sheet input[type=text],.sheet input[type=search],.sheet input[type=number],.sheet input[type=month],.sheet select,.sheet textarea{box-sizing:border-box;width:100%;min-height:42px;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:rgba(0,0,0,.28);color:var(--text);font:15px var(--f-ui);outline:none}
+.sheet input[type=text],.sheet input[type=search],.sheet input[type=number],.sheet input[type=month],.sheet select,.sheet textarea{box-sizing:border-box;width:100%;min-height:42px;padding:9px 12px;border-radius:8px;border:1px solid var(--line);background:rgba(0,0,0,.18);color:var(--text);font:15px var(--f-ui);outline:none}
 .sheet textarea{font:16px/1.5 var(--f-book);resize:vertical}
 .sheet .row{display:flex;gap:10px;align-items:center}
 .seg{display:inline-flex;padding:3px;border-radius:22px;border:1px solid var(--line);background:rgba(0,0,0,.25)}
 .seg button{min-height:36px;padding:0 14px;white-space:nowrap;border:0;border-radius:18px;background:none;color:var(--muted);font-size:14px;cursor:pointer}
 .seg button.on{background:rgba(212,185,122,.18);color:var(--text)}
-.pick{display:inline-flex;align-items:center;min-height:34px;padding:0 13px;border-radius:17px;border:1px solid var(--line);background:rgba(0,0,0,.2);color:var(--text);font:15px var(--f-book);cursor:pointer}
+.pick{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:16px;border:1px solid var(--line);background:rgba(255,240,210,.06);color:var(--text);font:14.5px var(--f-book);cursor:pointer}
 .pick.on{background:rgba(212,185,122,.22);border-color:rgba(212,185,122,.75);color:#fff6df}
 .cand{display:flex;gap:12px;align-items:flex-start;width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.2);text-align:left;cursor:pointer;color:var(--text)}
 .cand.on{border-color:var(--gilt);background:rgba(212,185,122,.1)}
@@ -188,10 +188,10 @@ const PAGES = { L: { x: 95, y: 114.3, w: 495, h: 642 }, R: { x: 590, y: 114.3, w
 const GENRES = ['Fiction', 'Fantasy & Childhood', 'Chinese Literature', 'Poetry & Drama', 'History', 'Biography & Memoir', 'Philosophy & Religion', 'Essays & Criticism', 'Society & Ideas', 'Science & Nature', 'Art & Design', 'Travel & Food'];
 const GCODE = { 'Fiction': 'FIC', 'Fantasy & Childhood': 'FAN', 'Chinese Literature': 'CHI', 'Poetry & Drama': 'POE', 'History': 'HIS', 'Biography & Memoir': 'BIO', 'Philosophy & Religion': 'PHI', 'Essays & Criticism': 'ESS', 'Society & Ideas': 'SOC', 'Science & Nature': 'SCI', 'Art & Design': 'ART', 'Travel & Food': 'TRV' };
 const FEELINGS = [
-  ['The writing', ['Beautifully written', 'Lyrical', 'Witty', 'Spare & precise', 'Hard going']],
-  ['The ideas', ['Insightful', 'Thought-provoking', 'Eye-opening', 'Profound']],
-  ['How it felt', ['Moving', 'Haunting', 'Gripping', 'Comforting', 'Funny', 'Melancholy']],
-  ['Verdict', ['Life-changing', 'Will re-read', 'Overrated', 'Did not finish']]
+  ['The writing', ['Beautifully written', 'Lyrical', 'Witty', 'Spare & precise', 'Hard going', 'Atmospheric', 'Elegant', 'Vivid', 'Understated', 'Slow burn']],
+  ['The ideas', ['Insightful', 'Thought-provoking', 'Eye-opening', 'Profound', 'Wise', 'Original', 'Challenging', 'Timely']],
+  ['How it felt', ['Moving', 'Haunting', 'Gripping', 'Comforting', 'Funny', 'Melancholy', 'Heartbreaking', 'Tender', 'Nostalgic', 'Uplifting', 'Unsettling', 'Quietly devastating']],
+  ['Verdict', ['Life-changing', 'Will re-read', 'Overrated', 'Did not finish', 'A favourite', 'Underrated', 'Worth the hype', 'Must recommend']]
 ];
 const COLORS = SPR.colors;          // binding colours, same order as the sprite atlas columns
 const STYLES = SPR.styles;          // antique | smooth | label
