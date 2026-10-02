@@ -865,6 +865,7 @@ body.compact .chips>*{transition:opacity .2s}
 body.compact .arrange-banner span{white-space:nowrap}
 /* A4 re-render has its own soft gutter: the E19 stop-gap shadow only needs to be a whisper now */
 .bookview::after{opacity:.5}
+.shelf .range-tag{position:absolute;bottom:-16px;height:14px;padding:0 7px;font:600 9px/14px var(--f-ui);color:#2B1F0E;background:linear-gradient(#CDB27A,#9A7A42);border-radius:1.5px;box-shadow:0 1px 1px rgba(0,0,0,.6),inset 0 0 0 .5px rgba(60,40,10,.45);white-space:nowrap;z-index:6;pointer-events:none}
 
 </style>
 </head>
@@ -1232,7 +1233,7 @@ function dims(b) {
   const pages = b.pages || (180 + rnd(b.id, 'p') * 420);
   const wm = Math.min(0.06, Math.max(0.025, 0.019 + pages * 0.00007));
   const hm = b.heightM || (0.245 + rnd(b.id, 'h') * 0.085);
-  const base = { w: Math.round(wm * PXM), h: Math.round(hm * PXM) };
+  const base = { w: Math.round(wm * PXM * 1.1), h: Math.round(hm * PXM) }; // 10% wider so titles can be set larger
   const r = spineFitFor(b, base, STYLES[binding(b).style]); // a long title may widen the spine a little
   return { w: base.w + r.boost, h: base.h, fit: r.f };
 }
@@ -1432,9 +1433,9 @@ function spineFitFor(b, base, style) {
   const key = [b.id, b.title, b.spineTitle, b.series, base.w, base.h, style].join('|');
   let r = fitCache.get(key); if (r) return r;
   const zh = isZh(b.spineTitle || b.title);
-  const maxBoost = b.pages ? 3 : 6;
+  const maxBoost = b.pages ? 4 : 8;
   const fit = (W, minF, track) => (zh ? fitZh(b, W, base.h, style, minF) : fitLatin(b, W, base.h, style, minF, track));
-  for (const [minF, track] of zh ? [[9, 0], [7.5, 0]] : [[7.6, 0.01], [7.0, 0]]) {
+  for (const [minF, track] of zh ? [[9, 0], [7.5, 0]] : [[8.2, 0.01], [7.4, 0]]) {
     for (let boost = 0; boost <= maxBoost; boost++) { const f = fit(base.w + boost, minF, track); if (f) { r = { boost, f }; break; } }
     if (r) break;
   }
@@ -1502,7 +1503,15 @@ function wallInner(L, page) {
           x += it.d.w + 1 + (lean ? 9 : 0);
         });
         const sw = g.x1 - g.x0;
-        tags.forEach((tg, k) => { const next = k + 1 < tags.length ? tags[k + 1].x : sw - 4; const mw = next - tg.x - 6; if (mw >= 54) html += `<span class="genre-tag" style="left:${tg.x.toFixed(1)}px;max-width:${mw.toFixed(1)}px">${esc(tg.name)}</span>`; });
+        let rangeHTML = '';
+        if (books.length >= 4 && sh.secs.length === 1) {
+          const sn = (b) => { const a = authorSort(b) || ''; return a.split(',')[0].trim(); };
+          const a0 = sn(books[0].b), a1 = sn(books[books.length - 1].b);
+          const txt = a0 && a1 ? (a0 === a1 ? a0 : a0 + ' – ' + a1) : '';
+          if (txt) { const w = txt.length * 5.6 + 16; rangeHTML = `<span class="range-tag" style="right:4px">${esc(txt)}</span>`; tags.push({ x: sw - w - 4, range: true }); }
+        }
+        tags.filter((tg) => !tg.range).forEach((tg, k, arr) => { const rg = tags.find((t) => t.range); const next = k + 1 < arr.length ? arr[k + 1].x : (rg ? rg.x : sw - 4); const mw = next - tg.x - 6; if (mw >= 54) html += `<span class="genre-tag" style="left:${tg.x.toFixed(1)}px;max-width:${mw.toFixed(1)}px">${esc(tg.name)}</span>`; });
+        html += rangeHTML;
         if (sh.fill < 0.45 && !S.arrange) inner += propHTML(sh, x, g.yb - g.yt);
         html += inner;
       }
@@ -2707,7 +2716,7 @@ function applyImport() {
   const imp = S.sheet.imp; let added = 0, updated = 0;
   for (const x of imp.books) {
     const dup = findDuplicate(x.title, x.author, x.isbn);
-    const doc = { title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: x.feelings || [], series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: [], notes: '', links: [], createdAt: x.createdAt || Date.now() };
+    const doc = { autoGenre: !(x.tags && x.tags.length), title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: x.feelings || [], series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: [], notes: '', links: [], createdAt: x.createdAt || Date.now() };
     if (dup) {
       if (imp.mode !== 'update') continue;
       const p = {}; for (const [k, v] of Object.entries(doc)) { if (k === 'genre' || k === 'createdAt') continue; const cur = dup[k]; if ((cur == null || cur === '' || (Array.isArray(cur) && !cur.length)) && v != null && v !== '' && !(Array.isArray(v) && !v.length)) p[k] = v; }
@@ -3582,7 +3591,7 @@ const GENRE_RULES = [
   [/essays|criticism|literary criticism/i, 'Essays & Criticism'],
   [/history|historical(?! fiction)|war, \d|civilization|ancient/i, 'History'],
   [/politic|economic|sociology|social science|law|feminism/i, 'Society & Ideas'],
-  [/science|nature|biology|physics|mathemat|ecology|natural history|medicine/i, 'Science & Nature'],
+  [/science|nature|biology|physics|mathemat|ecology|natural history|medicine|cosmolog|astronom|universe|evolution/i, 'Science & Nature'],
   [/\bart\b|design|architecture|photograph|painting|music/i, 'Art & Design'],
   [/travel|cooking|food|wine|voyages/i, 'Travel & Food'],
   [/fiction|novel|stories/i, 'Fiction']
@@ -3651,6 +3660,7 @@ async function enrichBook(b) {
   let syn = c.synopsis;
   if (!syn && c.olKey && !b.synopsis) syn = await olSynopsis(c.olKey);
   const patch = { enriched: true };
+  if (b.autoGenre && c.genre && !b.sectionId) { patch.genre = c.genre; patch.autoGenre = false; }
   if (c.coverUrl && !b.coverUrl) patch.coverUrl = c.coverUrl;
   if (c.pages && !b.pages) patch.pages = c.pages;
   if (c.isbn && !b.isbn) patch.isbn = c.isbn;
