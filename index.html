@@ -863,6 +863,8 @@ body.compact .qpill~.chips,body.compact .chips:has(~.arrange-banner){opacity:0}
 body.compact .qpill~.chips>*,body.compact .chips:has(~.arrange-banner)>*{pointer-events:none}
 body.compact .chips>*{transition:opacity .2s}
 body.compact .arrange-banner span{white-space:nowrap}
+/* A4 re-render has its own soft gutter: the E19 stop-gap shadow only needs to be a whisper now */
+.bookview::after{opacity:.5}
 
 </style>
 </head>
