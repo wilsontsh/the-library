@@ -14,6 +14,9 @@
 <link rel="icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preload" href="wall.jpg" as="image">
+<link rel="preload" href="fonts/eb-garamond-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/eb-garamond-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/cormorant-garamond-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="fonts.css">
 <title>The Library</title>
 <style>
@@ -542,6 +545,324 @@ body.landphone .bayname .dots{display:none}
 .deskchip.mini{gap:6px;padding:0 12px;min-height:38px}.deskchip.mini svg{color:var(--gilt);flex-shrink:0}.deskchip.mini b{font:600 14px var(--f-ui)}.deskchip.mini .sep{width:1px;height:16px;background:var(--line);margin:0 2px}
 h2[tabindex="-1"]:focus{outline:none}
 
+/* ===================== v3: art direction pass ===================== */
+@font-face{font-family:"LibZH";src:local("PingFang TC"),local("PingFangTC-Regular"),local("Noto Sans CJK TC"),local("Noto Sans TC");size-adjust:94%;unicode-range:U+2E80-2FFF,U+3000-303F,U+3040-30FF,U+3100-9FFF,U+F900-FAFF,U+FE30-FE4F,U+FF00-FFEF,U+20000-2FA1F}
+:root{
+  --f-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI","LibZH","PingFang TC","Noto Sans CJK TC","Noto Sans TC",sans-serif;
+  --f-book:"EB Garamond","LibZH","PingFang TC","Noto Sans CJK TC","Noto Sans TC",Georgia,serif;
+  --f-display:"Cormorant Garamond","LibZH","PingFang TC","Noto Sans CJK TC","Noto Sans TC",Georgia,serif;
+  --f-zhserif:"Songti TC","STSongti-TC-Bold","Noto Serif CJK TC","Noto Serif TC","PingFang TC","Noto Sans CJK TC",serif;
+  --ink-wet:#6B4A2A;--gilt-hi:#E9CF8F;--oxblood:#6E1F1A;--inkblue:#23324F;--bottle:#24402F;--oldgold:#8A6A2A;
+}
+::selection{background:rgba(212,185,122,.35)}
+.page textarea,.pb textarea,.writer{caret-color:#7A2A1F}
+.page :focus-visible,.pb :focus-visible,.parchment-sheet :focus-visible{outline-color:#7A2A1F}
+:lang(zh-Hant){line-height:1.8;letter-spacing:.04em;font-style:normal}
+
+/* ---------- B: spine typography ---------- */
+.spine .t{color:#D9BC7A;text-shadow:0 .055em 0 rgba(0,0,0,.7),0 -.04em 0 rgba(255,236,190,.2);-webkit-font-smoothing:antialiased;font-kerning:normal;font-feature-settings:"kern","liga","onum";white-space:nowrap}
+.spine .t.v{writing-mode:vertical-rl;text-transform:none;line-height:1.02;letter-spacing:.01em}
+.spine .t.v.eb{font-family:"EB Garamond",Georgia,serif;font-weight:600}
+.spine .t.v.cg{font-family:"Cormorant Garamond",Georgia,serif;font-weight:700}
+.spine .t.v.caps{letter-spacing:.06em}
+.spine .t.zh{writing-mode:vertical-rl;text-orientation:upright;font-family:var(--f-zhserif);font-weight:600;letter-spacing:.1em;font-feature-settings:"vert","vrt2";line-height:1.05;text-combine-upright:digits 2}
+.spine.light .t{color:#3A2614;text-shadow:0 .04em 0 rgba(255,250,235,.35)}
+.spine .t.onlabel{background:none}
+.spine.lift::after,.spine.found::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 35%,rgba(255,240,200,.55) 50%,transparent 65%);mix-blend-mode:soft-light;animation:glint .9s cubic-bezier(.4,0,.2,1) both}
+@keyframes glint{from{transform:translateY(-100%)}to{transform:translateY(100%)}}
+.spine{overflow:visible}
+.spine.lean{transform-origin:0 100%}
+.spine.lean::before{content:"";position:absolute;left:-9px;bottom:0;width:9px;height:60%;background:linear-gradient(90deg,rgba(0,0,0,.35),transparent);pointer-events:none}
+.spine .fav{top:3%;left:50%;width:7px;height:7px;margin-left:-3.5px;background:radial-gradient(circle at 40% 35%,#f6e2a6,#c9a45a 55%,#7d5f2a);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);font-size:0}
+.spine .sno{font:600 8.5px/1 "EB Garamond",serif;color:#D9BC7A;text-shadow:0 .5px 0 rgba(0,0,0,.7)}
+.spine .slip{background:linear-gradient(#efe6d0,#e2d6b8);box-shadow:0 1px 1px rgba(0,0,0,.4)}
+.spine .lent{background:#f4f1e8;box-shadow:0 1px 1px rgba(0,0,0,.45);background-image:linear-gradient(transparent 9px,rgba(80,80,80,.35) 9px,rgba(80,80,80,.35) 10px,transparent 10px)}
+.spine.tip{transform:translateY(-7px) rotate(-1.2deg)!important;transform-origin:0 100%;box-shadow:0 10px 14px rgba(0,0,0,.55);z-index:7;transition:transform .16s cubic-bezier(.3,0,.2,1),box-shadow .16s}
+.shelf .slot{position:absolute;bottom:0;background:rgba(0,0,0,.55);box-shadow:inset 0 0 6px #000;border-radius:2px 2px 0 0;z-index:0;pointer-events:none}
+.spine.found{animation:foundPulse 1.6s ease-in-out 2}
+@keyframes foundPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,226,170,.75),0 0 18px 4px rgba(255,200,120,.32),0 12px 16px rgba(0,0,0,.6)}50%{box-shadow:0 0 0 1px rgba(255,226,170,.9),0 0 22px 6px rgba(255,200,120,.5),0 12px 16px rgba(0,0,0,.6)}}
+.spine.found{transition:transform .4s cubic-bezier(.3,1.3,.5,1)}
+
+/* ---------- E: wall ---------- */
+.shelf .genre-tag{bottom:-16px;height:14px;padding:0 7px;font:600 9px/14px var(--f-ui);letter-spacing:.02em;color:#2B1F0E;background:linear-gradient(#DCC287,#A8854A);border-radius:1.5px;box-shadow:0 1px 1px rgba(0,0,0,.6),inset 0 0 0 .5px rgba(60,40,10,.45);text-shadow:0 .5px 0 rgba(255,236,190,.4);overflow:hidden;text-overflow:ellipsis;box-sizing:border-box;z-index:6}
+.divider{width:6px;height:68%;margin:0 5px;background:linear-gradient(90deg,#4A3418,#C9A45A 40%,#7D5F2A);border-radius:1px 1px 0 0;box-shadow:1px 0 2px rgba(0,0,0,.6)}
+.divider i{display:none}
+.plate{color:#2A1C0B;text-shadow:0 1px 0 rgba(255,230,170,.28),0 -1px 0 rgba(0,0,0,.35);font-family:"Cormorant Garamond",serif;font-weight:600}
+.wall.zoomed .shelf:not(.z){filter:none}
+.zveil{position:absolute;inset:0;background:radial-gradient(120% 100% at 50% 50%,rgba(6,4,3,.55),rgba(6,4,3,.7));opacity:0;transition:opacity .55s cubic-bezier(.2,.7,.2,1);pointer-events:none;z-index:9}
+.wall.zoomed .zveil{opacity:1}
+.wall.zoomed .shelf.z{z-index:10}
+.wall.zoomed .plate{opacity:.92}
+.wall.zoomed .atmos{opacity:.4}
+.atmos{position:absolute;inset:0;pointer-events:none;z-index:2;transition:opacity .5s}
+.cone{position:absolute;width:320px;height:440px;clip-path:polygon(31% 0,69% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(255,214,150,.10),rgba(255,214,150,.03) 60%,transparent 85%);mix-blend-mode:screen;opacity:.6;animation:breathe 9s ease-in-out infinite}
+@keyframes breathe{0%,100%{opacity:.55}50%{opacity:.65}}
+.halo{position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,190,110,.20),rgba(255,190,110,.08) 35%,transparent 70%);mix-blend-mode:soft-light;animation:flick 3.7s ease-in-out infinite}
+.flame{position:absolute;width:6px;height:14px;border-radius:50% 50% 45% 45%;background:radial-gradient(ellipse at 50% 70%,#fff6d8,#ffcf7a 40%,rgba(255,180,90,0) 72%);mix-blend-mode:screen;transform-origin:50% 100%;animation:flick 2.3s ease-in-out infinite,sway 5.9s ease-in-out infinite}
+@keyframes flick{0%,100%{opacity:.92;transform:scale(1)}23%{opacity:.86;transform:scale(.97)}41%{opacity:1;transform:scale(1.03)}67%{opacity:.9;transform:scale(.99)}83%{opacity:.97;transform:scale(1.02)}}
+@keyframes sway{0%,100%{translate:0 0}30%{translate:.4px 0}60%{translate:-.4px 0}}
+.dust{position:absolute;pointer-events:none}
+.tod{position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;z-index:30}
+.tod.morning{background:rgba(190,210,235,.08)}.tod.evening{background:rgba(255,180,110,.10)}
+.tod.evening~*,.wall .tod{display:block}
+.ladder{position:absolute;pointer-events:none;z-index:25;transform-origin:50% 12%;filter:drop-shadow(10px 8px 10px rgba(0,0,0,.45));transition:opacity .4s}
+.wall.zoomed~.ladder{opacity:0}
+body.baymode .ladder{opacity:.0}
+.prop{position:absolute;bottom:0;pointer-events:none;z-index:1}
+.prop.stack{width:124px;height:62px}
+.prop.stack i{position:absolute;width:20px;height:118px;transform-origin:0 100%;transform:translateY(-20px) rotate(90deg);box-shadow:0 1px 2px rgba(0,0,0,.6);border-radius:1px}
+.prop svg{display:block;filter:drop-shadow(2px 2px 2px rgba(0,0,0,.5))}
+.prop.bookend{width:10px;height:60px;background:linear-gradient(90deg,#4A3418,#C9A45A 40%,#7D5F2A);border-radius:2px 2px 0 0;box-shadow:2px 0 3px rgba(0,0,0,.6)}
+.prop.bookend::after{content:"";position:absolute;left:0;bottom:0;width:26px;height:3px;background:linear-gradient(#C9A45A,#7D5F2A);border-radius:1px}
+.oldwall{position:absolute;inset:0;pointer-events:none}
+.oldwall .atmos{display:none}
+
+/* bottom bar: a mini map and quiet numerals */
+.pager .where{font:15px var(--f-book);color:#C2B8A2;letter-spacing:.06em}
+.pager .where small{font-size:13px;color:var(--faint);letter-spacing:.04em}
+.case-dot{width:22px;height:30px;padding:3px 2px;display:flex;flex-direction:column;justify-content:space-between;background:rgba(14,10,7,.7);border:1px solid rgba(212,185,122,.18);border-radius:2px;box-sizing:border-box}
+.case-dot i{position:static;display:flex;gap:0;height:7px;align-items:flex-end;border-bottom:1px solid rgba(212,185,122,.35);background:none;overflow:hidden}
+.case-dot i b{display:block;width:2px;height:6px;margin-right:.4px}
+.case-dot.on{outline:1px solid var(--gilt);outline-offset:1px;box-shadow:0 0 8px rgba(212,185,122,.3)}
+.bottombar .zoompill{position:static;transform:none;margin:0 auto;background:rgba(20,15,10,.6);border-color:rgba(212,185,122,.3)}
+.bottombar.zoomed .pager,.bottombar.zoomed .cases{display:none}
+.deskchip{background:rgba(28,20,14,.72);border-color:rgba(212,185,122,.28);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.deskchip:focus:not(:focus-visible){outline:none}
+.syncbtn .lbl{text-decoration:none;color:#948B78;font-size:12px}
+.dot.green{background:#9DB58A;box-shadow:none}.dot.amber{background:#C9A55E}.dot.red{background:#C27A64}
+.wordmark span{display:flex;align-items:center;gap:4px}
+body.compact .wordmark span{gap:6px}
+body.compact .dot{width:6px;height:6px}
+.arrange-banner{background:rgba(24,17,11,.94)}
+body:not(.compact) .arrange-banner{top:auto;bottom:calc(104px + env(safe-area-inset-bottom))}
+.empty-note{background:url(parchment.jpg) 0 0/160% auto,#ece2ca;color:#2A1E14;border:0;box-shadow:inset 0 0 30px rgba(120,86,40,.35),0 20px 40px rgba(0,0,0,.6)}
+.empty-note h2{color:#1F150C!important}.empty-note p{color:#2A1E14!important}
+
+/* search results */
+.results{background:rgba(24,17,11,.96);border-radius:12px;border:1px solid rgba(212,185,122,.2);border-top-color:rgba(212,185,122,.35)}
+.result .sw{width:9px;height:36px;border-radius:1px;box-shadow:0 1px 2px rgba(0,0,0,.6)}
+.result b{font:500 17px var(--f-book)}
+.result small{font-size:12.5px;color:#A89C84}
+.result em.hit{font-style:normal;color:var(--gilt)}
+
+/* ---------- E: open book ---------- */
+.lp-head{flex-shrink:0}
+.heart{margin-left:10px}
+.btitle{letter-spacing:-.005em;text-wrap:balance}
+.kicker{font:600 10.5px/1.3 var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:#6B5A42;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kicker .ex{display:inline-block;border:1px solid rgba(122,42,31,.4);border-radius:3px;padding:0 5px;margin-left:6px;color:#7A2A1F;font-size:9.5px;line-height:15px}
+.cover{gap:10px}
+.cover b{font:600 18px/1.15 var(--f-display);text-transform:none;letter-spacing:0;color:#E3C987;padding:0 16px;text-shadow:0 1px 0 rgba(0,0,0,.6),0 -.5px 0 rgba(255,236,190,.2)}
+.cover small{white-space:normal;padding:0 14px;letter-spacing:.08em;font:500 10px var(--f-book);font-variant:small-caps;text-transform:lowercase;color:#CDB172;font-size:12px}
+.cover .cfl{position:relative;color:#C9A45A;width:72px;opacity:.85}
+.cover .cfl svg{display:block;width:72px;height:9px}
+.cover.vellum b,.cover.vellum small{color:#4A3420;text-shadow:0 .5px 0 rgba(255,250,235,.35)}.cover.vellum .cfl{color:#7a5a32}
+.pb .cover b{font-size:13px;padding:0 10px}.pb .cover small{font-size:10px}.pb .cover .cfl{width:50px}.pb .cover .cfl svg{width:50px}
+.bookview::after{content:"";position:absolute;left:575px;top:114px;width:30px;height:642px;background:linear-gradient(90deg,transparent,rgba(60,40,20,.20) 45%,rgba(35,22,10,.38) 50%,rgba(60,40,20,.20) 55%,transparent);pointer-events:none;z-index:1}
+.ribbons{gap:10px}
+.ribbon{width:72px;height:58px;font:500 15px var(--f-book);color:#F4EAD6;text-shadow:0 1px 1px rgba(0,0,0,.45);background-image:linear-gradient(90deg,rgba(0,0,0,.28),rgba(255,255,255,.10) 32%,rgba(0,0,0,.04) 55%,rgba(0,0,0,.30)),url(silk.jpg)!important;background-size:100% 100%;filter:drop-shadow(0 2px 2px rgba(40,25,10,.35));transform-origin:50% 0;transition:height .38s cubic-bezier(.3,1.3,.5,1)}
+.ribbon[aria-selected=true]{height:96px}
+.ribbon[data-tab=review]{background-color:var(--oxblood)!important}.ribbon[data-tab=synopsis]{background-color:var(--inkblue)!important}.ribbon[data-tab=quotes]{background-color:var(--bottle)!important}.ribbon[data-tab=notes]{background-color:var(--oldgold)!important}
+.pb .ribbons{background:none;justify-content:flex-start;padding:0 12px}
+.pb .ribbon{flex:1 1 0;max-width:96px;filter:drop-shadow(0 3px 3px rgba(40,25,10,.4))}
+body:not(.compact) .pb .ribbon{flex:0 0 84px}
+.pb .ribbon[aria-selected=true]{height:76px!important}
+.rating .st{width:28px;height:28px;font-size:0}
+.rating .st svg{width:28px;height:28px;display:block}
+.rating .st .e path{fill:none;stroke:#93681C;stroke-opacity:.55;stroke-width:1.2}
+.rating .st .f path{fill:#9a6f28;stroke:#7a5520;stroke-width:.6}
+.rating .st>span{height:28px}
+.rating.dark .st .e path{stroke:#D4B97A;stroke-opacity:.5}.rating.dark .st .f path{fill:#d4b97a;stroke:#a8843f}
+body:not(.compact) .pb .rating .st,body:not(.compact) .pb .rating .st svg{width:30px;height:30px}
+.spill{border:0;border-bottom:1px dotted rgba(122,42,31,.45);border-radius:0;background:none;padding:0 2px;min-height:44px;font:16px var(--f-book);color:#4A2A18}
+.fl-rule{color:rgba(122,42,31,.45);text-align:center;margin:14px 0 2px}.fl-rule svg{width:120px;height:14px}
+.inkarea{font:18px/1.6 var(--f-book)}
+.inkarea::placeholder{color:rgba(138,117,86,.75)}
+.inkarea.ruled{background:repeating-linear-gradient(180deg,transparent 0 31px,rgba(60,45,30,.10) 31px 32px);line-height:32px}
+.pull{font:500 21px/1.35 var(--f-display);font-style:normal;color:#7A2A1F}
+.quote{position:relative;border-left:0;padding-left:18px}
+.quote::before{content:"“";position:absolute;left:-2px;top:-8px;font:600 36px/1 var(--f-display);color:rgba(122,42,31,.55)}
+.quote textarea{font:normal 19px/1.55 var(--f-book)!important}
+.meta dd{font:16px/1.4 var(--f-book)}
+.meta dt{font:600 10.5px var(--f-ui);letter-spacing:.06em}
+.pg-btn{border:0;background:none;color:#7A2A1F;font:15px var(--f-book);padding:0 4px;gap:6px}
+.pg-btn::after{content:"→";font-size:13px}
+.chip.add{border-style:dashed}
+.booktop{transition:background .25s,box-shadow .25s}
+.pscroll~.booktop,.booktop{background:none}
+body.compact .booktop,body.portrait .booktop{background:none}
+.booktop.scrolled{background:rgba(28,20,14,.86)!important;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(212,185,122,.18)}
+.booknav button{font-style:normal}
+.booknav i{font-style:normal}
+.balt:lang(zh),.bzh{font-style:normal}
+.bzh{font-family:var(--f-zhserif);font-weight:600;letter-spacing:.06em;font-feature-settings:"palt"}
+.stamp{position:absolute;right:10px;top:-6px;z-index:20;pointer-events:none;filter:drop-shadow(1px 2px 2px rgba(40,10,5,.4))}
+#sheet .stamp{right:24px;top:24px}
+.inkin{animation:inkIn .7s cubic-bezier(.3,0,.2,1) both,inkDry 1.2s ease-out both;-webkit-mask-image:linear-gradient(90deg,#000 var(--p),transparent calc(var(--p) + 12%));mask-image:linear-gradient(90deg,#000 var(--p),transparent calc(var(--p) + 12%))}
+@property --p{syntax:'<percentage>';inherits:false;initial-value:100%}
+@keyframes inkIn{from{--p:-12%}to{--p:100%}}
+@keyframes inkDry{from{color:var(--ink-wet)}}
+
+/* page turning leaves (iPad) and the flying book */
+.leafwrap{position:fixed;inset:0;pointer-events:none;z-index:150}
+.leaf{position:absolute;transform-style:preserve-3d;will-change:transform}
+.leaf.fromright{transform-origin:0 50%}.leaf.fromleft{transform-origin:100% 50%}
+.lf{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden}
+.lf.back{transform:rotateY(180deg)}
+.lfi{position:absolute;left:0;top:0;transform-origin:0 0}
+.lback{position:absolute;inset:0;background:linear-gradient(90deg,rgba(60,40,20,.18),transparent 30%)}
+.lshade{position:absolute;top:0;bottom:0;right:-70px;width:70px;background:linear-gradient(90deg,transparent,rgba(50,32,15,.22),transparent);opacity:0}
+.fromleft .lshade{right:auto;left:-70px}
+.flywrap{position:fixed;inset:0;perspective:1400px;pointer-events:none;z-index:160}
+.flyouter{position:absolute;transform-origin:0 50%;will-change:transform}
+.flyinner{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:0 50%}
+.fface{position:absolute;top:0;bottom:0;left:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.ffront{right:0}.ffront .cover{width:100%!important;height:100%!important;visibility:visible!important;box-shadow:6px 10px 18px rgba(0,0,0,.5)}
+.fspine{transform-origin:0 50%;transform:rotateY(90deg);overflow:hidden}
+.fspine .spine{position:absolute;left:0;top:0}
+.ghostlayer{position:fixed;inset:0;z-index:40;pointer-events:none}
+.ghostlayer .stage{position:absolute}
+.ghostchrome{position:absolute;inset:0}
+.gveil{position:absolute;inset:0;background:#000;opacity:0}
+
+/* ---------- E: catalogue ---------- */
+.dlabel{font:400 8.5px/1.05 "Courier Prime",monospace!important;color:#2B2219;mix-blend-mode:multiply;filter:blur(.25px)!important}
+.dlabel.big{font:400 12px "Courier Prime",monospace!important;filter:none!important}
+.dempty{background:rgba(8,6,4,.55)}
+.dfront{position:absolute;z-index:3;transform:translateY(4px) scale(1.03);box-shadow:0 10px 18px rgba(0,0,0,.55);border-radius:2px;pointer-events:none}
+.dfront .dlabel{position:absolute}
+.card-nav .icon-btn,.cardnav .icon-btn{width:36px;min-width:36px;height:36px;padding:0;border:1px solid #7D5F2A;background:linear-gradient(180deg,#E9CF8F,#C9A45C 48%,#A8823F);color:#2A1C09;box-shadow:inset 0 1px 0 rgba(255,244,214,.6),0 1px 2px rgba(0,0,0,.45)}
+.cardcount{font:12px "Courier Prime",monospace!important;color:#C2B8A2!important}
+.cph{font:600 17px var(--f-display)}
+.cfind input{min-height:32px}
+.drawer{background:linear-gradient(180deg,#5E3E25,#43291A 60%,#38220F);box-shadow:inset 0 1px 0 rgba(255,220,170,.16),inset 0 -2px 4px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.45);transition:transform .26s cubic-bezier(.2,.8,.2,1)}
+.drawer:active{transform:scale(.97)}
+.drawer.on{transform:translateY(3px) scale(1.04)}
+.drawer .lab{border:1.5px solid #B08A48;background:#EFE6CF;font:400 10px/1.05 "Courier Prime",monospace}
+.drawer .pull{width:30px;height:9px;border:0;background:linear-gradient(#E6C983,#8F6D33);border-radius:0 0 15px 15px;box-shadow:inset 0 2px 2px rgba(0,0,0,.45),0 1px 0 rgba(255,230,170,.25)}
+.drawer .n{font:9px "Courier Prime",monospace;color:rgba(240,220,180,.6)}
+.icard{font:12.5px/19px "Courier Prime",monospace}
+body:not(.compact) .icard{font-size:13px;line-height:20px}
+.oldcard{pointer-events:none;z-index:4}
+.icard,.cardtext{transform-origin:50% 100%}
+
+/* ---------- E: all books ---------- */
+.plist~*{}
+body[data-view=list] .view .bg{content:url(wall_blur.jpg);filter:none}
+.plist{background:rgba(10,7,5,.62)}
+.lfil .pick,.lfil select,.lctl .seg button,.sortpill{font:500 14px var(--f-ui)}
+.sortpill{position:relative;display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0 14px;border-radius:18px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:var(--text)}
+.sortpill select{position:absolute;inset:0;opacity:0;font-size:16px}
+.lhead{background:rgba(30,22,15,.96);font:600 15px var(--f-display);letter-spacing:.04em}
+.lt b{font:500 17px/1.2 var(--f-book)}
+.svstars{display:inline-flex;gap:1px}
+.svstars .sv{width:var(--ss);height:var(--ss)}
+.svstars .se{fill:none;stroke:#D4B97A;stroke-opacity:.45;stroke-width:1.4}
+.sealdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#9a2a22,#5a140f);margin-right:5px;vertical-align:-1px}
+
+/* ---------- E: sheets ---------- */
+.sheet{box-shadow:inset 0 0 0 1px rgba(201,164,92,.5),0 30px 60px rgba(0,0,0,.6)}
+.sheet h2{font:600 28px/1.1 var(--f-display)}
+body.compact .sheet h2{font-size:25px}
+.scrim.enter .sheet{animation:riseIn .38s cubic-bezier(.16,1,.3,1),gilt .7s ease-out}
+@keyframes riseIn{from{opacity:0;transform:translateY(18px) scale(.965)}}
+@keyframes gilt{0%{box-shadow:inset 0 0 0 1px rgba(212,185,122,0),0 30px 60px rgba(0,0,0,.6)}40%{box-shadow:inset 0 0 0 1px rgba(212,185,122,.75),0 30px 60px rgba(0,0,0,.6)}}
+body.compact .scrim.enter .sheet{animation:riseUp .44s cubic-bezier(.32,.72,0,1)}
+@keyframes riseUp{from{transform:translateY(100%)}}
+.scrim.enter .parchment-sheet,.scrim.enter .welcome-sheet{animation:unfold .46s cubic-bezier(.2,.8,.2,1)}
+@keyframes unfold{from{clip-path:inset(48% 0 48% 0 round 4px);transform:scaleY(.96)}to{clip-path:inset(0 round 4px)}}
+body.compact .sheet::before{content:"";position:sticky;display:block;top:-12px;margin:-10px auto 6px;width:38px;height:4px;border-radius:2px;background:rgba(212,185,122,.35);z-index:6}
+.toc .menu-item{min-height:60px;gap:14px;border-bottom-color:rgba(212,185,122,.10)}
+.toc .menu-item>span:last-child{font:500 19px var(--f-book);color:#F3ECDC}
+.toc .menu-item small{font:12.5px var(--f-ui);color:#A89C84}
+.mi{display:inline-flex;align-items:center;justify-content:center;width:28px;color:var(--gilt);flex-shrink:0}
+.primary{border:1px solid #7D5F2A;border-image:none;border-radius:22px;background:linear-gradient(180deg,#E9CF8F 0%,#C9A45C 48%,#A8823F 100%);box-shadow:inset 0 1px 0 rgba(255,244,214,.6),inset 0 -1px 0 rgba(80,55,20,.45),0 1px 2px rgba(0,0,0,.45);color:#2A1C09;font:600 15px var(--f-ui);text-shadow:0 1px 0 rgba(255,240,205,.4);padding:0 18px;height:44px}
+.primary:active{filter:brightness(.94);box-shadow:inset 0 2px 3px rgba(80,55,20,.45)}
+.primary[disabled]{opacity:1;background:none;border-color:rgba(212,185,122,.3);color:rgba(243,236,220,.4);text-shadow:none;box-shadow:none}
+.primary.full{width:100%}
+body.compact .topbar .primary.addbtn{width:44px;padding:0}
+.ghost,.icon-btn,.seg button,.pick,.menu-item small,.note{font-family:var(--f-ui)}
+.pick{font:500 14.5px var(--f-ui)}
+body.compact .pick{font-size:15px}
+.mwrap{position:relative;display:flex;align-items:center;min-height:42px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:rgba(0,0,0,.18);font:16px var(--f-book);color:var(--text)}
+.mwrap .mlab.empty{color:var(--faint);font-family:var(--f-ui);font-size:15px}
+.mwrap input{position:absolute!important;inset:0;opacity:.01;width:100%;min-height:0!important;border:0!important;padding:0!important}
+.manual-line{display:block;margin-top:6px}
+.cpb blockquote{border-left:0;padding-left:18px;position:relative;font:normal 19px/1.55 var(--f-book);color:#2A1E14}
+.cpb blockquote::before{content:"“";position:absolute;left:-4px;top:-10px;font:600 36px/1 var(--f-display);color:rgba(122,42,31,.55)}
+.cpb cite{font:12px var(--f-ui);color:#6B5A42}
+.lede.big i,.ledger i{font-style:normal;color:#E2B38F}
+.yq,.pvline{font-style:normal!important}
+.pvline::before{content:"“"}.pvline::after{content:"”"}
+body:not(.compact) .ypage{flex:0 0 calc(50% - 7px);max-width:none}
+.ypages.one{justify-content:center}
+.ypage .wseal{margin:0 auto 6px}
+.welcome{text-align:center}
+.welcome .wseal{display:flex;justify-content:center}
+.welcome .exl{margin:4px 0 0!important;font:600 12px var(--f-display)!important;letter-spacing:.14em;text-transform:uppercase;color:var(--gilt)!important}
+.welcome h2{margin-top:2px}
+.welcome p{font:17px/1.55 var(--f-book);margin:8px 0 0}
+.welcome label{text-align:left}
+.wlink{display:block;margin:12px auto 0;font-size:15px}
+.bindpick{margin-top:14px}
+.bindrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.bthumb{width:22px;height:64px;padding:0;border:0;border-radius:2px 2px 1px 1px;cursor:pointer;box-shadow:1px 0 1px rgba(0,0,0,.6);outline-offset:2px}
+.bthumb.on{outline:2px solid var(--gilt)}
+.toast{white-space:nowrap;background:rgba(24,17,11,.95);border:1px solid rgba(212,185,122,.3);border-radius:14px;font:500 14px var(--f-ui);padding:10px 8px 10px 16px}
+.toast span{overflow:hidden;text-overflow:ellipsis}
+.toast button{background:none;font-weight:600}
+.banner{background:rgba(30,21,14,.95);border-color:rgba(212,185,122,.35)}
+.banner::before{content:"";width:7px;height:7px;border-radius:50%;background:#C9A55E;flex-shrink:0}
+
+/* letters, seals, motes */
+.letter{position:fixed;right:max(16px,env(safe-area-inset-right));top:calc(env(safe-area-inset-top) + 74px);z-index:96;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border:0;border-radius:6px;background:rgba(24,17,11,.92);color:var(--text);font:500 13px var(--f-ui);box-shadow:0 10px 24px rgba(0,0,0,.5);cursor:pointer;pointer-events:auto;max-width:min(360px,calc(100vw - 32px));text-align:left}
+.letter .lfold svg{display:block;width:58px;height:36px}
+.letter.open{display:block;width:min(420px,calc(100vw - 32px));padding:18px 22px 16px;background:url(parchment.jpg) 0 0/160% auto,#ece2ca;color:#2A1E14;box-shadow:inset 0 0 30px rgba(120,86,40,.35),0 20px 40px rgba(0,0,0,.6)}
+.letter.open p{margin:0;font:19px/1.5 var(--f-book)}
+.letter.open small{display:block;margin-top:8px;font:12.5px var(--f-ui);color:#6B5A42}
+.letter .lseal{float:right;margin:-6px -6px 4px 8px}
+.mote{position:fixed;width:3px;height:3px;border-radius:50%;background:#ffe2a6;box-shadow:0 0 6px 2px rgba(255,210,130,.6);pointer-events:none;z-index:170}
+.qod{display:none}
+
+/* ---------- F/G odds and ends ---------- */
+.lt small,.result small,.dt small{font-family:var(--f-ui)}
+.dt b{font:500 19px/1.2 var(--f-book)}
+.cand b{font:500 18px/1.2 var(--f-book)}
+.menu-item{font-family:var(--f-book)}
+.sh3,.cih{font:600 20px/1.2 var(--f-display)}
+.num,.rnum,.cardcount{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.flame,.halo,.cone{animation:none!important}.inkin{animation:none!important;-webkit-mask-image:none;mask-image:none}.spine.found,.spine.lift::after,.spine.found::after{animation:none!important}.scrim.enter .sheet{animation:none!important}}
+.favseal{display:inline-block;vertical-align:middle;margin-left:10px;transform:translateY(-3px) rotate(-8deg);filter:drop-shadow(1px 1px 1px rgba(40,10,5,.35))}
+.pvst .svstars{vertical-align:-2px;margin-right:4px}
+.rating .st .f path{transition:fill .6s ease-out}.rating.wet .st .f path{fill:#6B4A1A;transition:none}
+.bottombar .cases{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(27px + env(safe-area-inset-bottom))}
+.ui .plist,.ui .chips>*,.ui .qpill,.ui .zoompill,.ui .letter{pointer-events:auto}
+.shead,body.compact .sheet::before{touch-action:none}
+body.compact .arrange-banner{top:calc(env(safe-area-inset-top) + 64px);bottom:auto;font-size:13px}
+.letter{top:auto;bottom:calc(env(safe-area-inset-bottom) + 100px);right:auto;left:max(16px,env(safe-area-inset-left))}
+body.compact .letter{bottom:calc(env(safe-area-inset-bottom) + 88px)}
+body[data-view=cat].compact .topbar,body[data-view=list].compact .topbar{background:linear-gradient(180deg,rgba(14,10,7,.96),rgba(14,10,7,.9) 80%,rgba(14,10,7,0))}
+.sheet .seg{flex-wrap:wrap;border-radius:18px}
+.rp-body,.writer{zoom:var(--ts)}
+.leafwrap{z-index:45}
+.dlabel{font-size:9px!important}
+.cardcount{color:#E0D6C0!important}
+.pcat .cih{margin-left:auto;margin-right:auto}
+/* spread: the details sit in the column under the cover, so nothing falls off the page */
+.lp-head{flex:1 1 auto;min-height:0}
+.lp-cover{align-self:stretch;display:flex;flex-direction:column;min-height:0}
+.lp-cover .lp-meta{flex:1 1 auto;min-height:0;overflow:auto;margin:20px 0 0!important;scrollbar-width:none}
+.lp-cover .meta div{flex-direction:column;gap:1px;padding:5px 0}
+.lp-cover .meta dt{width:auto;padding-top:0}
+.lp-cover .meta dd{font-size:14.5px;line-height:1.3}
+/* sticky footers: only the buttons take taps, the fade above them lets taps through */
+.sfoot.sticky{pointer-events:none}.sfoot.sticky>*{pointer-events:auto}
+.sheet{scroll-padding-bottom:84px}
+/* compact: the search pill and the arrange banner take the chips' place, so the chips step aside */
+body.compact .qpill~.chips,body.compact .chips:has(~.arrange-banner){opacity:0}
+body.compact .qpill~.chips>*,body.compact .chips:has(~.arrange-banner)>*{pointer-events:none}
+body.compact .chips>*{transition:opacity .2s}
+body.compact .arrange-banner span{white-space:nowrap}
 
 </style>
 </head>
@@ -555,7 +876,7 @@ h2[tabindex="-1"]:focus{outline:none}
 <script>
 'use strict';
 /* ================= The Library — core: constants, state, small utilities ================= */
-const GEO = {"shelves": [{"bay": 0, "shelf": 0, "x0": 56.9, "x1": 389.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 0, "shelf": 1, "x0": 56.9, "x1": 389.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 0, "shelf": 2, "x0": 56.9, "x1": 389.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}, {"bay": 1, "shelf": 0, "x0": 423.9, "x1": 756.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 1, "shelf": 1, "x0": 423.9, "x1": 756.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 1, "shelf": 2, "x0": 423.9, "x1": 756.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}, {"bay": 2, "shelf": 0, "x0": 790.9, "x1": 1123.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 2, "shelf": 1, "x0": 790.9, "x1": 1123.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 2, "shelf": 2, "x0": 790.9, "x1": 1123.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}], "plates": [{"x": 141.6, "y": 93.2, "w": 157.3, "h": 22.7}, {"x": 511.4, "y": 93.2, "w": 157.3, "h": 22.7}, {"x": 881.2, "y": 93.2, "w": 157.3, "h": 22.7}]};
+const GEO = {"shelves": [{"bay": 0, "shelf": 0, "x0": 56.9, "x1": 389.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 0, "shelf": 1, "x0": 56.9, "x1": 389.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 0, "shelf": 2, "x0": 56.9, "x1": 389.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}, {"bay": 1, "shelf": 0, "x0": 423.9, "x1": 756.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 1, "shelf": 1, "x0": 423.9, "x1": 756.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 1, "shelf": 2, "x0": 423.9, "x1": 756.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}, {"bay": 2, "shelf": 0, "x0": 790.9, "x1": 1123.1, "yb": 300.3, "yt": 128.7, "pxm": 433.63}, {"bay": 2, "shelf": 1, "x0": 790.9, "x1": 1123.1, "yb": 484.8, "yt": 313.3, "pxm": 433.63}, {"bay": 2, "shelf": 2, "x0": 790.9, "x1": 1123.1, "yb": 669.3, "yt": 497.8, "pxm": 433.63}], "plates": [{"x": 141.6, "y": 93.2, "w": 157.3, "h": 22.7}, {"x": 511.4, "y": 93.2, "w": 157.3, "h": 22.7}, {"x": 881.2, "y": 93.2, "w": 157.3, "h": 22.7}], "flames": [[402.1, 287.5], [777.9, 287.5]], "pils": [34.3, 404.8, 775.2, 1145.7], "rail": 126.7, "hoods": [[212.0, 61.7], [590.0, 61.7], [968.0, 61.7]], "ladder": {"x": 848.5, "y": 116.5, "x1": 962.5, "y1": 820.0, "cx": 885.5}, "hires": true};
 const CAT = {"drawers": [{"i": 0, "x": 46.8, "y": 173.5, "w": 100.8, "h": 67.1, "lx": 74.8, "ly": 181.9, "lw": 40.7, "lh": 15.1}, {"i": 1, "x": 155.4, "y": 173.5, "w": 100.6, "h": 67.1, "lx": 184.5, "ly": 182.3, "lw": 40.6, "lh": 15.1}, {"i": 2, "x": 264.1, "y": 173.5, "w": 100.2, "h": 67.1, "lx": 292.7, "ly": 181.9, "lw": 40.6, "lh": 15.1}, {"i": 3, "x": 372.7, "y": 173.5, "w": 100.0, "h": 67.1, "lx": 402.1, "ly": 182.2, "lw": 40.4, "lh": 15.1}, {"i": 4, "x": 481.4, "y": 173.5, "w": 99.7, "h": 67.1, "lx": 510.9, "ly": 182.2, "lw": 40.4, "lh": 15.1}, {"i": 5, "x": 48.4, "y": 249.6, "w": 100.5, "h": 66.6, "lx": 76.6, "ly": 258.2, "lw": 40.6, "lh": 15.0}, {"i": 6, "x": 156.7, "y": 249.6, "w": 100.2, "h": 66.6, "lx": 185.0, "ly": 258.2, "lw": 40.5, "lh": 15.0}, {"i": 7, "x": 265.0, "y": 249.6, "w": 100.0, "h": 66.6, "lx": 294.1, "ly": 258.3, "lw": 40.4, "lh": 15.0}, {"i": 8, "x": 373.3, "y": 249.6, "w": 99.7, "h": 66.6, "lx": 402.6, "ly": 258.3, "lw": 40.3, "lh": 15.0}, {"i": 9, "x": 481.7, "y": 249.6, "w": 99.4, "h": 66.6, "lx": 511.1, "ly": 258.3, "lw": 40.3, "lh": 15.0}, {"i": 10, "x": 49.9, "y": 325.1, "w": 100.3, "h": 66.3, "lx": 78.2, "ly": 334.0, "lw": 40.4, "lh": 14.9}, {"i": 11, "x": 157.9, "y": 325.1, "w": 100.0, "h": 66.3, "lx": 186.6, "ly": 334.0, "lw": 40.4, "lh": 14.9}, {"i": 12, "x": 266.0, "y": 325.1, "w": 99.6, "h": 66.3, "lx": 294.8, "ly": 334.0, "lw": 40.3, "lh": 14.9}, {"i": 13, "x": 374.0, "y": 325.1, "w": 99.4, "h": 66.3, "lx": 403.2, "ly": 334.0, "lw": 40.2, "lh": 14.9}, {"i": 14, "x": 482.0, "y": 325.1, "w": 99.1, "h": 66.3, "lx": 511.4, "ly": 334.0, "lw": 40.1, "lh": 14.9}, {"i": 15, "x": 51.5, "y": 400.2, "w": 100.0, "h": 65.9, "lx": 79.1, "ly": 409.3, "lw": 40.4, "lh": 14.8}, {"i": 16, "x": 159.2, "y": 400.2, "w": 99.7, "h": 65.9, "lx": 187.8, "ly": 409.2, "lw": 40.2, "lh": 14.8}, {"i": 17, "x": 266.9, "y": 400.2, "w": 99.4, "h": 65.9, "lx": 295.6, "ly": 409.3, "lw": 40.2, "lh": 14.8}, {"i": 18, "x": 374.6, "y": 400.2, "w": 99.1, "h": 65.9, "lx": 403.8, "ly": 409.2, "lw": 40.1, "lh": 14.8}, {"i": 19, "x": 482.3, "y": 400.2, "w": 98.8, "h": 65.9, "lx": 511.5, "ly": 409.3, "lw": 40.1, "lh": 14.8}, {"i": 20, "x": 53.1, "y": 474.9, "w": 99.6, "h": 65.5, "lx": 80.7, "ly": 484.2, "lw": 40.2, "lh": 14.7}, {"i": 21, "x": 160.5, "y": 474.9, "w": 99.3, "h": 65.5, "lx": 189.2, "ly": 484.0, "lw": 40.1, "lh": 14.7}, {"i": 22, "x": 267.8, "y": 474.9, "w": 99.1, "h": 65.5, "lx": 296.2, "ly": 484.2, "lw": 40.1, "lh": 14.7}, {"i": 23, "x": 375.2, "y": 474.9, "w": 98.9, "h": 65.5, "lx": 403.9, "ly": 484.2, "lw": 40.0, "lh": 14.7}, {"i": 24, "x": 482.6, "y": 474.9, "w": 98.6, "h": 65.5, "lx": 511.7, "ly": 484.2, "lw": 40.0, "lh": 14.7}, {"i": 25, "x": 54.6, "y": 549.2, "w": 99.4, "h": 65.1, "lx": 82.9, "ly": 558.4, "lw": 40.1, "lh": 14.6}, {"i": 26, "x": 161.7, "y": 549.2, "w": 99.1, "h": 65.1, "lx": 189.8, "ly": 558.6, "lw": 40.0, "lh": 14.6}, {"i": 27, "x": 268.8, "y": 549.2, "w": 98.8, "h": 65.1, "lx": 297.2, "ly": 558.6, "lw": 40.0, "lh": 14.6}, {"i": 28, "x": 375.9, "y": 549.2, "w": 98.5, "h": 65.1, "lx": 404.9, "ly": 558.3, "lw": 39.8, "lh": 14.6}, {"i": 29, "x": 482.9, "y": 549.2, "w": 98.3, "h": 65.1, "lx": 512.0, "ly": 558.5, "lw": 39.8, "lh": 14.6}], "card": {"id": "card", "x": 673.7, "y": 361.5, "w": 402.3, "h": 240.9}, "dlabel": {"id": "dlabel", "x": 931.0, "y": 777.8, "w": 295.0, "h": 106.6}};
 const SPR = {"cols": 13, "rows": 3, "cw": 80, "ch": 492, "colors": ["#3b1c0b", "#5e3214", "#4f240e", "#2a170c", "#4a0f0b", "#6b3a1e", "#47280f", "#12291b", "#1f2b1c", "#111c33", "#1a2433", "#6a1f17", "VELLUM"], "styles": ["antique", "smooth", "label"]};
 const PAGES = { L: { x: 95, y: 114.3, w: 495, h: 642 }, R: { x: 590, y: 114.3, w: 495, h: 642 } };
@@ -625,7 +946,7 @@ function colorOf(b) { const c = COLORS[binding(b).color]; return c === 'VELLUM' 
 
 const ICON = {
   search: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>',
-  drawers: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M3 9h18M3 15h18M12 3v18M6.5 6h2M15.5 6h2M6.5 12h2M15.5 12h2M6.5 18h2M15.5 18h2"/></svg>',
+  drawers: '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1.4"/><rect x="8.5" y="7.5" width="7" height="3.6" rx=".4"/><path d="M10 15.5c0 1.2 4 1.2 4 0"/></svg>',
   menu: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>',
   plus: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>',
   left: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg>',
@@ -749,7 +1070,10 @@ const Store = {
       const remote = JSON.parse(text || '{}');
       this.sha = meta.sha; LS.set('library.sha', this.sha);
       this.ensure();
+      const before = this.data.books || {};
       const merged = this.merge(this.data, remote);
+      const fresh = Object.values(merged.books).filter((b) => !before[b.id] || (b.updatedAt || 0) > (before[b.id].updatedAt || 0)).length;
+      if (fresh && this.savedAt && typeof letter === 'function') letter('A letter from your other device', `${plural(fresh, 'book')} updated since you were last here.`);
       const changed = JSON.stringify(merged.books) !== JSON.stringify(remote.books || {}) || JSON.stringify(merged.settings) !== JSON.stringify(remote.settings || {});
       this.data = merged; this.saveLocal();
       this.status = 'synced'; this.error = ''; this.savedAt = Date.now();
@@ -898,14 +1222,17 @@ function binding(b) {
   for (let i = 0; i < weights.length; i++) { acc += weights[i] / tot; if (r < acc) { ci = i; break; } }
   const zh = isZh(b.title);
   const rs = rnd(b.id, 's');
-  const style = zh ? (rs < 0.6 ? 'smooth' : 'label') : (rs < 0.3 ? 'antique' : rs < 0.7 ? 'smooth' : 'label');
+  let style = zh ? (rs < 0.6 ? 'smooth' : 'label') : (rs < 0.3 ? 'antique' : rs < 0.7 ? 'smooth' : 'label');
+  if (ci === 1 || ci === 5) style = 'label'; // light tan leathers: gilt needs a dark lettering piece to read
   return { color: ci, style: STYLES.indexOf(style) };
 }
 function dims(b) {
   const pages = b.pages || (180 + rnd(b.id, 'p') * 420);
   const wm = Math.min(0.06, Math.max(0.025, 0.019 + pages * 0.00007));
-  const hm = b.heightM || (0.215 + rnd(b.id, 'h') * 0.1);
-  return { w: Math.round(wm * PXM), h: Math.round(hm * PXM) };
+  const hm = b.heightM || (0.245 + rnd(b.id, 'h') * 0.085);
+  const base = { w: Math.round(wm * PXM), h: Math.round(hm * PXM) };
+  const r = spineFitFor(b, base, STYLES[binding(b).style]); // a long title may widen the spine a little
+  return { w: base.w + r.boost, h: base.h, fit: r.f };
 }
 
 /* ---------- sections: her own named shelves; genres are the starting set ---------- */
@@ -1046,46 +1373,77 @@ function findDuplicate(title, author, isbn) {
 }
 
 /* ================= the wall ================= */
-/* ---------- spine titles: measured so they fit, never clipped at both ends ---------- */
+/* ---------- spine typography: always vertical, Title Case, measured to fit; never cut to two words ---------- */
 const measureCtx = document.createElement('canvas').getContext('2d');
-const mCache = new Map();
+const mCache = new Map(), fitCache = new Map();
 function textW(s, font) { const k = font + '|' + s; let w = mCache.get(k); if (w == null) { measureCtx.font = font; w = measureCtx.measureText(s).width; mCache.set(k, w); } return w; }
-function shortTitle(t) {
-  let s = t.split(/\s*[:：—–]\s+|\s+-\s+/)[0];
-  s = s.replace(/^(The|A|An)\s+/i, '');
-  return s;
+const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.2, 0.6] }; // [top, length] as a share of the spine height
+const famFor = (fs) => (fs >= 11 ? 'cg' : 'eb');
+const fontStr = (fam, fs) => fam === 'cg' ? `700 ${fs}px "Cormorant Garamond", Georgia, serif` : `600 ${fs}px "EB Garamond", Georgia, serif`;
+function perPx(s, fam, track) { return textW(s, fontStr(fam, 20)) / 20 + [...s].length * track; }
+function stripArticle(t) { return t.replace(/^(The|A|An)\s+/i, ''); }
+function stripSubtitle(t) { return t.split(/\s*[:：—–]\s+|\s+-\s+/)[0]; }
+function seriesShort(b, t) {
+  if (!b.series) return t;
+  const first = b.series.split(/\s+/)[0];
+  if (!new RegExp('^(' + b.series.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '|' + first + ')', 'i').test(t)) return t;
+  const m = /\b(and the|and|:)\s+/i.exec(t); return m ? t.slice(m.index + m[0].length) : t;
 }
-function spineFit(b, d, style) {
-  const title = (b.spineTitle || b.title || '').trim();
-  const W = d.w, L = d.h * (style === 'antique' ? 0.66 : 0.64);
-  const top = d.h * (style === 'antique' ? 0.17 : 0.17);
-  if (isZh(title)) {
-    let chars = [...title.replace(/\s+/g, '')];
-    const maxF = Math.min(W * 0.6, 15);
-    let fs = Math.min(maxF, L / (chars.length * 1.06));
-    let cols = 1;
-    if (fs < 7.2 && W >= 17) { cols = 2; fs = Math.min(W * 0.42, L / (Math.ceil(chars.length / 2) * 1.06)); }
-    if (fs < 6.5) { fs = 6.5; const fit = Math.floor(L / (fs * 1.06)) * cols - 1; chars = chars.slice(0, fit).concat('…'); }
-    const text = cols === 2 ? [chars.slice(0, Math.ceil(chars.length / 2)).join(''), chars.slice(Math.ceil(chars.length / 2)).join('')] : [chars.join('')];
-    return { zh: true, lines: text, fs, top, L };
+function tryLatin(text, W, L, minF, maxF, track) {
+  const caps = [...text].length <= 10;
+  const go = (s, tr) => { // one line, choosing the family that the size calls for
+    let fs = Math.min(maxF, L / perPx(s, 'eb', tr));
+    if (fs >= 11) fs = Math.min(maxF, L / perPx(s, 'cg', tr));
+    return fs;
+  };
+  if (caps) { const up = text.toUpperCase(); const fs = go(up, track * 6); if (fs >= 10) return { lines: [up], fs, caps: true }; }
+  const one = { lines: [text], fs: go(text, track) };
+  let two = null;
+  const words = text.split(/\s+/);
+  if (W >= 19 && words.length > 1) {
+    let best = null;
+    for (let i = 1; i < words.length; i++) { const a = words.slice(0, i).join(' '), z = words.slice(i).join(' '); const m = Math.max(perPx(a, 'eb', track), perPx(z, 'eb', track)); if (!best || m < best.m) best = { a, z, m }; }
+    two = { lines: [best.a, best.z], fs: Math.min(L / best.m, (W * 0.88) / 2.12, maxF) };
   }
-  const font = (fs) => `600 ${fs}px "Cormorant Garamond", Georgia, serif`;
-  const per = (s) => (textW(s, font(20)) / 20) + s.length * 0.04; // width per 1px of font size, incl. tracking
-  const maxF = Math.min(W * 0.64, 13.5);
-  const Lf = L * 0.93; // a little air at both ends
-  const cands = [title, shortTitle(title)].map((s) => s.toUpperCase()).filter((s, i, a) => s && a.indexOf(s) === i);
-  const two = (c) => { const words = c.split(/\s+/); if (words.length < 2) return null; let best = null; for (let i = 1; i < words.length; i++) { const a = words.slice(0, i).join(' '), z = words.slice(i).join(' '); const m = Math.max(per(a), per(z)); if (!best || m < best.m) best = { a, z, m }; } return { lines: [best.a, best.z], fs: Math.min(Lf / best.m, (W * 0.88) / 2.15, maxF) }; };
-  for (const c of cands) {
-    const one = { lines: [c], fs: Math.min(Lf / per(c), maxF) };
-    const t2 = two(c);
-    const pick = t2 && t2.fs > one.fs * 1.18 && one.fs < 8.5 ? t2 : one;
-    if (pick.fs >= 6.4) return { lines: pick.lines, fs: pick.fs, top, L };
+  if (one.fs >= minF) return two && two.fs > one.fs * 1.25 && one.fs < 9 ? two : one;
+  if (two && two.fs >= minF) return two;
+  return null;
+}
+function fitLatin(b, W, H, style, minF, track) {
+  const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = H * lf * 0.94;
+  const maxF = Math.min(W * 0.62, 14);
+  const t0 = (b.spineTitle || b.title || '').trim();
+  const cands = [t0, stripArticle(t0), stripSubtitle(t0), stripArticle(stripSubtitle(t0)), seriesShort(b, stripSubtitle(t0))];
+  cands.push(cands[cands.length - 1].replace(/\s+and\s+/gi, ' & '));
+  for (const c of cands.filter((x, i, a) => x && a.indexOf(x) === i)) { const r = tryLatin(c, W, L, minF, maxF, track); if (r) return Object.assign(r, { top: H * top, L: H * lf }); }
+  return null;
+}
+function fitZh(b, W, H, style, minF) {
+  const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = H * lf * 0.95;
+  const ch = [...(b.spineTitle || b.title || '').replace(/\s+/g, '')]; const n = ch.length;
+  let fs = Math.min(W * 0.62, 15, L / (n * 1.1));
+  if (fs >= minF) return { zh: true, lines: [ch.join('')], fs, top: H * top, L: H * lf };
+  if (W >= 22 && n > 6) { const half = Math.ceil(n / 2); fs = Math.min(W * 0.4, 15, L / (half * 1.1)); if (fs >= minF) return { zh: true, lines: [ch.slice(0, half).join(''), ch.slice(half).join('')], fs, top: H * top, L: H * lf }; }
+  return null;
+}
+function spineFitFor(b, base, style) {
+  const key = [b.id, b.title, b.spineTitle, b.series, base.w, base.h, style].join('|');
+  let r = fitCache.get(key); if (r) return r;
+  const zh = isZh(b.spineTitle || b.title);
+  const maxBoost = b.pages ? 3 : 6;
+  const fit = (W, minF, track) => (zh ? fitZh(b, W, base.h, style, minF) : fitLatin(b, W, base.h, style, minF, track));
+  for (const [minF, track] of zh ? [[9, 0], [7.5, 0]] : [[7.6, 0.01], [7.0, 0]]) {
+    for (let boost = 0; boost <= maxBoost; boost++) { const f = fit(base.w + boost, minF, track); if (f) { r = { boost, f }; break; } }
+    if (r) break;
   }
-  for (const c of cands) { const t2 = two(c); if (t2 && t2.fs >= 6) return { lines: t2.lines, fs: t2.fs, top, L }; }
-  // last resort: shorten with an ellipsis
-  const c = cands[cands.length - 1]; const fs = 6.4; let s = c;
-  while (s.length > 2 && per(s + '…') * fs > Lf) s = s.slice(0, -1);
-  return { lines: [s.trim() + '…'], fs, top, L };
+  if (!r) { // last resort: end at a word boundary, never mid-word
+    const W = base.w + maxBoost; const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = base.h * lf * 0.94; const fs = 7;
+    let words = stripArticle(stripSubtitle(b.spineTitle || b.title || '')).split(/\s+/);
+    if (zh) { const c = [...(b.title || '')]; const k = Math.max(2, Math.floor(L / (fs * 1.1)) - 1); r = { boost: maxBoost, f: { zh: true, lines: [c.slice(0, k).join('') + '…'], fs, top: base.h * top, L: base.h * lf } }; }
+    else { while (words.length > 1 && perPx(words.join(' ') + '…', 'eb', 0) * fs > L) words = words.slice(0, -1); r = { boost: maxBoost, f: { lines: [words.join(' ') + '…'], fs, top: base.h * top, L: base.h * lf } }; }
+  }
+  fitCache.set(key, r);
+  return r;
 }
 function spineHTML(b, d, extraCls, lean) {
   const bd = binding(b);
@@ -1093,31 +1451,31 @@ function spineHTML(b, d, extraCls, lean) {
   const cw = SPR.cw, ch = SPR.ch;
   const kx = d.w / cw, ky = d.h / ch;
   const style = STYLES[row];
-  const light = COLORS[col] === 'VELLUM' && style === 'smooth';
-  const f = spineFit(b, d, style);
-  const t = `<span class="t ${f.zh ? 'zh' : 'v'} ${style === 'antique' ? 'onlabel' : ''}" style="top:${f.top.toFixed(1)}px;height:${f.L.toFixed(1)}px;font-size:${f.fs.toFixed(2)}px">${f.lines.map(esc).join('<br>')}</span>`;
+  const light = COLORS[col] === 'VELLUM' && style !== 'label';
+  const f = d.fit || spineFitFor(b, d, style).f;
+  const fam = f.zh ? 'zh' : famFor(f.fs);
+  const t = `<span class="t ${f.zh ? 'zh' : 'v'} ${fam} ${f.caps ? 'caps' : ''}" style="top:${f.top.toFixed(1)}px;height:${f.L.toFixed(1)}px;font-size:${f.fs.toFixed(2)}px">${f.lines.map(esc).join('<br>')}</span>`;
   let marks = '';
   if (status(b) === 'want') marks += '<i class="slip" aria-hidden="true"></i>';
   if (b.lentTo) marks += '<i class="lent" aria-hidden="true"></i>';
-  if (b.favourite) marks += '<i class="fav" aria-hidden="true">✦</i>';
+  if (b.favourite) marks += '<i class="fav" aria-hidden="true"></i>';
   if (b.series && b.seriesNo) marks += `<i class="sno" aria-hidden="true">${esc(b.seriesNo)}</i>`;
-  const leanCss = lean ? `transform:rotate(${lean}deg);margin-left:10px;` : '';
+  const tilt = !lean && rnd(b.id, 'tilt') < 0.15 ? (rnd(b.id, 'td') - 0.5) * 1.2 : 0;
+  const leanCss = lean ? `transform:rotate(${lean}deg);margin-left:9px;` : tilt ? `transform:rotate(${tilt.toFixed(2)}deg);` : '';
   const label = `${b.title}${b.author ? ', ' + b.author : ''}${status(b) === 'want' ? ', want to read' : ''}${b.lentTo ? ', lent to ' + b.lentTo : ''}`;
   return `<button class="spine ${extraCls || ''} ${lean ? 'lean' : ''} ${light ? 'light' : ''}" data-act="spine" data-id="${esc(b.id)}" aria-label="${esc(label)}" style="width:${d.w}px;height:${d.h}px;background-image:url(spines.webp);background-size:${(SPR.cols * cw * kx).toFixed(1)}px ${(SPR.rows * ch * ky).toFixed(1)}px;background-position:-${(col * cw * kx).toFixed(1)}px -${(row * ch * ky).toFixed(1)}px;${leanCss}">${t}${marks}</button>`;
 }
 
-/* ---------- the wall ---------- */
-function renderWall() {
-  const L = layout();
-  if (S.page >= L.pages) S.page = L.pages - 1;
+function wallInner(L, page) {
   const q = S.q.trim();
-  let html = `<div class="wall" id="wall"><img class="bg" src="wall.jpg" alt="">`;
+  let html = `<img class="bg" src="${HIRES.wall ? 'wall@2x.webp' : 'wall.jpg'}" alt="">`;
+  html += atmosphereHTML();
   for (let bay = 0; bay < 3; bay++) {
-    const caseIdx = S.page * 3 + bay;
+    const caseIdx = page * 3 + bay;
     const shelves = L.cases[caseIdx] || [];
     const p = GEO.plates[bay];
     const plateText = shelves.length ? caseTitle(L, caseIdx) : '';
-    html += `<div class="plate" ${S.arrange && shelves.length ? `data-act="plate" data-bay="${bay}" role="button" tabindex="0" aria-label="Sort or rename ${esc(plateText)}"` : 'aria-hidden="true"'} style="${S.arrange && shelves.length ? 'cursor:pointer;' : ''}left:${p.x + 8}px;top:${p.y + 3}px;width:${p.w - 16}px;height:${p.h - 6}px;font-size:${plateText.length > 18 ? 9 : plateText.length > 14 ? 10.5 : 12}px;letter-spacing:${plateText.length > 14 ? '.05em' : '.12em'}">${esc(plateText)}</div>`;
+    html += `<div class="plate" ${S.arrange && shelves.length ? `data-act="plate" data-bay="${bay}" role="button" tabindex="0" aria-label="Sort or rename ${esc(plateText)}"` : 'aria-hidden="true"'} style="${S.arrange && shelves.length ? 'cursor:pointer;' : ''}left:${p.x + 8}px;top:${p.y + 3}px;width:${p.w - 16}px;height:${p.h - 6}px;font-size:${plateText.length > 18 ? 9 : plateText.length > 14 ? 10.5 : 12}px;letter-spacing:${plateText.length > 14 ? '.06em' : '.1em'}">${esc(plateText)}</div>`;
     if (S.arrange && shelves.length) html += `<button class="plate-hit" data-act="plate" data-bay="${bay}" aria-hidden="true" tabindex="-1" style="left:${p.x}px;top:${p.y - 10}px;width:${p.w}px;height:${p.h + 20}px"></button>`;
     for (let si = 0; si < 3; si++) {
       const g = GEO.shelves[bay * 3 + si];
@@ -1126,29 +1484,42 @@ function renderWall() {
       if (sh && sh.empty) html += `<span class="empty-shelf">${esc(secName(sh.empty))} — drag books here</span>`;
       if (sh && !sh.empty) {
         const prevSh = si > 0 ? shelves[si - 1] : null;
+        const tags = [];
         let x = 4;
-        if (secName(sh.sec) !== plateText && (!prevSh || prevSh.secs[prevSh.secs.length - 1] !== sh.sec)) html += `<span class="genre-tag" style="left:${x + 4}px">${esc(secName(sh.sec))}</span>`;
+        if (secName(sh.sec) !== plateText && (!prevSh || prevSh.secs[prevSh.secs.length - 1] !== sh.sec)) tags.push({ x: x + 2, name: secName(sh.sec) });
         const books = sh.items.filter((it) => it.b);
+        let inner = '';
         sh.items.forEach((it, i) => {
-          if (it.div) { html += `<span class="divider" aria-hidden="true"><i>${esc(secName(it.div))}</i></span><span class="genre-tag" style="left:${x + DIV_W + 4}px">${esc(secName(it.div))}</span>`; x += it.d.w; return; }
+          if (it.div) { inner += `<span class="divider" aria-hidden="true"></span>`; tags.push({ x: x + 8, name: secName(it.div) }); x += it.d.w; return; }
           const isLast = it === books[books.length - 1] && i === sh.items.length - 1;
-          const lean = isLast && sh.fill < 0.82 && books.length > 2 && !S.arrange ? 5 : 0;
+          const lean = isLast && sh.fill < 0.82 && books.length > 2 && !S.arrange ? -(Math.asin(9 / it.d.h) * 180 / Math.PI) : 0;
           let cls = '';
           if (q) cls = matchBook(it.b, q) ? (S.found === it.b.id ? 'found' : '') : 'dim';
           else if (S.found === it.b.id) cls = 'found';
-          html += spineHTML(it.b, it.d, cls, lean);
-          x += it.d.w + 1;
+          inner += spineHTML(it.b, it.d, cls, lean);
+          x += it.d.w + 1 + (lean ? 9 : 0);
         });
+        const sw = g.x1 - g.x0;
+        tags.forEach((tg, k) => { const next = k + 1 < tags.length ? tags[k + 1].x : sw - 4; const mw = next - tg.x - 6; if (mw >= 54) html += `<span class="genre-tag" style="left:${tg.x.toFixed(1)}px;max-width:${mw.toFixed(1)}px">${esc(tg.name)}</span>`; });
+        if (sh.fill < 0.45 && !S.arrange) inner += propHTML(sh, x, g.yb - g.yt);
+        html += inner;
       }
       html += `</div>`;
     }
   }
-  html += `</div>`;
-  stage.innerHTML = `<section class="view wallview" aria-label="Library wall">${html}</section>`;
+  html += `<div class="zveil" aria-hidden="true"></div>`;
+  return html;
+}
+function renderWall() {
+  const L = layout();
+  if (S.page >= L.pages) S.page = L.pages - 1;
+  stage.innerHTML = `<section class="view wallview" aria-label="Library wall"><div class="wall" id="wall">${wallInner(L, S.page)}</div>${ladderHTML()}<div class="tod ${todClass()}" aria-hidden="true"></div></section>`;
   chrome.innerHTML = wallChrome(L);
   applyZoom(false);
   renderResults();
   bindSearch();
+  Atmos.start();
+  setTimeout(() => upgrade('wall'), 1200);
 }
 function syncBits() {
   const st = Store.status; const t = Store.savedAt ? new Date(Store.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
@@ -1166,7 +1537,7 @@ function chipsHTML() {
   const desk = deskBooks(), pile = pileBooks();
   let h = '';
   if (S.compact) return desk.length || pile.length ? `<button class="deskchip mini" data-act="desk" data-tab="${desk.length ? 'desk' : 'pile'}" aria-label="Reading desk: ${desk.length} open, ${pile.length} to read">${ICON.desk}<b>${desk.length}</b><span class="sep"></span>${ICON.pile}<b>${pile.length}</b></button>` : '';
-  if (desk.length) { const b = desk[0]; h += `<button class="deskchip" data-act="desk" data-tab="desk" aria-label="Reading desk: ${esc(desk.map((x) => x.title).join(', '))}"><span class="thumb" style="background:${colorOf(b)}">${coverImg(b, '', '')}</span><span><small>On the desk</small><b>${esc(b.title)}</b></span>${desk.length > 1 ? `<em>+${desk.length - 1}</em>` : ''}</button>`; }
+  if (desk.length) { const b = desk[0]; h += `<button class="deskchip" data-act="desk" data-tab="desk" aria-label="Reading desk: ${esc(desk.map((x) => x.title).join(', '))}"><span class="thumb" style="${spineCrop(b, 26, 38)}">${coverImg(b, '', '')}</span><span><small>On the desk</small><b>${esc(b.title)}</b></span>${desk.length > 1 ? `<em>+${desk.length - 1}</em>` : ''}</button>`; }
   if (pile.length && S.settings.pileMode !== 'shelf') h += `<button class="deskchip pilechip" data-act="desk" data-tab="pile" aria-label="To-read pile, ${plural(pile.length, 'book')}">${ICON.pile}<span><small>To read</small><b>${pile.length}</b></span></button>`;
   if (!h && !S.compact) h = `<button class="deskchip quiet" data-act="desk" data-tab="desk"><span><small>The reading desk</small><b>Nothing open just now</b></span></button>`;
   return h;
@@ -1176,25 +1547,25 @@ function wallChrome(L) {
   const owner = S.settings.owner;
   const ci = S.page * 3 + S.bay;
   let html = `<header class="topbar">
-    <div class="wordmark"><b>The Library</b><span>${S.compact ? '' : (owner ? esc(owner) + '’s library' : 'Your library') + ' · '}${plural(n, 'book')} · <button id="sync" class="syncbtn" data-act="settings"></button></span></div>
+    <div class="wordmark"><b>The Library</b><span>${S.compact ? '' : (owner ? esc(owner) + '’s library' : 'Your library') + ' · '}${plural(n, 'book')}${S.compact ? ' ' : ' · '}<button id="sync" class="syncbtn" data-act="settings"></button></span></div>
     <button class="icon-btn search-toggle" data-act="search-toggle" aria-label="Search" aria-expanded="${S.searchOpen || !!S.q}">${ICON.search}</button>
-    <div class="search ${S.searchOpen || S.q ? 'open' : ''}">${ICON.search}<input id="q" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" placeholder="Find a title, author or feeling" value="${esc(S.q)}" aria-label="Search the library">${S.q ? `<button class="clear" data-act="search-clear" aria-label="Clear search">${ICON.close}</button>` : ''}<div id="results"></div></div>
+    <div class="search ${(S.searchOpen || S.q) && !(S.compact && S.resultsHidden) ? 'open' : ''}">${ICON.search}<input id="q" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" placeholder="Find a title, author or feeling" value="${esc(S.q)}" aria-label="Search the library">${S.q ? `<button class="clear" data-act="search-clear" aria-label="Clear search">${ICON.close}</button>` : ''}<div id="results"></div></div>
     <button class="icon-btn" data-act="go-cat" aria-label="Card catalogue">${ICON.drawers}<span class="lbl">Catalogue</span></button>
     <button class="primary addbtn" data-act="add" aria-label="Add a book">${ICON.plus}<span class="lbl"> Add a book</span></button>
     <button class="icon-btn" data-act="menu" aria-label="Menu">${ICON.menu}</button>
   </header>`;
   if (S.q && S.resultsHidden) { const k = S.books.filter((b) => matchBook(b, S.q)).length; html += `<div class="qpill"><span>Showing “${esc(S.q)}” · ${plural(k, 'book')}</span><button data-act="search-clear" aria-label="Clear search">${ICON.close}</button></div>`; }
   html += `<div class="chips">${chipsHTML()}</div>`;
-  if (S.arrange) html += `<div class="arrange-banner"><span>Arranging · hold a book, then drag it${S.compact ? '' : ' · tap a brass plate to sort or rename'}</span><button class="primary" data-act="arrange-done">Done</button></div>`;
-  if (S.zoom) html += `<button class="zoompill" data-act="unzoom">${ICON.expand}<span>Whole bookcase</span></button>`;
-  html += `<footer class="bottombar">
+  if (S.arrange) html += `<div class="arrange-banner"><span>${S.compact ? 'Hold a book, then drag' : 'Arranging · hold a book, then drag it · tap a brass plate to sort or rename'}</span><button class="primary" data-act="arrange-done">Done</button></div>`;
+  html += `<footer class="bottombar ${S.zoom ? 'zoomed' : ''}">
+    ${S.zoom ? `<button class="zoompill" data-act="unzoom">${ICON.expand}<span>Whole bookcase</span></button>` : ''}
     <div class="pager">
       <button class="icon-btn" data-act="page-prev" aria-label="Previous bookcase" ${canStep(L, -1) ? '' : 'disabled'}>${ICON.left}</button>
-      <span class="where">Bookcases ${S.page * 3 + 1}–${Math.min(L.cases.length, S.page * 3 + 3) || 1} of ${Math.max(1, L.cases.length)}</span>
+      <span class="where">Bookcases ${roman(S.page * 3 + 1)}–${roman(Math.min(L.cases.length, S.page * 3 + 3) || 1)} <small>of ${roman(Math.max(1, L.cases.length))}</small></span>
       <div class="bayname" aria-live="polite"><b>${esc(caseTitle(L, ci))}</b><span>Bookcase ${ci + 1} of ${Math.max(1, L.cases.length)}</span><div class="dots" aria-hidden="true">${(L.cases.length ? L.cases : [0]).map((c, i) => `<i class="${i === ci ? 'on' : ''}"></i>`).join('')}</div></div>
       <button class="icon-btn" data-act="page-next" aria-label="Next bookcase" ${canStep(L, 1) ? '' : 'disabled'}>${ICON.right}</button>
     </div>
-    <div class="cases" role="group" aria-label="All bookcases">${L.cases.map((c, i) => `<button class="case-dot ${Math.floor(i / 3) === S.page ? 'on' : ''}" data-act="page" data-page="${Math.floor(i / 3)}" aria-label="Bookcase ${i + 1}: ${esc(caseTitle(L, i))}"><i style="top:12px"></i><i style="top:24px"></i></button>`).join('')}</div>
+    <div class="cases" role="group" aria-label="All bookcases">${L.cases.map((c, i) => `<button class="case-dot ${Math.floor(i / 3) === S.page ? 'on' : ''}" data-act="page" data-page="${Math.floor(i / 3)}" aria-label="Bookcase ${i + 1}: ${esc(caseTitle(L, i))}">${[0, 1, 2].map((k) => `<i>${(c[k] ? c[k].items.filter((it) => it.b).slice(0, 7) : []).map((it) => `<b style="background:${colorOf(it.b)}"></b>`).join('')}</i>`).join('')}</button>`).join('')}</div>
   </footer>`;
   if (S.ready && n === 0) html += `<div class="empty-note"><h2>The shelves are waiting</h2><p>Add the first book you have read and it will be bound and shelved for you.</p><button class="primary" data-act="add">${ICON.plus} Add a book</button></div>`;
   if (!S.ready) html += `<div class="empty-note"><h2>Opening the library</h2><p><span class="spin"></span>&nbsp; Fetching your books…</p></div>`;
@@ -1210,8 +1581,22 @@ function renderBanner() {
   if (!el) { el = document.createElement('div'); el.id = 'banner'; el.className = 'banner'; el.setAttribute('role', 'status'); ui.appendChild(el); }
   el.innerHTML = msgs[0];
 }
+/* sharper images once the first paint is done, or as soon as she zooms (A6) */
+const HIRES = { wall: false, cat: false, asked: {} };
+function upgrade(kind, now) {
+  if (HIRES[kind] || HIRES.asked[kind] || !GEO.hires) return;
+  if (!now && (devicePixelRatio || 1) * (S.scale || 1) < 2.2) return;
+  HIRES.asked[kind] = true;
+  const src = kind === 'wall' ? 'wall@2x.webp' : 'catalogue@2x.webp';
+  const im = new Image(); im.src = src;
+  (im.decode ? im.decode() : Promise.resolve()).then(() => {
+    HIRES[kind] = true;
+    document.querySelectorAll(kind === 'wall' ? '#wall .bg' : '.catview .bg').forEach((b) => { b.src = src; });
+  }).catch(() => { HIRES.asked[kind] = false; });
+}
 function applyZoom(animate) {
   const w = document.getElementById('wall');
+  if (S.zoom) upgrade('wall', true);
   if (!w) return;
   if (!animate) w.style.transition = 'none';
   if (S.zoom) {
@@ -1246,7 +1631,7 @@ function renderResults() {
   if (!q || S.resultsHidden) { box.innerHTML = ''; return; }
   const r = searchAll(q);
   const rows = r.secs.slice(0, 2).map((x) => `<button class="result" data-act="goto-sec" data-sec="${esc(x.sec.id)}"><span class="sw sec">${ICON.drawers}</span><span><b>${esc(x.sec.name)} shelf</b><small>${plural(x.count, 'book')} · Go to the shelf</small></span></button>`).join('') +
-    r.books.slice(0, 8).map((b) => `<button class="result" data-act="goto" data-id="${esc(b.id)}" role="option"><span class="sw" style="background:${colorOf(b)}"></span><span><b>${esc(b.title)}</b><small>${esc(b.author || '')}${b.author ? ' · ' : ''}${esc(locText(b.id))}</small></span></button>`).join('');
+    r.books.slice(0, 8).map((b) => `<button class="result" data-act="goto" data-id="${esc(b.id)}" role="option"><span class="sw" style="${spineCrop(b, 9, 36)}"></span><span><b>${hi(b.title, q)}</b><small>${esc(b.author || '')}${b.author ? ' · ' : ''}${esc(locText(b.id))}</small></span></button>`).join('');
   box.innerHTML = `<div class="results" role="listbox" aria-label="${plural(r.books.length, 'book')} found">${r.books.length || r.secs.length ? `<div class="rcount">${plural(r.books.length, 'book')}</div>${rows}${r.books.length > 8 ? `<button class="result more" data-act="list-q">Show all ${r.books.length} in the list</button>` : ''}` : `<div style="padding:14px;font-size:14px;color:var(--muted)">No book matches “${esc(S.q)}”. Try an author, a feeling, or part of a title.</div>`}</div>`;
 }
 function bindSearch() {
@@ -1277,7 +1662,7 @@ function gotoBook(id) {
   for (let i = 0; i < l.idx; i++) x += it[i].d.w + (it[i].b ? 1 : 0);
   S.zoom = { bay: l.bay, shelf: l.shelf, fx: x + it[l.idx].d.w / 2 };
   render();
-  requestAnimationFrame(() => applyZoom(true));
+  requestAnimationFrame(() => { applyZoom(true); setTimeout(() => foundGlow(id), 520); });
 }
 function gotoSection(secId) {
   const L = layout();
@@ -1300,50 +1685,240 @@ function step(dir) {
   S.zoom = null; S.found = null;
   if (S.bayMode) {
     const c = S.page * 3 + S.bay + dir, np = Math.floor(c / 3);
-    S.bay = c % 3;
-    if (np === S.page) { render({ pan: true }); return; }
-    S.page = np; render(); booksIn(dir); return;
+    if (np === S.page) { S.bay = c % 3; render({ pan: true }); return; }
+    walk(dir, np, c % 3); return;
   }
-  S.page += dir; render(); booksIn(dir);
+  walk(dir, S.page + dir);
 }
 function booksIn(dir) {
   // the cabinets stay where they are; only the books change, sliding in like a new aisle
   document.querySelectorAll('#wall .shelf, #wall .plate').forEach((el, i) => anim(el, [{ transform: `translateX(${dir * 46}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 520, delay: (i % 3) * 40, easing: 'cubic-bezier(.2,.75,.2,1)', fill: 'backwards' }));
 }
 
+function roman(n) { const r = [[10, 'X'], [9, 'IX'], [5, 'V'], [4, 'IV'], [1, 'I']]; let s = ''; for (const [v, c] of r) while (n >= v) { s += c; n -= v; } return n > 0 ? s : s || '—'; }
+function spineCrop(b, w, h) { // a window onto the real binding (uniform scale), for chips, lists and results
+  const bd = binding(b); const k = w / SPR.cw;
+  const y = bd.style * SPR.ch * k + Math.max(0, SPR.ch * k * 0.42 - h / 2);
+  return `background-image:url(spines.webp);background-size:${(SPR.cols * SPR.cw * k).toFixed(2)}px ${(SPR.rows * SPR.ch * k).toFixed(2)}px;background-position:-${(bd.color * SPR.cw * k).toFixed(2)}px -${y.toFixed(2)}px`;
+}
+function hi(text, q) { // the matched part in gilt
+  const s = String(text || ''); const n = norm(q).trim(); if (!n) return esc(s);
+  const k = norm(s).indexOf(n); if (k < 0) return esc(s);
+  return esc(s.slice(0, k)) + '<em class="hit">' + esc(s.slice(k, k + n.length)) + '</em>' + esc(s.slice(k + n.length));
+}
+
+/* ================= the room is alive: candles, light, dust, ladder, props, seals, letters, sound ================= */
+const FLAMES = GEO.flames || [[402.1, 287.5], [777.9, 287.5]];
+const HOODS = GEO.hoods || [[212, 61.7], [590, 61.7], [968, 61.7]];
+const PILS = GEO.pils || [34.3, 404.8, 775.2, 1145.7];
+function atmosphereHTML() {
+  let h = '<div class="atmos" aria-hidden="true">';
+  HOODS.forEach(([x, y], i) => { h += `<i class="cone" style="left:${(x - 160).toFixed(1)}px;top:${(y + 10).toFixed(1)}px;animation-delay:${-i * 3.1}s"></i>`; });
+  FLAMES.forEach(([x, y], i) => { h += `<i class="halo" style="left:${(x - 110).toFixed(1)}px;top:${(y - 110).toFixed(1)}px;animation-delay:${-i * 1.7}s"></i><i class="flame" style="left:${(x - 3).toFixed(1)}px;top:${(y - 9).toFixed(1)}px;animation-delay:${-i * 2.3}s,${-i * 1.1}s"></i>`; });
+  h += `<canvas class="dust" id="dust" width="10" height="10"></canvas></div>`;
+  return h;
+}
+function todClass() { const h = new Date().getHours(); return h >= 6 && h < 11 ? 'morning' : h >= 18 ? 'evening' : ''; }
+
+/* ---------- a rolling library ladder on the brass rail ---------- */
+S.ladderPil = 3;
+function ladderX(pil) { return pil === 3 ? PILS[3] - 46 : pil === 0 ? PILS[0] + 46 : PILS[pil]; } // at the ends it stands just inside the run, so it stays in view
+function ladderHTML() {
+  const L = GEO.ladder; if (!L) return '';
+  const dx = ladderX(S.ladderPil) - L.cx;
+  return `<img class="ladder" id="ladder" src="ladder.webp" alt="" aria-hidden="true" style="left:${L.x}px;top:${L.y}px;width:${(L.x1 - L.x).toFixed(1)}px;height:${(L.y1 - L.y).toFixed(1)}px;transform:translateX(${dx.toFixed(1)}px)">`;
+}
+function rollLadder(pil) {
+  const el = document.getElementById('ladder'); const L = GEO.ladder; if (!el || !L || pil === S.ladderPil) return Promise.resolve();
+  const from = ladderX(S.ladderPil) - L.cx, to = ladderX(pil) - L.cx; S.ladderPil = pil;
+  const a = anim(el, [{ transform: `translateX(${from}px) rotate(0)` }, { transform: `translateX(${to + (to > from ? 6 : -6)}px) rotate(${to > from ? -1.5 : 1.5}deg)`, offset: 0.82 }, { transform: `translateX(${to}px) rotate(0)` }], { duration: 900, easing: 'cubic-bezier(.45,0,.2,1)', fill: 'forwards' });
+  el.style.transform = `translateX(${to}px)`;
+  return a ? a.finished.catch(() => {}) : Promise.resolve();
+}
+
+/* ---------- small things on sparse shelves ---------- */
+function propHTML(sh, x, shelfH) {
+  const kinds = ['stack', 'hourglass', 'letter', 'bookends', 'candle'];
+  const k = kinds[hash(sh.sec + ':' + sh.items.length) % kinds.length];
+  const left = x + 16;
+  if (k === 'stack') {
+    const bs = S.books.slice(0, 40); const pick = [0, 1, 2].map((i) => bs[(hash(sh.sec + i) % Math.max(1, bs.length))]).filter(Boolean);
+    return `<span class="prop stack" style="left:${left}px">${pick.map((b, i) => `<i style="${spineCrop(b, 20, 118)};bottom:${i * 20}px;left:${(rnd(b.id, 'sx') - 0.5) * 8}px"></i>`).join('')}</span>`;
+  }
+  if (k === 'hourglass') return `<span class="prop hourglass" style="left:${left}px">${SVG.hourglass}</span>`;
+  if (k === 'letter') return `<span class="prop letterprop" style="left:${left}px">${SVG.letter}</span>`;
+  if (k === 'candle') return `<span class="prop candleprop" style="left:${left}px">${SVG.candle}</span>`;
+  return `<span class="prop bookend" style="left:${left}px"></span>`;
+}
+const SVG = {
+  hourglass: '<svg viewBox="0 0 40 70" width="34" height="60"><defs><linearGradient id="hgB" x1="0" x2="1"><stop offset="0" stop-color="#5d4420"/><stop offset=".45" stop-color="#e6c983"/><stop offset="1" stop-color="#6e5226"/></linearGradient><linearGradient id="hgG" x1="0" x2="1"><stop offset="0" stop-color="rgba(255,255,255,.05)"/><stop offset=".3" stop-color="rgba(255,255,255,.28)"/><stop offset=".6" stop-color="rgba(255,255,255,.06)"/></linearGradient></defs><rect x="3" y="2" width="34" height="5" rx="1.5" fill="url(#hgB)"/><rect x="3" y="63" width="34" height="5" rx="1.5" fill="url(#hgB)"/><rect x="5" y="7" width="2.4" height="56" fill="url(#hgB)"/><rect x="32.6" y="7" width="2.4" height="56" fill="url(#hgB)"/><path d="M10 8h20c0 12-8 16-8 27 0 11 8 15 8 27H10c0-12 8-16 8-27 0-11-8-15-8-27Z" fill="url(#hgG)" stroke="rgba(255,240,210,.25)" stroke-width=".6"/><path d="M12.5 56c3-5 5.5-7 7.5-7s4.5 2 7.5 7Z" fill="#c9a46a"/><path d="M14 17h12c-1.5 4-4 6.5-6 9-2-2.5-4.5-5-6-9Z" fill="#c9a46a" opacity=".9"/><line x1="20" y1="35" x2="20" y2="49" stroke="#c9a46a" stroke-width=".8"/></svg>',
+  letter: '<svg viewBox="0 0 64 40" width="58" height="36"><path d="M2 6 32 2l30 4v32l-30 2-30-2Z" fill="#e9dcbf" stroke="rgba(80,55,25,.35)" stroke-width=".6"/><path d="M2 6l30 17L62 6" fill="none" stroke="rgba(80,55,25,.35)" stroke-width=".7"/><circle cx="32" cy="23" r="6.5" fill="#7a1d17"/><circle cx="32" cy="23" r="4" fill="none" stroke="rgba(255,190,170,.35)" stroke-width=".8"/></svg>',
+  candle: '<svg viewBox="0 0 30 64" width="26" height="56"><defs><linearGradient id="cdB" x1="0" x2="1"><stop offset="0" stop-color="#5d4420"/><stop offset=".45" stop-color="#e6c983"/><stop offset="1" stop-color="#6e5226"/></linearGradient><linearGradient id="cdW" x1="0" x2="1"><stop offset="0" stop-color="#cdbf9f"/><stop offset=".5" stop-color="#f1e8d2"/><stop offset="1" stop-color="#b9a986"/></linearGradient></defs><ellipse cx="15" cy="60" rx="13" ry="3.4" fill="url(#cdB)"/><rect x="11" y="44" width="8" height="15" fill="url(#cdB)"/><rect x="10" y="26" width="10" height="19" rx="1" fill="url(#cdW)"/><path d="M15 26v-4" stroke="#2a1d10" stroke-width=".9"/></svg>',
+  quill: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 3C11 4 6 10 5 19"/><path d="M20 3c-1 6-5 10-11 11"/><path d="M8 13l3 3"/><path d="M4 21l1-2"/></svg>',
+  ledger: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h12a2 2 0 0 1 2 2v16H7a2 2 0 0 1-2-2Z"/><path d="M5 19a2 2 0 0 1 2-2h12M9 7h6M9 10h6"/></svg>',
+  candleI: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1.6 1.8 1.6 3.4 0 4.6-1.6-1.2-1.6-2.8 0-4.6Z"/><path d="M10 9h4v9h-4Z"/><path d="M6 21h12M8 18h8"/></svg>',
+  book: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5c3-1.3 6-1.3 9 .5 3-1.8 6-1.8 9-.5V19c-3-1.3-6-1.3-9 .5-3-1.8-6-1.8-9-.5Z"/><path d="M12 7v12.5"/></svg>',
+  ladder: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M8 2l-3 20M16 2l3 20M7.4 6h9.2M6.8 10h10.4M6.2 14h11.6M5.6 18h12.8"/></svg>',
+  seal: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3.5l1.6 1.2 2-.3.9 1.8 1.8.9-.3 2 1.2 1.6-1.2 1.6.3 2-1.8.9-.9 1.8-2-.3L12 20l-1.6-1.2-2 .3-.9-1.8-1.8-.9.3-2L4.8 12.8 6 11.2l-.3-2 1.8-.9.9-1.8 2 .3Z"/><circle cx="12" cy="12" r="3.4"/></svg>',
+  envelope: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.2"/><path d="M3.5 6.5l8.5 7 8.5-7"/></svg>',
+  drawer: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1.4"/><rect x="8.5" y="7.5" width="7" height="3.6" rx=".4"/><path d="M10 15.5c0 1.2 4 1.2 4 0"/></svg>',
+  gear: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg>',
+  dice: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1" fill="currentColor"/><circle cx="15" cy="15" r="1" fill="currentColor"/><circle cx="15" cy="9" r="1" fill="currentColor"/><circle cx="9" cy="15" r="1" fill="currentColor"/></svg>',
+  star: (fill, id) => `<svg class="sv" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="sg${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b8893a"/><stop offset="1" stop-color="#8e6420"/></linearGradient><clipPath id="sc${id}"><rect x="0" y="0" width="${(24 * fill).toFixed(2)}" height="24"/></clipPath></defs><path class="se" d="M12 2.8l2.75 5.75 6.3.8-4.62 4.36 1.17 6.24L12 16.9l-5.6 3.05 1.17-6.24L2.95 9.35l6.3-.8Z"/><path clip-path="url(#sc${id})" fill="url(#sg${id})" d="M12 2.8l2.75 5.75 6.3.8-4.62 4.36 1.17 6.24L12 16.9l-5.6 3.05 1.17-6.24L2.95 9.35l6.3-.8Z"/></svg>`
+};
+let starUid = 0;
+function starsSVG(v, size) { let h = ''; for (let i = 0; i < 5; i++) h += SVG.star(Math.max(0, Math.min(1, (v || 0) - i)), 'x' + (starUid++)); return `<span class="svstars" style="--ss:${size || 14}px" aria-hidden="true">${h}</span>`; }
+
+/* ---------- wax seals ---------- */
+function sealSVG(size, letter) {
+  const n = 24, r = 18, pts = [];
+  for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2; const rr = r + (rnd('seal' + (letter || ''), i) - 0.5) * 2.4; pts.push(`${(24 + Math.cos(a) * rr).toFixed(2)},${(24 + Math.sin(a) * rr).toFixed(2)}`); }
+  const id = 'w' + (starUid++);
+  const mark = letter ? `<text x="24" y="29.5" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-weight="600" font-size="16" fill="#5a1410" style="filter:url(#e${id})">${esc(letter)}</text>` : `<path d="M24 15l2.2 6.6 6.8.2-5.4 4.2 2 6.6L24 28.6 18.4 32.6l2-6.6-5.4-4.2 6.8-.2Z" fill="#5a1410" style="filter:url(#e${id})"/>`;
+  return `<svg class="seal" width="${size}" height="${size}" viewBox="0 0 48 48" aria-hidden="true"><defs><radialGradient id="g${id}" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#9a2a22"/><stop offset=".6" stop-color="#6e1a15"/><stop offset="1" stop-color="#4e120e"/></radialGradient><filter id="e${id}"><feOffset dy=".6"/><feGaussianBlur stdDeviation=".3"/><feComposite operator="arithmetic" k2="-1" k3="1"/><feColorMatrix values="0 0 0 0 1  0 0 0 0 .8  0 0 0 0 .75  0 0 0 .5 0"/></filter></defs><polygon points="${pts.join(' ')}" fill="url(#g${id})"/><circle cx="24" cy="24" r="12.5" fill="none" stroke="rgba(40,8,6,.55)" stroke-width="1.2"/><path d="M14 16a13 13 0 0 1 12-5" fill="none" stroke="rgba(255,200,180,.35)" stroke-width="1.4" stroke-linecap="round"/>${mark}</svg>`;
+}
+function ownerInitial() { const o = (S.settings.owner || '').trim(); return o ? [...o][0].toUpperCase() : ''; }
+function stampSeal(host) {
+  if (!host) return;
+  const s = document.createElement('span'); s.className = 'stamp'; s.innerHTML = sealSVG(64, ownerInitial());
+  host.appendChild(s);
+  const a = anim(s, [{ transform: 'scale(1.5) rotate(-10deg)', opacity: 0 }, { transform: 'scale(.94) rotate(0)', opacity: 1, offset: 0.56 }, { transform: 'scale(1)', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.2,1.4,.4,1)' });
+  sound('seal');
+  setTimeout(() => { anim(s, [{ opacity: 1 }, { opacity: 0 }], { duration: 400, fill: 'forwards' }); setTimeout(() => s.remove(), 420); }, a ? 1100 : 600);
+}
+
+/* ---------- letters: notices arrive folded and sealed ---------- */
+function letter(title, body, sub) {
+  const el = document.createElement('button'); el.className = 'letter'; el.setAttribute('aria-label', title + ' — tap to open');
+  el.innerHTML = `<span class="lfold">${SVG.letter}</span><span class="lt2">${esc(title)}</span>`;
+  ui.appendChild(el);
+  anim(el, [{ transform: 'translate(40px,-30px) rotate(6deg)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 520, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  const bye = () => { if (!el.isConnected) return; const a = anim(el, [{ opacity: 1 }, { opacity: 0, transform: 'translateY(-10px)' }], { duration: 300, fill: 'forwards' }); setTimeout(() => el.remove(), a ? 300 : 0); };
+  let opened = false;
+  el.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (opened) return bye();
+    opened = true; el.classList.add('open');
+    el.innerHTML = `<span class="lseal">${sealSVG(30, ownerInitial())}</span><p class="ink">${body}</p>${sub ? `<small>${sub}</small>` : ''}`;
+    anim(el, [{ clipPath: 'inset(45% 0 45% 0 round 4px)' }, { clipPath: 'inset(0 0 0 0 round 4px)' }], { duration: 460, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    sound('page');
+    clearTimeout(el._t); el._t = setTimeout(bye, 12000);
+  });
+  el._t = setTimeout(bye, 9000);
+  return el;
+}
+
+/* ---------- dust drifting in the lamp light ---------- */
+const Atmos = {
+  raf: 0, parts: null, last: 0,
+  start() {
+    cancelAnimationFrame(this.raf); this.raf = 0;
+    const c = document.getElementById('dust');
+    if (!c || REDUCED.matches || document.hidden || S.view !== 'wall' || S.settings.quietMotion) return;
+    const k = Math.min(2, (S.scale || 1) * (devicePixelRatio || 1));
+    const W = 1180, H = 460, Y0 = 60;
+    c.width = Math.round(W * k); c.height = Math.round(H * k); c.style.cssText = `left:0;top:${Y0}px;width:${W}px;height:${H}px`;
+    const g = c.getContext('2d');
+    if (!this.parts) this.parts = Array.from({ length: 45 }, (_, i) => { const h = HOODS[i % 3]; return { x: h[0] + (Math.random() - 0.5) * 200, y: Math.random() * H, r: 0.5 + Math.random() * 1.1, a: 0.06 + Math.random() * 0.26, s: Math.random() * 1000, tw: 0 }; });
+    const P = this.parts;
+    const tick = (t) => {
+      if (!c.isConnected || S.view !== 'wall' || document.hidden) { this.raf = 0; return; }
+      const dt = Math.min(0.05, (t - (this.last || t)) / 1000); this.last = t;
+      g.setTransform(k, 0, 0, k, 0, 0); g.clearRect(0, 0, W, H);
+      if (!S.zoom) for (const p of P) {
+        const n = Math.sin(p.s + t * 0.00031) + Math.sin(p.s * 1.7 + t * 0.00017);
+        p.x += (n * 4) * dt; p.y += (-6 + Math.cos(p.s + t * 0.00023) * 5) * dt;
+        if (p.y < -4) { p.y = H + 4; const h = HOODS[Math.floor(Math.random() * 3)]; p.x = h[0] + (Math.random() - 0.5) * 220; }
+        if (Math.random() < 0.0004) p.tw = 0.3;
+        if (p.tw > 0) p.tw -= dt;
+        // brightness from the nearest lamp cone
+        let m = 0; for (const h of HOODS) { const wy = 60 + (p.y / H) * 150; const d = Math.abs(p.x - h[0]) / wy; m = Math.max(m, Math.max(0, 1 - d * d) * (1 - p.y / H * 0.6)); }
+        const al = p.a * m * (p.tw > 0 ? 1.6 : 1);
+        if (al < 0.01) continue;
+        g.fillStyle = `rgba(255,232,190,${al.toFixed(3)})`; g.beginPath(); g.arc(p.x, p.y, p.r, 0, 6.283); g.fill();
+      }
+      this.raf = requestAnimationFrame(tick);
+    };
+    this.last = 0; this.raf = requestAnimationFrame(tick);
+  }
+};
+document.addEventListener('visibilitychange', () => { if (!document.hidden) Atmos.start(); });
+
+/* ---------- motes: a little burst of gold (search found, new book) ---------- */
+function motes(el, n) {
+  if (!el || REDUCED.matches) return;
+  const r = el.getBoundingClientRect();
+  for (let i = 0; i < (n || 12); i++) {
+    const m = document.createElement('i'); m.className = 'mote';
+    m.style.left = (r.left + r.width / 2 + (Math.random() - 0.5) * r.width) + 'px'; m.style.top = (r.top + r.height * (0.2 + Math.random() * 0.5)) + 'px';
+    ui.appendChild(m);
+    const dx = (Math.random() - 0.5) * 40, dy = -30 - Math.random() * 60;
+    const a = m.animate([{ transform: 'translate(0,0) scale(1)', opacity: 0 }, { opacity: 0.9, offset: 0.2 }, { transform: `translate(${dx}px,${dy}px) scale(.4)`, opacity: 0 }], { duration: 900 + Math.random() * 700, delay: Math.random() * 200, easing: 'cubic-bezier(.2,.6,.3,1)' });
+    a.onfinish = () => m.remove();
+  }
+}
+
+/* ---------- optional sound (Settings, off by default): synthesised, no files ---------- */
+let AC = null;
+function sound(kind) {
+  if (!S.settings.sound) return;
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const t = AC.currentTime;
+    const noise = (dur, f0, f1, gain) => {
+      const buf = AC.createBuffer(1, Math.ceil(AC.sampleRate * dur), AC.sampleRate); const d = buf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 1.5);
+      const s = AC.createBufferSource(); s.buffer = buf;
+      const f = AC.createBiquadFilter(); f.type = 'bandpass'; f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(f1, t + dur); f.Q.value = 0.8;
+      const g = AC.createGain(); g.gain.value = gain;
+      s.connect(f).connect(g).connect(AC.destination); s.start(t);
+    };
+    const thump = (fr, dur, gain) => { const o = AC.createOscillator(); o.frequency.setValueAtTime(fr, t); o.frequency.exponentialRampToValueAtTime(fr * 0.5, t + dur); const g = AC.createGain(); g.gain.setValueAtTime(gain, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur); o.connect(g).connect(AC.destination); o.start(t); o.stop(t + dur); };
+    if (kind === 'page') noise(0.32, 2400, 700, 0.06);
+    else if (kind === 'drawer') { noise(0.34, 500, 180, 0.08); thump(90, 0.12, 0.05); }
+    else if (kind === 'seal') thump(120, 0.16, 0.12);
+    else if (kind === 'card') noise(0.08, 3000, 1800, 0.04);
+    else if (kind === 'book') { noise(0.22, 900, 400, 0.05); thump(140, 0.1, 0.04); }
+  } catch (e) { /* no audio */ }
+}
+
 /* ================= the open book ================= */
 const RIBBONS = [['review', 'Review', '#8a2219'], ['synopsis', 'Synopsis', '#26406a'], ['quotes', 'Quotes', '#2f5a3a'], ['notes', 'Notes', '#9a7422']];
 const BACK_LABEL = { wall: 'Shelf', cat: 'Catalogue', list: 'All books', desk: 'Desk', ledger: 'Ledger', quotes: 'Quotations', year: 'Your year' };
 function openBook(id, from) {
+  openCount++;
   const fromBook = S.view === 'book';
   const d = fromBook && S.bookNav ? (id === S.bookNav.prev ? -1 : 1) : 0;
   if (!fromBook) S.from = from || S.view || 'wall';
   S.book = id; S.view = 'book'; S.sheet = null; S.sheets = []; S.tab = S.tab || 'review';
   render();
-  if (fromBook) pageIn(d); else anim(document.querySelector('.pb') || document.querySelector('.bookview'), [{ opacity: 0, transform: 'translateY(14px) scale(.985)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.2,.75,.2,1)' });
+  if (fromBook) pageIn(d); else { anim(document.querySelector('.pb') || document.querySelector('.bookview'), [{ opacity: 0, transform: 'translateY(14px) scale(.985)' }, { opacity: 1, transform: 'none' }], { duration: 420, easing: 'cubic-bezier(.2,.75,.2,1)' }); }
+  inkIn();
 }
 function closeBook() {
   const b = S.books.find((x) => x.id === S.book);
   const from = S.from || 'wall'; S.from = null;
   if (from === 'cat' || from === 'list') { S.view = from; render(); return; }
   if (from === 'desk' || from === 'ledger' || from === 'quotes' || from === 'year') { S.view = 'wall'; render(); openSheet(from === 'desk' ? { kind: 'desk', tab: b && status(b) === 'want' ? 'pile' : 'desk' } : { kind: from }); return; }
-  if (b && shelvedOn(b) === 'shelf') { gotoBook(b.id); return; }
+  if (b && shelvedOn(b) === 'shelf') { returnBook(b); return; }
   S.view = 'wall'; render();
 }
 function ratingHTML(r, dark, act) {
   const v = r == null ? 0 : r;
   let stars = '';
-  for (let i = 0; i < 5; i++) { const f = Math.max(0, Math.min(1, v - i)) * 100; stars += `<span class="st">★<span style="width:${f}%">★</span></span>`; }
+  for (let i = 0; i < 5; i++) { const f = Math.max(0, Math.min(1, v - i)) * 100; stars += `<span class="st"><svg viewBox="0 0 24 24" class="e"><path d="${STAR_D}"/></svg><span style="width:${f}%"><svg viewBox="0 0 24 24" class="f"><path d="${STAR_D}"/></svg></span></span>`; }
   return `<div class="rating ${dark ? 'dark' : ''}" role="slider" tabindex="0" aria-label="My rating" aria-valuemin="0" aria-valuemax="5" aria-valuenow="${v}" aria-valuetext="${r == null ? 'Not rated' : r + ' stars'}" data-rate="${act || 'rate'}">${stars}</div><span class="rnum">${r != null ? r.toFixed(1) : ''}</span>${r != null ? `<button class="rclear" data-act="${act || 'rate'}-clear" aria-label="Clear rating">Clear</button>` : ''}`;
 }
-function titleSize(t) { const n = [...t].length; return n <= 22 ? 36 : n <= 40 ? 30 : 26; }
+const STAR_D = 'M12 2.8l2.75 5.75 6.3.8-4.62 4.36 1.17 6.24L12 16.9l-5.6 3.05 1.17-6.24L2.95 9.35l6.3-.8Z';
+const FLEURON = '<svg class="fleuron" viewBox="0 0 120 14" aria-hidden="true"><path d="M2 7h44M74 7h44" stroke="currentColor" stroke-width=".8"/><path d="M60 2c3 2.5 3 7.5 0 10-3-2.5-3-7.5 0-10Z" fill="currentColor"/><path d="M60 7c-4-3-8-3-11 0 3 3 7 3 11 0Zm0 0c4-3 8-3 11 0-3 3-7 3-11 0Z" fill="none" stroke="currentColor" stroke-width=".8"/><circle cx="47" cy="7" r="1" fill="currentColor"/><circle cx="73" cy="7" r="1" fill="currentColor"/></svg>';
+function titleSize(t) { const n = [...t].length; return S.compact ? (n <= 22 ? 30 : n <= 40 ? 32 * 0.85 : 26) : (n <= 22 ? 40 : n <= 40 ? 34 : 28); }
 function altLabel(b) { return isZh(b.titleAlt) && !isZh(b.title) ? 'Chinese title' : isZh(b.title) && !isZh(b.titleAlt) ? 'English title' : 'Original title'; }
 function tabBodyHTML(b) {
   const quotes = b.quotes || [];
   return {
-    review: `<div class="sec-h"><h2>My review</h2><span class="saved" id="saved">${b.sample ? 'Example book' : ''}</span></div>
+    review: `<div class="sec-h"><h2>My review</h2><span class="saved" id="saved">${b.sample ? 'Example book' : ''}</span></div>${!b.review && !b.pullLine ? `<div class="fl-rule">${FLEURON}</div>` : ''}
       <textarea class="inkarea pull" id="f-pull" data-field="pullLine" rows="2" placeholder="One line you would say about it…" style="margin-top:12px">${esc(b.pullLine || '')}</textarea>
-      <textarea class="inkarea" id="f-review" data-field="review" rows="11" placeholder="What did it leave you with? English or 中文 both work." style="margin-top:12px">${esc(b.review || '')}</textarea>`,
+      <textarea class="inkarea ${b.review ? '' : 'ruled'}" id="f-review" data-field="review" ${isZh(b.review) ? 'lang="zh-Hant"' : ''} rows="11" placeholder="What did it leave you with? English or 中文 both work." style="margin-top:12px">${esc(b.review || '')}</textarea>`,
     synopsis: `<div class="sec-h"><h2>Synopsis</h2><span class="saved" id="saved"></span></div>
       <textarea class="inkarea" id="f-synopsis" data-field="synopsis" rows="14" placeholder="A short summary, no spoilers." style="margin-top:14px">${esc(b.synopsis || '')}</textarea>`,
     quotes: `<div class="sec-h"><h2>Quotations</h2><span class="saved" id="saved">${quotes.filter((q) => (q.text || '').trim()).length ? plural(quotes.filter((q) => (q.text || '').trim()).length, 'saved', 'saved') : ''}</span></div>
@@ -1361,7 +1936,7 @@ function renderBook() {
   const reads = readsOf(b).filter((r) => r.finish).map((r) => monthLabel(r.finish)).reverse();
   const meta = [
     ['Published', [b.year, b.publisher].filter(Boolean).join(' · ')],
-    [altLabel(b), b.titleAlt || ''],
+    [altLabel(b), ''],
     ['Translator', b.translator || ''],
     ['Pages', b.pages ? String(b.pages) : ''],
     ['Genre', [b.genre || 'Fiction', b.subgenre].filter(Boolean).join(' › ')],
@@ -1377,17 +1952,19 @@ function renderBook() {
   const prev = pool[ix - 1], next = pool[ix + 1];
   S.bookNav = { prev, next };
   const links = (b.links || []).map((id) => S.books.find((x) => x.id === id)).filter(Boolean);
-  const cover = `<div class="cover" style="background:linear-gradient(90deg,rgba(0,0,0,.4),rgba(255,255,255,.05) 8%,rgba(0,0,0,0) 22%,rgba(0,0,0,.25)),${col}">
-        <small>${esc(b.author || '')}</small><b>${esc(b.title)}</b>${coverImg(b, '', 'Cover of ' + b.title)}
+  const vel = COLORS[binding(b).color] === 'VELLUM';
+  const cover = `<div class="cover ${vel ? 'vellum' : ''}" style="background:linear-gradient(90deg,rgba(0,0,0,.4),rgba(255,255,255,.05) 8%,rgba(0,0,0,0) 22%,rgba(0,0,0,.25)),url(ui_leather.png) center/220% auto,${col};background-blend-mode:normal,multiply,normal">
+        <b>${esc(b.title)}</b><span class="cfl">${FLEURON}</span><small>${esc(b.author || '')}</small>${coverImg(b, '', 'Cover of ' + b.title)}
         <button class="cover-btn" data-act="cover" aria-label="Change the cover"></button>
       </div>`;
   const sb = b.series ? seriesBooks(b.series) : [];
   const nextInSeries = b.series ? sb.find((x) => (x.seriesNo ?? 0) > (b.seriesNo ?? 0)) : null;
   const seriesLine = b.series ? `<div class="series">${esc(b.series)}${b.seriesNo ? ` · book ${esc(b.seriesNo)}` : ''}${nextInSeries ? ` · <button class="linkish" data-act="open" data-id="${esc(nextInSeries.id)}">next: ${esc(nextInSeries.title)} ›</button>` : ''}</div>` : '';
   const ts = titleSize(b.title);
-  const titleBlock = `<div class="kicker">${esc([secName(secOf(b)) !== (b.genre || 'Fiction') ? secName(secOf(b)) : '', b.genre || 'Fiction', b.subgenre].filter(Boolean).join(' · '))}${isExample(b) ? ' · <span class="ex">Example</span>' : ''}</div>
-      <h1 class="btitle" style="font-size:${ts}px">${esc(b.title)}</h1>
-      ${b.titleAlt ? `<div class="${isZh(b.titleAlt) ? 'bzh' : 'balt'}">${esc(b.titleAlt)}</div>` : ''}
+  const kick = [...new Set([secName(secOf(b)) !== (b.genre || 'Fiction') ? secName(secOf(b)) : '', b.subgenre && b.subgenre !== b.genre ? b.subgenre : (b.genre || 'Fiction')].filter(Boolean))];
+  const titleBlock = `<div class="kicker">${esc(kick.join(' · '))}${isExample(b) ? ' <span class="ex">Example</span>' : ''}</div>
+      <h1 class="btitle" style="font-size:${ts}px">${esc(b.title)}${b.favourite ? `<span class="favseal" title="A favourite">${sealSVG(30, ownerInitial())}</span>` : ''}</h1>
+      ${b.titleAlt ? `<div class="${isZh(b.titleAlt) ? 'bzh' : 'balt'}" ${isZh(b.titleAlt) ? 'lang="zh-Hant"' : ''}>${esc(b.titleAlt)}</div>` : ''}
       <div class="bsub">${esc(b.author || '')}</div>${seriesLine}`;
   const rateRow = `<div class="raterow">${ratingHTML(b.rating, false)}<button class="heart ${b.favourite ? 'on' : ''}" data-act="fav" aria-pressed="${!!b.favourite}" aria-label="${b.favourite ? 'A favourite — tap to unmark' : 'Mark as a favourite'}">${b.favourite ? ICON.heart : ICON.heartO}</button></div>`;
   const statusPill = `<button class="spill" data-act="status">${esc(statusLabel(b))} ${ICON.down}</button>`;
@@ -1425,12 +2002,13 @@ function renderBook() {
       </article></div>`;
     });
     bindBookFields(b); hydrateCovers(chrome);
+    const ps = document.getElementById('pscroll'), tb = chrome.querySelector('.booktop');
+    if (ps && tb) { const f = () => tb.classList.toggle('scrolled', ps.scrollTop > 16); ps.addEventListener('scroll', f, { passive: true }); f(); }
     return;
   }
   const html = `<img class="bg" src="desk.jpg" alt="">
   <div class="page lp" style="left:${L.x}px;top:${L.y}px;width:${L.w}px;height:${L.h}px">
-    <div class="lp-head" data-swipe="1"><div class="lp-cover">${cover}</div><div class="lp-title">${titleBlock}${rateRow}<div class="row-wrap">${statusPill}</div><div class="chiprow">${feelChips}</div></div></div>
-    <dl class="meta lp-meta">${metaHTML}</dl>
+    <div class="lp-head" data-swipe="1"><div class="lp-cover">${cover}<dl class="meta lp-meta">${meta.filter((m) => m[0] !== 'Shelved').map((m) => `<div><dt>${esc(m[0])}</dt><dd>${esc(m[1])}</dd></div>`).join('')}</dl></div><div class="lp-title">${titleBlock}${rateRow}<div class="row-wrap">${statusPill}</div><div class="chiprow">${feelChips}</div></div></div>
     <div class="lp-foot"><div class="plate-wrap">${plate}</div>${showShelf}</div>
   </div>
   <div class="page rp" style="left:${R.x}px;top:${R.y}px;width:${R.w}px;height:${R.h}px">
@@ -1442,19 +2020,21 @@ function renderBook() {
   chrome.innerHTML = top;
   bindBookFields(b); hydrateCovers(stage);
 }
-function refreshTab() {
+function refreshTab(quiet) {
   const b = S.books.find((x) => x.id === S.book); const tb = document.getElementById('tabbody'); if (!b || !tb) return;
   document.querySelectorAll('.ribbon').forEach((r) => r.setAttribute('aria-selected', r.dataset.tab === S.tab));
   tb.setAttribute('aria-labelledby', 'rb-' + S.tab);
   tb.innerHTML = tabBodyHTML(b); tb.scrollTop = 0;
   bindBookFields(b);
-  anim(tb, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 260, easing: 'ease-out' });
+  if (!quiet) anim(tb, [{ opacity: 0, transform: `translateX(${S.tabDir || 18}px)` }, { opacity: 1, transform: 'none' }], { duration: 280, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  const sel = document.querySelector('.ribbon[aria-selected=true]'); anim(sel, [{ rotate: '0deg' }, { rotate: '-1.6deg' }, { rotate: '.8deg' }, { rotate: '0deg' }], { duration: 700, easing: 'ease-out' });
 }
 function refreshRating(el, v) { // live, without rebuilding the page
   const wrap = el.parentElement;
   el.querySelectorAll('.st > span').forEach((s, i) => { s.style.width = Math.max(0, Math.min(1, (v || 0) - i)) * 100 + '%'; });
   el.setAttribute('aria-valuenow', v || 0); el.setAttribute('aria-valuetext', v ? v + ' stars' : 'Not rated');
   const n = wrap.querySelector('.rnum'); if (n) n.textContent = v ? v.toFixed(1) : '';
+  el.classList.add('wet'); clearTimeout(el._dry); el._dry = setTimeout(() => el.classList.remove('wet'), 120);
 }
 function bindBookFields(b) {
   const wide = !S.single;
@@ -1522,7 +2102,7 @@ function cardLines(b, label) {
   const call = `${GCODE[b.genre || 'Fiction'] || 'GEN'} ${(authorSort(b) || b.title).replace(/[^A-Za-z㐀-鿿]/g, '').slice(0, 3).toUpperCase()}`;
   const loc = locate(b.id);
   const where = loc ? `Case ${loc.caseNo} · Shelf ${loc.shelf + 1}` : shelvedOn(b) === 'desk' ? 'On the desk' : shelvedOn(b) === 'pile' ? 'To-read pile' : '';
-  const r = b.rating != null ? '   ' + '★'.repeat(Math.floor(b.rating)) + (b.rating % 1 ? '½' : '') : '';
+  const r = b.rating != null ? '   Rating ' + b.rating + '/5' : '';
   return `<div class="cardhead"><span>${esc(call)}</span><span>${esc(where)}</span></div>
       <div>${ix(authorSort(b) || 'Anonymous', 40)}</div>
       <div style="padding-left:28px">${ix(b.title, 36)}${b.series ? ' (' + ix(b.series, 18) + (b.seriesNo ? ' ' + esc(b.seriesNo) : '') + ')' : ''} /</div>
@@ -1550,7 +2130,7 @@ function renderCat() {
   const index = `<div class="cindex" id="cindex"><div class="cfind"><input type="search" id="c-find" placeholder="Find in this drawer" value="${esc(S.catFind)}" autocomplete="off" autocorrect="off" spellcheck="false" aria-label="Find in this drawer"></div>
     <div class="crows" role="listbox" aria-label="Cards in ${esc(label)}">${books.map((x, i) => `<button class="crow ${i === S.catCard ? 'on' : ''}" data-act="card-go" data-i="${i}" role="option" aria-selected="${i === S.catCard}"><span class="sw" style="background:${colorOf(x)}"></span><span class="ct"><b>${esc((authorSort(x) || '').split(',')[0] || '—')}</b> ${esc(x.title)}</span></button>`).join('') || `<p class="note" style="padding:8px 4px">${label ? 'Nothing here yet.' : ''}</p>`}</div></div>`;
   const nav = `<button class="icon-btn" data-act="card-prev" aria-label="Previous card" ${S.catCard <= 0 ? 'disabled' : ''}>${ICON.left}</button>
-          <span class="note">${books.length ? `Card ${S.catCard + 1} of ${books.length}` : 'Empty drawer'}</span>
+          <span class="note cardcount">${books.length ? `Card ${S.catCard + 1} of ${books.length}` : 'Empty drawer'}</span>
           <button class="icon-btn" data-act="card-next" aria-label="Next card" ${S.catCard >= books.length - 1 ? 'disabled' : ''}>${ICON.right}</button>`;
   if (S.single) {
     stage.innerHTML = `<section class="view"><img class="bg" src="catalogue_blur.jpg" alt=""></section>`;
@@ -1567,13 +2147,14 @@ function renderCat() {
     return;
   }
   const card = CAT.card, dl = CAT.dlabel;
-  let html = `<img class="bg" src="catalogue.jpg" alt="">`;
+  let html = `<img class="bg" src="${HIRES.cat ? 'catalogue@2x.webp' : 'catalogue.jpg'}" alt="">`;
   CAT.drawers.forEach((d) => {
     const l = labels[d.i] || '';
     if (!l) return;
     html += `<span class="dlabel" style="left:${d.lx - 6}px;top:${d.ly - 3}px;width:${d.lw + 12}px;height:${d.lh + 6}px">${esc(l)}</span>`;
     html += `<span class="dcount" style="left:${d.x}px;top:${d.y + d.h - 15}px;width:${d.w - 6}px">${counts[d.i] || ''}</span>`;
-    if (!counts[d.i]) html += `<span class="dempty" style="left:${d.x}px;top:${d.y}px;width:${d.w}px;height:${d.h}px"></span>`;
+    if (!counts[d.i]) html += `<span class="dempty" style="left:${d.lx - 6}px;top:${d.ly - 3}px;width:${d.lw + 12}px;height:${d.lh + 6}px"></span>`;
+    if (d.i === S.catDrawer) html += `<span class="dfront" id="dfront" style="left:${d.x}px;top:${d.y}px;width:${d.w}px;height:${d.h}px;background:url(catalogue.jpg) -${d.x}px -${d.y}px / 1180px 820px"><span class="dlabel" style="left:${d.lx - d.x - 6}px;top:${d.ly - d.y - 3}px;width:${d.lw + 12}px;height:${d.lh + 6}px">${esc(l)}</span></span>`;
     html += `<button class="drawer-hit ${d.i === S.catDrawer ? 'on' : ''}" data-act="drawer" data-i="${d.i}" ${counts[d.i] ? '' : 'disabled'} style="left:${d.x}px;top:${d.y}px;width:${d.w}px;height:${d.h}px" aria-label="${esc(l)}, ${plural(counts[d.i], 'card')}"></button>`;
   });
   html += `<span class="dlabel big" style="left:${dl.x}px;top:${dl.y}px;width:${dl.w}px;height:${dl.h}px">${esc(label)}</span>`;
@@ -1581,13 +2162,21 @@ function renderCat() {
   if (b) html += `<button data-act="open" data-id="${esc(b.id)}" aria-label="Open ${esc(b.title)}" style="position:absolute;left:${card.x}px;top:${card.y}px;width:${card.w}px;height:${card.h}px;border:0;background:none;cursor:pointer;padding:0"></button>`;
   html += `<div class="card-nav" style="left:${card.x}px;top:${card.y + card.h + 116}px;width:${card.w}px">${nav}${b ? `<button class="primary" data-act="open" data-id="${esc(b.id)}">Open the book</button>` : ''}</div>`;
   html += `<div class="cpanel" style="left:${card.x + 10}px;top:112px;width:${card.w - 20}px;height:${card.y - 128}px"><div class="cph">${esc(label)} · ${plural(all.length, 'card')}</div>${index}</div>`;
-  keepScroll(['cindex'], () => { stage.innerHTML = `<section class="view" aria-label="Card catalogue">${html}</section>`; });
+  keepScroll(['cindex'], () => { stage.innerHTML = `<section class="view catview" aria-label="Card catalogue">${html}</section>`; });
+  setTimeout(() => upgrade('cat'), 800);
   chrome.innerHTML = top;
   bindCatFind();
 }
+function drawerOut() { // C5
+  const f = document.getElementById('dfront') || document.querySelector('.drawer.on');
+  if (!f || QUIET()) return;
+  if (f.id === 'dfront') anim(f, [{ transform: 'none', boxShadow: '0 0 0 rgba(0,0,0,0)' }, { transform: 'translateY(5px) scale(1.07)', boxShadow: '0 14px 22px rgba(0,0,0,.6)', offset: 0.6 }, { transform: 'translateY(4px) scale(1.03)', boxShadow: '0 10px 18px rgba(0,0,0,.55)' }], { duration: 420, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  else anim(f, [{ transform: 'none' }, { transform: 'translateY(3px) scale(1.04)' }], { duration: 260, easing: 'cubic-bezier(.2,.8,.2,1)' });
+}
 function bindCatFind() {
-  const el = document.getElementById('c-find'); if (!el) return;
-  el.addEventListener('input', () => { S.catFind = el.value; S.catCard = 0; const pos = el.selectionStart; renderCat(); const n = document.getElementById('c-find'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) { /* */ } } });
+  const el = document.getElementById('c-find'); if (!el) return; let comp = false;
+  el.addEventListener('compositionstart', () => { comp = true; }); el.addEventListener('compositionend', () => { comp = false; el.dispatchEvent(new Event('input')); });
+  el.addEventListener('input', () => { if (comp) return; S.catFind = el.value; S.catCard = 0; const pos = el.selectionStart; renderCat(); const n = document.getElementById('c-find'); if (n) { n.focus(); try { n.setSelectionRange(pos, pos); } catch (e) { /* */ } } });
 }
 function scrollCardIntoView() {
   const c = document.getElementById('icard'); if (c && S.single) c.scrollIntoView({ behavior: REDUCED.matches ? 'auto' : 'smooth', block: 'center' });
@@ -1630,11 +2219,11 @@ function renderList() {
     const l = az ? letterOf(b) : '';
     const head = az && l !== lastL ? `<div class="lhead" id="L-${esc(l)}">${esc(l)}</div>` : '';
     lastL = l;
-    return `${head}<button class="lrow" data-act="open" data-id="${esc(b.id)}"><span class="lthumb" style="background:${colorOf(b)}">${coverImg(b, '', '')}</span><span class="lt"><b>${esc(b.title)}</b><small>${esc(b.author || '')}${b.series ? ' · ' + esc(b.series) + (b.seriesNo ? ' ' + esc(b.seriesNo) : '') : ''}</small></span><span class="lr">${b.rating != null ? `<span class="lstars">${'★'.repeat(Math.floor(b.rating))}${b.rating % 1 ? '½' : ''}</span>` : ''}<small>${esc(status(b) === 'read' ? (lastFinish(b) ? monthLabel(lastFinish(b), true) : '') : status(b) === 'reading' ? 'Reading' : 'To read')}${b.favourite ? ' ♥' : ''}</small></span></button>`;
+    return `${head}<button class="lrow" data-act="open" data-id="${esc(b.id)}"><span class="lthumb" style="${spineCrop(b, 30, 44)}">${coverImg(b, '', '')}</span><span class="lt"><b>${esc(b.title)}</b><small>${esc(b.author || '')}${b.series ? ' · ' + esc(b.series) + (b.seriesNo ? ' ' + esc(b.seriesNo) : '') : ''}</small></span><span class="lr">${b.rating != null ? starsSVG(b.rating, 12) : ''}<small>${b.favourite ? '<i class="sealdot" title="A favourite"></i>' : ''}${esc(status(b) === 'read' ? (lastFinish(b) ? monthLabel(lastFinish(b), true) : '') : status(b) === 'reading' ? 'Reading' : 'To read')}</small></span></button>`;
   }).join('');
   const letters = az ? [...new Set(books.map(letterOf))] : [];
   const feelings = [...new Set(S.books.flatMap((b) => b.feelings || []))].sort();
-  stage.innerHTML = `<section class="view"><img class="bg" src="desk_blur.jpg" alt=""></section>`;
+  stage.innerHTML = `<section class="view"><img class="bg" src="wall_blur.jpg" alt=""></section>`;
   keepScroll(['plist'], () => {
     chrome.innerHTML = `<header class="topbar">
       <button class="icon-btn backpill" data-act="back" aria-label="Back">${ICON.left}<span>${S.from === 'cat' ? 'Catalogue' : 'Shelves'}</span></button>
@@ -1643,15 +2232,18 @@ function renderList() {
     </header>
     <div class="plist" id="plist"><div class="lpanel">
       <div class="search open lsearch">${ICON.search}<input id="l-search" type="search" placeholder="Title, author, feeling, tag…" value="${esc(S.list.q)}" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" aria-label="Search all books"></div>
-      <div class="lctl"><div class="seg" role="group" aria-label="Sort by">${LIST_SORTS.map((s) => `<button class="${S.list.sort === s[0] ? 'on' : ''}" data-act="list-sort" data-v="${s[0]}" aria-pressed="${S.list.sort === s[0]}">${s[1]}</button>`).join('')}</div></div>
+      <div class="lctl">${S.compact ? `<label class="sortpill"><span>Sort: ${esc(LIST_SORTS.find((s) => s[0] === S.list.sort)[1])}</span>${ICON.down}<select id="l-sort" aria-label="Sort by">${LIST_SORTS.map((s) => `<option value="${s[0]}" ${S.list.sort === s[0] ? 'selected' : ''}>${s[1]}</option>`).join('')}</select></label>` : `<div class="seg" role="group" aria-label="Sort by">${LIST_SORTS.map((s) => `<button class="${S.list.sort === s[0] ? 'on' : ''}" data-act="list-sort" data-v="${s[0]}" aria-pressed="${S.list.sort === s[0]}">${s[1]}</button>`).join('')}</div>`}</div>
       <div class="lfil">${LIST_FILTERS.map((f) => `<button class="pick ${S.list.filter === f[0] ? 'on' : ''}" data-act="list-filter" data-v="${f[0]}" aria-pressed="${S.list.filter === f[0]}">${f[1]}</button>`).join('')}
         <select id="l-genre" aria-label="Genre"><option value="">Any genre</option>${GENRES.map((g) => `<option ${S.list.genre === g ? 'selected' : ''}>${g}</option>`).join('')}</select>
         <select id="l-feel" aria-label="Feeling"><option value="">Any feeling</option>${feelings.map((g) => `<option ${S.list.feeling === g ? 'selected' : ''}>${esc(g)}</option>`).join('')}</select></div>
       <div class="lrows">${rows || '<p class="note" style="padding:20px 6px">No books match. Try clearing a filter.</p>'}</div>
     </div>${letters.length > 3 ? `<nav class="scrub" id="scrub" aria-label="Jump to letter">${letters.map((l) => `<button data-act="scrub" data-l="${esc(l)}">${esc(l)}</button>`).join('')}</nav>` : ''}</div>`;
   });
-  const ls = document.getElementById('l-search');
-  ls.addEventListener('input', () => { S.list.q = ls.value; const p = ls.selectionStart; renderList(); const n = document.getElementById('l-search'); n.focus(); try { n.setSelectionRange(p, p); } catch (e) { /* */ } });
+  const ls = document.getElementById('l-search'); let lcomp = false;
+  const lupd = () => { if (lcomp) return; S.list.q = ls.value; const p = ls.selectionStart; renderList(); const n = document.getElementById('l-search'); n.focus(); try { n.setSelectionRange(p, p); } catch (e) { /* */ } };
+  ls.addEventListener('compositionstart', () => { lcomp = true; }); ls.addEventListener('compositionend', () => { lcomp = false; lupd(); });
+  ls.addEventListener('input', lupd);
+  const lsrt = document.getElementById('l-sort'); if (lsrt) lsrt.addEventListener('change', () => { S.list.sort = lsrt.value; renderList(); document.getElementById('plist').scrollTop = 0; });
   document.getElementById('l-genre').addEventListener('change', (e) => { S.list.genre = e.target.value; renderList(); });
   document.getElementById('l-feel').addEventListener('change', (e) => { S.list.feeling = e.target.value; renderList(); });
   hydrateCovers(chrome);
@@ -1666,7 +2258,8 @@ function openSheet(sh, stack) {
   S.sheet = sh; renderSheet();
 }
 function closeSheet() {
-  S.sheet = S.sheets.pop() || null; renderSheet();
+  const next = S.sheets.pop() || null;
+  if (!next) { S.sheet = null; sheetExit(() => {}); } else { S.sheet = next; renderSheet(); }
   if (!S.sheet) { if (S.view === 'book') renderBook(); else if (S.view === 'wall') { chrome.innerHTML = wallChrome(layout()); renderResults(); bindSearch(); renderSync(); } if (lastFocus && lastFocus.isConnected) try { lastFocus.focus({ preventScroll: true }); } catch (e) { /* */ } }
 }
 const head = (title, sub, id) => `<div class="shead"><div><h2 id="${id || 'sh-title'}">${title}</h2>${sub ? `<p class="lede">${sub}</p>` : ''}</div><button class="ghost xbtn" data-act="close" aria-label="Close">${ICON.close}</button></div>`;
@@ -1690,20 +2283,21 @@ function renderSheet() {
   if (!renderSheet.enter) s2.scrollTop = oldTop;
   else { const f = el.querySelector('[autofocus]') || el.querySelector('h2'); if (f && !f.matches('input,textarea')) { f.setAttribute('tabindex', '-1'); try { f.focus({ preventScroll: true }); } catch (e) { /* */ } } }
   (BIND[sh.kind] || (() => {}))(sh, el);
+  enhanceMonths(el);
   hydrateCovers(el);
 }
 
 const SHEETS = {
   menu: () => [`${head('The Library')}
-      <div class="menu">
-        <button class="menu-item" data-act="desk" data-tab="desk"><span>Reading desk &amp; to-read pile<small>${plural(deskBooks().length, 'book')} open · ${plural(pileBooks().length, 'book')} waiting</small></span></button>
-        <button class="menu-item" data-act="go-list"><span>All books<small>Every book as a list — sort, filter, jump to a letter</small></span></button>
-        <button class="menu-item" data-act="quotes"><span>Commonplace book<small>Every line you have copied out, in one place</small></span></button>
-        <button class="menu-item" data-act="ledger"><span>Reading ledger<small>What you have read and how it felt</small></span></button>
-        <button class="menu-item" data-act="year"><span>Your ${thisYear()} in books<small>A few quiet pages about your year</small></span></button>
-        <button class="menu-item" data-act="random"><span>Take down a random book<small>For when you want to revisit an old friend</small></span></button>
-        <button class="menu-item" data-act="arrange"><span>Arrange the shelves<small>Move books, make your own sections, sort a bookcase</small></span></button>
-        <button class="menu-item" data-act="settings"><span>Bookplate, sync &amp; backup<small>Your name, iPhone and iPad in step, import, export, text size</small></span></button>
+      <div class="menu toc">
+        <button class="menu-item" data-act="desk" data-tab="desk"><span class="mi">${SVG.book}</span><span>Reading desk &amp; to-read pile<small>${plural(deskBooks().length, 'book')} open · ${plural(pileBooks().length, 'book')} waiting</small></span></button>
+        <button class="menu-item" data-act="go-list"><span class="mi">${ICON.list}</span><span>All books<small>Every book as a list — sort, filter, jump to a letter</small></span></button>
+        <button class="menu-item" data-act="quotes"><span class="mi">${SVG.quill}</span><span>Commonplace book<small>Every line you have copied out, in one place</small></span></button>
+        <button class="menu-item" data-act="ledger"><span class="mi">${SVG.ledger}</span><span>Reading ledger<small>What you have read and how it felt</small></span></button>
+        <button class="menu-item" data-act="year"><span class="mi">${SVG.seal}</span><span>Your ${thisYear()} in books<small>A few quiet pages about your year</small></span></button>
+        <button class="menu-item" data-act="random"><span class="mi">${SVG.candleI}</span><span>Take down a random book<small>For when you want to revisit an old friend</small></span></button>
+        <button class="menu-item" data-act="arrange"><span class="mi">${SVG.ladder}</span><span>Arrange the shelves<small>Move books, make your own sections, sort a bookcase</small></span></button>
+        <button class="menu-item" data-act="settings"><span class="mi">${SVG.gear}</span><span>Bookplate, sync &amp; backup<small>Your name, iPhone and iPad in step, import, export, text size</small></span></button>
       </div>`, 480],
 
   owner: () => [`${head('Whose library is this?', 'Your name goes on the bookplate inside every book.')}
@@ -1717,13 +2311,14 @@ const SHEETS = {
     return [`${head('How it felt', 'Tap all that fit. They show on the page and in search.')}
       <div class="feelgroups">${groups.map((g) => `<div class="feel-row"><span class="note">${g[0]}</span><div>${g[1].map((f) => `<button class="pick ${cur.has(f) ? 'on' : ''}" data-act="toggle-feel" data-f="${esc(f)}" aria-pressed="${cur.has(f)}">${esc(f)}</button>`).join('')}</div></div>`).join('')}
         <div class="feel-row"><span class="note">Your own</span><div><input type="text" id="f-own" placeholder="A word of your own…" enterkeyhint="done" style="max-width:260px"><button class="pick" data-act="own-word">+ Add</button></div></div></div>
-      <div class="sfoot"><button class="primary" data-act="close">Done</button></div>`, 680];
+      <div class="sfoot sticky"><button class="primary" data-act="close">Done</button></div>`, 680];
   },
 
   more: (sh) => {
     const b = curBook(); const bd = binding(b);
     const f = (id, label, val, extra) => `<label class="f">${label}<input type="text" id="${id}" data-mf="${id.slice(2)}" value="${esc(val ?? '')}" ${extra || ''}></label>`;
     return [`${head('Binding &amp; details', 'Changes are saved as you go.')}
+      <div class="bindpick"><span class="note">Binding</span><div class="bindrow">${STYLES.map((s, si) => COLORS.map((c, ci) => `<button class="bthumb ${bd.color === ci && bd.style === si ? 'on' : ''}" data-act="m-bind" data-c="${ci}" data-s="${si}" aria-label="${{ antique: 'Raised bands', smooth: 'Smooth', label: 'Leather label' }[s]}, colour ${ci + 1}" aria-pressed="${bd.color === ci && bd.style === si}" style="${spineCrop({ id: b.id, binding: { color: ci, style: si } }, 22, 64)}"></button>`).join('')).join('')}</div></div>
       <div class="grid2" style="margin-top:14px">
         ${f('m-title', 'Title', b.title)}${f('m-author', 'Author', b.author)}
         ${f('m-titleAlt', 'Second title (original or Chinese)', b.titleAlt)}${f('m-year', 'Year published', b.year, 'inputmode="numeric"')}
@@ -1743,8 +2338,6 @@ const SHEETS = {
         <button class="icon-btn wide" data-act="find-covers">Find covers online</button>
         ${b.coverUrl ? `<button class="ghost" data-act="no-cover">Use the plain binding</button>` : ''}</div>
         ${sh.covers ? `<div class="covpick">${sh.covers.length ? sh.covers.map((c, i) => `<button data-act="pick-cover" data-i="${i}" aria-label="Use cover ${i + 1}"><img src="${esc(c)}" alt="" onerror="this.parentElement.remove()"></button>`).join('') : `<p class="note">${sh.coversBusy ? '<span class="spin"></span> Looking…' : 'No other covers found.'}</p>`}</div>` : ''}</div>
-      <div style="margin-top:16px"><span class="note">Binding colour</span><div class="row" style="flex-wrap:wrap;gap:8px;margin-top:8px">${COLORS.map((c, i) => `<button class="swatch ${bd.color === i ? 'on' : ''}" data-act="m-color" data-c="${i}" aria-label="Colour ${i + 1}" aria-pressed="${bd.color === i}" style="background:${c === 'VELLUM' ? '#c4ad80' : c}"></button>`).join('')}</div></div>
-      <div class="row" style="margin-top:14px;flex-wrap:wrap"><span class="note" style="width:70px">Spine</span><div class="seg">${STYLES.map((s, i) => `<button class="${bd.style === i ? 'on' : ''}" data-act="m-style" data-s="${i}" aria-pressed="${bd.style === i}">${{ antique: 'Raised bands', smooth: 'Smooth', label: 'Leather label' }[s]}</button>`).join('')}</div></div>
       <div class="sfoot spread">
         ${sh.confirmDelete ? `<span class="row" style="flex-wrap:wrap"><span class="err">Remove this book and everything you wrote in it?</span><button class="ghost" data-act="m-delete-yes" style="color:#e2a68f">Remove</button><button class="ghost" data-act="m-delete-no">Keep</button></span>` : `<button class="ghost" data-act="m-delete">${ICON.trash} Remove from the library</button>`}
         <button class="primary" data-act="close">Done</button>
@@ -1806,6 +2399,8 @@ const SHEETS = {
       <div class="row" style="flex-wrap:wrap"><span class="note" style="width:84px">Text size</span><div class="seg">${[[0.92, 'Small'], [1, 'Default'], [1.15, 'Large'], [1.3, 'Larger']].map((x) => `<button class="${(S.settings.textSize || 1) === x[0] ? 'on' : ''}" data-act="s-ts" data-v="${x[0]}">${x[1]}</button>`).join('')}</div></div>
       <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">To-read</span><div class="seg"><button class="${S.settings.pileMode !== 'shelf' ? 'on' : ''}" data-act="s-pile" data-v="pile">On a pile by the desk</button><button class="${S.settings.pileMode === 'shelf' ? 'on' : ''}" data-act="s-pile" data-v="shelf">On the shelves too</button></div></div>
       <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">On opening</span><div class="seg"><button class="${S.settings.quoteOfDay !== false ? 'on' : ''}" data-act="s-qod" data-v="1">Show a saved quotation</button><button class="${S.settings.quoteOfDay === false ? 'on' : ''}" data-act="s-qod" data-v="0">Just the shelves</button></div></div>
+      <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">Motion</span><div class="seg"><button class="${!S.settings.quietMotion ? 'on' : ''}" data-act="s-motion" data-v="0">Living room</button><button class="${S.settings.quietMotion ? 'on' : ''}" data-act="s-motion" data-v="1">Quiet motion</button></div></div>
+      <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">Sound</span><div class="seg"><button class="${!S.settings.sound ? 'on' : ''}" data-act="s-sound" data-v="0">Silent</button><button class="${S.settings.sound ? 'on' : ''}" data-act="s-sound" data-v="1">Pages, drawers &amp; seals</button></div></div>
       <label class="f" style="margin-top:8px">A gentle reading intention for ${thisYear()} (optional)<input type="number" id="s-goal" min="0" max="365" inputmode="numeric" value="${esc(S.settings.goal || '')}" placeholder="e.g. 12 books"></label>
       <h3 class="sh3">Keep iPhone and iPad in step</h3>
       <p class="lede" style="font-size:15px">Your books are saved on this device and copied to your private GitHub repository, so every device shows the same library. ${Store.connected() ? `<b style="color:var(--text)">${esc(syncBits().text)}.</b> ${esc(Store.error)}` : ''}</p>
@@ -1862,7 +2457,7 @@ const SHEETS = {
   preview: () => {
     const b = curBook();
     return [`<div class="preview"><div class="pvcover" style="background:${colorOf(b)}"><b>${esc(b.title)}</b>${coverImg(b, '', '')}</div><div class="pvt"><h2 id="sh-title">${esc(b.title)}</h2><p class="lede">${esc(b.author || '')}</p>
-      <p class="pvst">${b.rating != null ? '★'.repeat(Math.floor(b.rating)) + (b.rating % 1 ? '½' : '') + ' · ' : ''}${esc(statusLabel(b))}</p>
+      <p class="pvst">${b.rating != null ? starsSVG(b.rating, 15) + ' ' : ''}${esc(statusLabel(b))}</p>
       ${b.pullLine ? `<p class="pvline">“${esc(b.pullLine)}”</p>` : ''}
       <div class="row" style="flex-wrap:wrap;gap:8px;margin-top:12px"><button class="primary" data-act="open" data-id="${esc(b.id)}">Open the book</button><button class="icon-btn wide" data-act="moveto" data-id="${esc(b.id)}">Move to…</button><button class="ghost" data-act="close">Close</button></div></div></div>`, 520];
   },
@@ -1873,10 +2468,11 @@ const SHEETS = {
       <textarea id="w-text" class="writer ${sh.field === 'notes' ? 'lined' : ''}" placeholder="${sh.field === 'review' ? 'What did it leave you with? English or 中文 both work.' : ''}">${esc(b[sh.field] || '')}</textarea>`, 860, 'parchment-sheet writer-sheet'];
   },
 
-  welcome: () => [`<div class="welcome"><h2 id="sh-title">Welcome to your library</h2>
-      <p>These ${plural(S.books.filter((b) => b.sample).length, 'book')} are examples, so you can feel how it works. Tap a spine to take a book down. Swipe to walk along the bookcases. The card catalogue is for when you know what you are looking for.</p>
-      <label class="f" style="margin-top:14px">Whose library is this?<input type="text" id="w-name" value="${esc(S.settings.owner || '')}" placeholder="Your name, for the bookplate" autocomplete="name"></label>
-      <div class="sfoot spread"><button class="ghost" data-act="welcome-empty">Start with an empty library</button><button class="primary" data-act="welcome-keep">Keep the examples for now</button></div></div>`, 560],
+  welcome: () => [`<div class="welcome"><div class="wseal">${sealSVG(58, ownerInitial())}</div><p class="exl">Ex libris</p><h2 id="sh-title">Welcome to your library</h2>
+      <p>The books here are examples, so you can feel how it works.</p><p>Tap a spine to take a book down; swipe to walk along the cases.</p>
+      <label class="f" style="margin-top:16px">Whose library is this?<input type="text" id="w-name" value="${esc(S.settings.owner || '')}" placeholder="Your name, for the bookplate" autocomplete="name"></label>
+      <button class="primary full" data-act="welcome-keep" style="margin-top:18px">Keep the examples for now</button>
+      <button class="ghost linkish wlink" data-act="welcome-empty">Start with an empty library</button></div>`, 520, 'welcome-sheet'],
 
   confirmDiscard: () => [`${head('Discard this book?', 'What you typed and chose will be lost.')}
       <div class="sfoot"><button class="ghost" data-act="discard-no">Keep editing</button><button class="primary" data-act="discard-yes">Discard</button></div>`, 420],
@@ -1960,7 +2556,7 @@ function ledgerHTML() {
   const months = Array.from({ length: 12 }, (_, i) => { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() - 11 + i); return d.toISOString().slice(0, 7); });
   const byMonth = months.map((m) => pool.filter((b) => readsOf(b).some((r) => r.finish === m)));
   const max = Math.max(1, ...byMonth.map((x) => x.length));
-  const strip = `<div class="mstrip" role="img" aria-label="Books finished each month">${byMonth.map((list, i) => `<div class="mcol"><div class="mstack">${list.slice(0, 8).map((b) => `<i style="background:${colorOf(b)};height:${Math.max(6, 46 / Math.max(max, 4))}px" title="${esc(b.title)}"></i>`).join('')}</div><span>${MONTHS[+months[i].slice(5) - 1].slice(0, 1)}</span></div>`).join('')}</div>`;
+  const strip = byMonth.every((x) => !x.length) ? '' : `<div class="mstrip" role="img" aria-label="Books finished each month">${byMonth.map((list, i) => `<div class="mcol"><div class="mstack">${list.slice(0, 8).map((b) => `<i style="background:${colorOf(b)};height:${Math.max(6, 46 / Math.max(max, 4))}px" title="${esc(b.title)}"></i>`).join('')}</div><span>${MONTHS[+months[i].slice(5) - 1].slice(0, 1)}</span></div>`).join('')}</div>`;
   const lines = [];
   lines.push(thisYr.length ? `This year you have finished ${plural(thisYr.length, 'book')}${goal ? ` — ${thisYr.length} of about ${goal}${thisYr.length >= goal ? '. Lovely.' : ', a lovely pace'}` : ''}.` : 'No finished books dated this year yet.');
   if (feel.length) lines.push(`Most often, a book left you feeling <i>${esc(feel[0][0].toLowerCase())}</i>.`);
@@ -2017,7 +2613,7 @@ function yearHTML(sh) {
   const years = [...new Set(S.books.flatMap((b) => readsOf(b).map((r) => (r.finish || '').slice(0, 4))).filter(Boolean))].sort().reverse();
   return `${head('Your year in books')}
     <div class="row" style="gap:8px;flex-wrap:wrap;margin-top:8px">${years.slice(0, 6).map((x) => `<button class="pick ${+x === y ? 'on' : ''}" data-act="year-pick" data-y="${x}">${x}</button>`).join('')}</div>
-    <div class="ypages" id="ypages">${d.done.length ? pages.join('') : `<div class="ypage"><h3>${y}</h3><p>No books dated as finished in ${y} yet.</p></div>`}</div>
+    <div class="ypages ${pages.length === 1 || !d.done.length ? 'one' : ''}" id="ypages">${d.done.length ? pages.join('') : `<div class="ypage"><div class="wseal">${sealSVG(52, ownerInitial())}</div><h3>${y}</h3><p>Your ${y} pages are still blank — the first book you finish will begin them.</p>${years.find((x) => +x < y) ? `<button class="linkish" data-act="year-pick" data-y="${years.find((x) => +x < y)}">See ${years.find((x) => +x < y)}</button>` : ''}</div>`}</div>
     <div class="sfoot"><button class="icon-btn wide" data-act="year-share" ${d.done.length ? '' : 'disabled'}>Share as a picture</button><button class="primary" data-act="close">Close</button></div>`;
 }
 async function shareYear(y) {
@@ -2124,6 +2720,17 @@ async function exportCSV() {
   await shareOrSave(new Blob([csv], { type: 'text/csv' }), `library-${new Date().toISOString().slice(0, 10)}.csv`, 'text/csv');
 }
 
+function enhanceMonths(root) {
+  root.querySelectorAll('input[type=month]').forEach((inp) => {
+    if (inp.parentElement.classList.contains('mwrap')) return;
+    const w = document.createElement('span'); w.className = 'mwrap';
+    const lab = document.createElement('span'); lab.className = 'mlab';
+    const show = () => { lab.textContent = inp.value ? monthLabel(inp.value) : (inp.dataset.empty || 'Choose a month'); lab.classList.toggle('empty', !inp.value); };
+    inp.parentElement.insertBefore(w, inp); w.append(lab, inp); show();
+    inp.addEventListener('input', show); inp.addEventListener('change', show);
+  });
+}
+
 /* ================= add a book ================= */
 function newAdd(extra) { return Object.assign({ kind: 'add', q: '', status: 'read', rating: null, feelings: [], edits: {}, month: '', start: thisMonth(), line: '', want: '' }, extra || {}); }
 function addDirty(a) { return !!((a.q || '').trim() || Object.values(a.edits || {}).some((v) => v) || a.rating != null || (a.feelings || []).length || (a.line || '').trim() || (a.want || '').trim()); }
@@ -2147,7 +2754,7 @@ function addSheet() {
       <label class="f" style="grid-column:1 / -1">Genre<span class="sel"><select data-ak="genre">${GENRES.map((g) => `<option ${g === (addVal(a, 'genre') || 'Fiction') ? 'selected' : ''}>${g}</option>`).join('')}</select></span></label>
     </div>${c ? `<p class="note" style="margin-top:8px">Filled in from ${esc(c.src)}. Check the details; you can change them later.</p>` : ''}`;
   } else if (!a.cands) {
-    left += `<p class="note" style="margin-top:12px">The author, year, cover and a short synopsis come from Open Library and Google Books. Chinese titles work too. Or <button class="ghost linkish" data-act="manual">enter the details yourself</button>.</p>`;
+    left += `<p class="note" style="margin-top:12px">The author, year, cover and a short synopsis come from Open Library and Google Books. Chinese titles work too.</p><button class="ghost linkish manual-line" data-act="manual">Or enter the details yourself</button>`;
   }
   const st = a.status || 'read';
   let right = `<div class="seg wide-seg" role="group" aria-label="Status">${[['read', 'Read'], ['reading', 'Reading'], ['want', 'Want to read']].map((s) => `<button class="${st === s[0] ? 'on' : ''}" data-act="a-status" data-s="${s[0]}" aria-pressed="${st === s[0]}">${s[1]}</button>`).join('')}</div>`;
@@ -2156,7 +2763,7 @@ function addSheet() {
       <details class="more-d" id="a-feeld" ${openFeel ? 'open' : ''}><summary>How it felt <span class="note">(optional${feel.size ? ' · ' + feel.size + ' chosen' : ''})</span></summary>
       <div class="feelgroups" style="margin-top:8px">${FEELINGS.concat((S.settings.myWords || []).length ? [['Mine', S.settings.myWords]] : []).map((g) => `<div class="feel-row"><span class="note">${g[0]}</span><div>${g[1].map((f) => `<button class="pick ${feel.has(f) ? 'on' : ''}" data-act="a-feel" data-f="${esc(f)}" aria-pressed="${feel.has(f)}">${esc(f)}</button>`).join('')}</div></div>`).join('')}</div>
       <label class="f" style="margin-top:12px">A line or two<textarea data-ak2="line" rows="2" placeholder="What stayed with you?">${esc(a.line || '')}</textarea></label></details>
-      <label class="f" style="margin-top:12px">Finished<input type="month" data-ak2="month" value="${esc(a.month || '')}"></label>`;
+      <label class="f" style="margin-top:12px">Finished<input type="month" data-ak2="month" data-empty="Not noted — tap to choose" value="${esc(a.month || '')}"></label>`;
   } else if (st === 'reading') {
     right += `<label class="f" style="margin-top:14px">Started<input type="month" data-ak2="start" value="${esc(a.start || thisMonth())}"></label><p class="note" style="margin-top:8px">It will wait for you on the reading desk.</p>`;
   } else {
@@ -2199,7 +2806,7 @@ async function placeBook(force) {
   const c = a.pick != null && a.cands ? a.cands[a.pick] : {};
   const det = { title: String(addVal(a, 'title')).trim(), author: String(addVal(a, 'author') || '').trim(), titleAlt: String(addVal(a, 'titleAlt') || '').trim(), year: String(addVal(a, 'year') || '').trim(), genre: addVal(a, 'genre') || 'Fiction' };
   if (!det.title) { a.saveError = 'Give the book a title first.'; return renderSheet(); }
-  if (!force) { const d = findDuplicate(det.title, det.author, c.isbn); if (d) { a.dup = d; return renderSheet(); } }
+  if (!force) { const d = findDuplicate(det.title, det.author, c.isbn); if (d) { a.dup = d; renderSheet(); const sh = document.querySelector('#sheet .sheet'); if (sh) sh.scrollTop = sh.scrollHeight; return; } }
   a.placing = true; renderSheet();
   const st = a.status || 'read';
   const reads = st === 'read' && a.month ? [{ finish: a.month }] : st === 'reading' ? [{ start: a.start || thisMonth() }] : [];
@@ -2215,7 +2822,7 @@ async function placeBook(force) {
   S.sheet = null; S.sheets = []; renderSheet();
   if (c.olKey && !c.synopsis) olSynopsis(c.olKey).then((syn) => { if (syn) saveBook(b.id, { synopsis: syn }, true); });
   const where = shelvedOn(b);
-  if (where === 'shelf') { S.q = ''; S.arrange = false; gotoBook(b.id); toast(`Shelved in ${secName(secOf(b))}`, { label: 'Open it', fn: () => openBook(b.id, 'wall') }, 6000); }
+  if (where === 'shelf') { S.q = ''; S.arrange = false; gotoBook(b.id); setTimeout(() => shelveNew(b.id), 600); toast(`Shelved in ${secName(secOf(b))}`, { label: 'Open it', fn: () => openBook(b.id, 'wall') }, 6000); }
   else { S.view = 'wall'; render(); toast(where === 'desk' ? 'On the reading desk' : 'On the to-read pile', { label: 'Open it', fn: () => openBook(b.id, 'desk') }, 6000); anim(document.querySelector(where === 'desk' ? '.deskchip' : '.pilechip'), [{ transform: 'scale(1)' }, { transform: 'scale(1.12)' }, { transform: 'scale(1)' }], { duration: 600, easing: 'ease-out' }); }
 }
 
@@ -2343,8 +2950,264 @@ function moveBookTo(b, secId) {
   undoable(`Moved to ${secName(secId)}`, () => restoreSnap(snap));
 }
 
+/* ================= signature motion ================= */
+const QUIET = () => REDUCED.matches || !!S.settings.quietMotion;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+let openCount = 0;
+const dur = (ms) => Math.round(ms * (openCount > 3 ? 0.65 : 1));
+function fadeIn(els, ms, delay) { els.filter(Boolean).forEach((el) => anim(el, [{ opacity: 0 }, { opacity: 1 }], { duration: ms, delay: delay || 0, easing: 'ease-out', fill: 'backwards' })); }
+function ghostOf() { // a frozen copy of what is on screen, to cross-fade from
+  const g = document.createElement('div'); g.className = 'ghostlayer';
+  const st = stage.cloneNode(true); st.removeAttribute('id'); st.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+  g.appendChild(st);
+  const ch = chrome.cloneNode(true); ch.removeAttribute('id'); ch.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id')); ch.className = 'ghostchrome';
+  g.appendChild(ch);
+  g.querySelectorAll('.topbar,.bottombar,.chips,.qpill,.zoompill').forEach((n) => n.remove());
+  document.body.insertBefore(g, ui);
+  return g;
+}
+function flyBook(from, to, spineEl, coverEl, reverse) {
+  // a book with two faces: its spine and its cover, turning between them as it travels
+  const wrap = document.createElement('div'); wrap.className = 'flywrap';
+  const outer = document.createElement('div'); outer.className = 'flyouter';
+  Object.assign(outer.style, { left: to.left + 'px', top: to.top + 'px', width: to.width + 'px', height: to.height + 'px' });
+  const inner = document.createElement('div'); inner.className = 'flyinner';
+  const front = document.createElement('div'); front.className = 'fface ffront'; front.appendChild(coverEl.cloneNode(true));
+  const s0 = from.height / to.height; const sw = from.width / s0;
+  const side = document.createElement('div'); side.className = 'fface fspine'; side.style.width = sw + 'px';
+  const sc = spineEl.cloneNode(true); sc.classList.remove('lift', 'found', 'dim', 'tip', 'lean'); sc.style.transform = `scale(${to.height / spineEl.offsetHeight})`; sc.style.transformOrigin = '0 0'; sc.style.margin = '0'; sc.style.visibility = 'visible';
+  side.appendChild(sc);
+  inner.append(front, side); outer.appendChild(inner); wrap.appendChild(outer); document.body.appendChild(wrap);
+  const tx = from.left - to.left, ty = (from.top + from.height / 2) - (to.top + to.height / 2);
+  const A = [{ transform: `translate(${tx}px, ${ty}px) scale(${s0})` }, { transform: 'none' }];
+  const B = [{ transform: 'rotateY(-90deg)' }, { transform: 'rotateY(0deg)' }];
+  if (reverse) { A.reverse(); B.reverse(); }
+  const d = dur(reverse ? 480 : 460);
+  const a = outer.animate(A, { duration: d, easing: reverse ? 'cubic-bezier(.4,0,.2,1)' : 'cubic-bezier(.2,.75,.15,1)', fill: 'forwards' });
+  inner.animate(B, { duration: d, easing: 'cubic-bezier(.45,0,.2,1)', fill: 'forwards' });
+  return a.finished.then(() => wrap).catch(() => wrap);
+}
+/* C1 — take a book off the shelf and open it */
+async function takeBook(el) {
+  const id = el.dataset.id;
+  if (QUIET() || S.motion) { openBook(id, 'wall'); return; }
+  S.motion = true; openCount++;
+  sound('book');
+  const shelf = el.closest('.shelf');
+  const slot = document.createElement('i'); slot.className = 'slot'; Object.assign(slot.style, { left: el.offsetLeft + 'px', width: el.offsetWidth + 'px', height: el.offsetHeight + 'px' }); shelf.appendChild(slot);
+  el.classList.add('tip');
+  await wait(dur(160));
+  const from = el.getBoundingClientRect();
+  const ghost = ghostOf();
+  S.from = 'wall'; S.book = id; S.view = 'book'; S.sheet = null; S.sheets = []; S.tab = S.tab || 'review';
+  render();
+  const cover = document.querySelector(S.single ? '.pb .cover' : '.lp .cover');
+  if (!cover) { ghost.remove(); S.motion = false; return; }
+  if (S.single) { const ps = document.getElementById('pscroll'); if (ps) ps.scrollTop = 0; }
+  cover.style.visibility = 'hidden';
+  const to = cover.getBoundingClientRect();
+  fadeIn([stage, chrome], dur(460), dur(40));
+  const veil = document.createElement('i'); veil.className = 'gveil'; ghost.appendChild(veil);
+  anim(veil, [{ opacity: 0 }, { opacity: 0.6 }], { duration: 300, fill: 'forwards' });
+  const wrap = await flyBook(from, to, el, cover, false);
+  cover.style.visibility = '';
+  anim(cover, [{ transform: 'scale(1.02)' }, { transform: 'none' }], { duration: 120, easing: 'ease-out' });
+  wrap.remove(); ghost.remove();
+  inkIn();
+  S.motion = false;
+}
+/* C2 — put it back */
+async function returnBook(b) {
+  if (QUIET() || S.motion) { gotoBook(b.id); return; }
+  const cover = document.querySelector(S.single ? '.pb .cover' : '.lp .cover');
+  const l = locate(b.id);
+  if (!cover || !l) { gotoBook(b.id); return; }
+  S.motion = true;
+  const from = cover.getBoundingClientRect();
+  document.querySelectorAll('.page,.pb').forEach((p) => anim(p, [{ opacity: 1 }, { opacity: 0.25 }], { duration: 140, fill: 'forwards' }));
+  anim(cover, [{ transform: 'none' }, { transform: 'translateY(-6px)' }], { duration: 120, fill: 'forwards' });
+  await wait(120);
+  const ghost = ghostOf();
+  S.view = 'wall'; S.page = l.page; S.bay = l.bay; S.found = null; S.sheet = null;
+  const it = layout().cases[l.page * 3 + l.bay][l.shelf].items; let x = GEO.shelves[l.bay * 3 + l.shelf].x0 + 4;
+  for (let i = 0; i < l.idx; i++) x += it[i].d.w + (it[i].b ? 1 : 0);
+  S.zoom = { bay: l.bay, shelf: l.shelf, fx: x + it[l.idx].d.w / 2 };
+  render();
+  const sp = document.querySelector(`.spine[data-id="${CSS.escape(b.id)}"]`);
+  if (!sp) { ghost.remove(); S.motion = false; return; }
+  sp.style.visibility = 'hidden';
+  const to = sp.getBoundingClientRect();
+  anim(ghost, [{ opacity: 1 }, { opacity: 0 }], { duration: 300, delay: 60, fill: 'forwards' });
+  fadeIn([chrome], 300);
+  const coverClone = cover.cloneNode(true); coverClone.style.visibility = 'visible';
+  // fly from the cover's rect (as a book seen face-on) back to the slot
+  const wrap = await flyBook(to, from, sp, coverClone, true);
+  wrap.remove(); ghost.remove();
+  sp.style.visibility = '';
+  anim(sp, [{ transform: 'translateY(-8px)' }, { transform: 'none' }], { duration: 220, easing: 'cubic-bezier(.3,1.35,.5,1)' });
+  const sib = [sp.previousElementSibling, sp.nextElementSibling];
+  sib.forEach((s, i) => s && s.classList.contains('spine') && anim(s, [{ transform: 'none' }, { transform: `translateX(${i ? 1 : -1}px)` }, { transform: 'none' }], { duration: 160, delay: 60 }));
+  sound('book');
+  S.motion = false;
+}
+/* D4 — ink appearing */
+function inkIn() {
+  if (QUIET()) return;
+  const els = [...document.querySelectorAll('.kicker, .btitle, .bzh, .balt, .bsub, .series, .raterow, .spill, .chiprow, .meta, #tabbody .sec-h, #tabbody .inkarea, .rp-foot, .foot')];
+  els.forEach((e, i) => { e.classList.remove('inkin'); void e.offsetWidth; e.style.animationDelay = (i * 50) + 'ms'; e.classList.add('inkin'); });
+  setTimeout(() => els.forEach((e) => e.classList.remove('inkin')), 1800 + els.length * 50);
+}
+
+/* C3 / C4 — turning a page (iPad spread) */
+function pageRect(which) { const P = PAGES[which]; const c = S.cam; return { left: c.tx + P.x * c.s, top: c.ty + P.y * c.s, width: P.w * c.s, height: P.h * c.s, P }; }
+function makeLeaf(which, contentEl) {
+  const r = pageRect(which); const P = r.P;
+  const leaf = document.createElement('div'); leaf.className = 'leafwrap';
+  leaf.innerHTML = `<div class="leaf ${which === 'R' ? 'fromright' : 'fromleft'}" style="left:${r.left}px;top:${r.top}px;width:${r.width}px;height:${r.height}px"><div class="lf front"><div class="lfi" style="width:${P.w}px;height:${P.h}px;transform:scale(${S.cam.s});background:url(desk.jpg) -${P.x}px -${P.y}px / 1180px 820px"></div></div><div class="lf back"><div class="lfi" style="width:${P.w}px;height:${P.h}px;transform:scale(${S.cam.s});background:url(desk.jpg) -${(which === 'R' ? PAGES.L : PAGES.R).x}px -${P.y}px / 1180px 820px"></div><i class="lback"></i></div><i class="lshade"></i></div>`;
+  if (contentEl) { const c = contentEl.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id')); leaf.querySelector('.front .lfi').appendChild(c); }
+  document.body.appendChild(leaf);
+  return leaf;
+}
+function turnLeaf(leaf, which, from, toDeg, ms) {
+  const el = leaf.querySelector('.leaf'), sh = leaf.querySelector('.lshade');
+  const sign = which === 'R' ? -1 : 1;
+  const a = el.animate([{ transform: `perspective(2200px) rotateY(${from}deg)` }, { transform: `perspective(2200px) rotateY(${toDeg}deg)` }], { duration: ms, easing: 'cubic-bezier(.45,.05,.25,1)', fill: 'forwards' });
+  sh.animate([{ opacity: Math.abs(from) / 180 < 0.5 ? 0.9 : 0, transform: 'translateX(0)' }, { opacity: 0, transform: `translateX(${sign * 80}%)` }], { duration: ms * 0.6, fill: 'forwards' });
+  sound('page');
+  return a.finished.catch(() => {});
+}
+async function turnTab() { // C3 — ribbons
+  if (QUIET() || S.single) { refreshTab(); return; }
+  const tb = document.querySelector('.rp'); // the whole right page, as it looks now
+  const leaf = makeLeaf('R', tb);
+  leaf.querySelector('.front .lfi').firstElementChild.style.cssText += ';position:absolute;left:0;top:0;width:100%;height:100%;background:none';
+  refreshTab(true);
+  await turnLeaf(leaf, 'R', 0, -180, 620);
+  leaf.remove();
+}
+async function turnBook(dir) { // C4 — next / previous book on the iPad spread
+  const id = dir > 0 ? S.bookNav && S.bookNav.next : S.bookNav && S.bookNav.prev;
+  if (!id) { bump(dir); return; }
+  if (QUIET() || S.single) { openBook(id); return; }
+  const which = dir > 0 ? 'R' : 'L';
+  const pageEl = document.querySelector(dir > 0 ? '.rp' : '.lp');
+  const leaf = makeLeaf(which, pageEl);
+  leaf.querySelector('.front .lfi').firstElementChild.style.cssText += ';position:absolute;left:0;top:0;width:100%;height:100%;background:none';
+  S.book = id; S.view = 'book'; renderBook();
+  await turnLeaf(leaf, which, 0, dir > 0 ? -180 : 180, 640);
+  leaf.remove(); inkIn();
+}
+/* interactive turn: the page follows the finger */
+const Turn = {
+  leaf: null, dir: 0,
+  begin(dir) {
+    if (QUIET() || S.single || this.leaf) return false;
+    const id = dir > 0 ? S.bookNav && S.bookNav.next : S.bookNav && S.bookNav.prev; if (!id) return false;
+    const which = dir > 0 ? 'R' : 'L';
+    this.dir = dir; this.which = which; this.id = id;
+    this.leaf = makeLeaf(which, document.querySelector(dir > 0 ? '.rp' : '.lp'));
+    this.leaf.querySelector('.front .lfi').firstElementChild.style.cssText += ';position:absolute;left:0;top:0;width:100%;height:100%;background:none';
+    this.el = this.leaf.querySelector('.leaf'); this.w = pageRect(which).width;
+    S.book = id; renderBook(); // the next book waits underneath
+    return true;
+  },
+  move(dx) { if (!this.leaf) return; const p = Math.max(0, Math.min(1, (-this.dir * dx) / (this.w * 1.6))); this.p = p; this.el.style.transform = `perspective(2200px) rotateY(${(this.dir > 0 ? -1 : 1) * p * 180}deg)`; },
+  async end(v) {
+    if (!this.leaf) return;
+    const p = this.p || 0, leaf = this.leaf, which = this.which, dir = this.dir;
+    this.leaf = null;
+    const done = p > 0.35 || v > 0.45;
+    const cur = (dir > 0 ? -1 : 1) * p * 180;
+    if (done) { await turnLeaf(leaf, which, cur, dir > 0 ? -180 : 180, Math.max(160, (1 - p) * 520)); leaf.remove(); inkIn(); }
+    else { // spring back: the previous book returns
+      const back = dir > 0 ? S.bookNav.prev : S.bookNav.next; if (back) { S.book = back; } renderBook();
+      await leaf.querySelector('.leaf').animate([{ transform: `perspective(2200px) rotateY(${cur}deg)` }, { transform: 'perspective(2200px) rotateY(0deg)' }], { duration: 280, easing: 'cubic-bezier(.3,1.2,.5,1)', fill: 'forwards' }).finished.catch(() => {});
+      leaf.remove();
+    }
+  }
+};
+
+/* C8 — walking between bookcases: the room pans; the next run of cases arrives beside this one */
+const PITCH = PILS[1] - PILS[0];
+async function walk(dir, newPage, newBay) {
+  if (QUIET()) { S.page = newPage; if (S.bayMode) S.bay = newBay; S.zoom = null; render(); return; }
+  const oldWall = document.getElementById('wall'); if (!oldWall) { S.page = newPage; render(); return; }
+  S.motion = true;
+  const old = oldWall.cloneNode(true); old.removeAttribute('id'); old.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id')); old.classList.add('oldwall');
+  const keepBay = S.bay;
+  S.page = newPage; S.zoom = null; S.found = null;
+  render(); // camera stays on the old bay for the walk (bay mode)
+  const nw = document.getElementById('wall'); nw.parentElement.insertBefore(old, nw);
+  const bay = S.bayMode;
+  const D0 = bay ? dir * 3 * PITCH : dir * 3 * PITCH, D1 = bay ? dir * 2 * PITCH : 0, O1 = bay ? -dir * PITCH : -dir * 3 * PITCH;
+  const ms = bay ? 560 : 640; const ease = 'cubic-bezier(.65,0,.35,1)';
+  const lad = document.getElementById('ladder');
+  const a = nw.animate([{ transform: `translateX(${D0}px)` }, { transform: `translateX(${D1}px)` }], { duration: ms, easing: ease, fill: 'forwards' });
+  old.animate([{ transform: 'none' }, { transform: `translateX(${O1}px)` }], { duration: ms, easing: ease, fill: 'forwards' });
+  if (lad) anim(lad, [{ translate: '0 0' }, { translate: `${-dir * 12}px 0`, offset: 0.7 }, { translate: '0 0' }], { duration: ms + 300, easing: 'cubic-bezier(.45,0,.2,1)' });
+  sound('drawer');
+  await a.finished.catch(() => {});
+  old.remove(); a.cancel(); nw.style.transform = '';
+  if (bay) { S.bay = newBay; fit(false); chrome.innerHTML = wallChrome(layout()); renderResults(); bindSearch(); renderSync(); }
+  void keepBay;
+  S.motion = false;
+}
+
+/* C6 — card flip */
+function flipCard(dir) {
+  const cur = document.getElementById('icard') || document.getElementById('cardtext');
+  if (!cur || QUIET()) return null;
+  const old = cur.cloneNode(true); old.removeAttribute('id'); old.classList.add('oldcard');
+  cur.parentElement.insertBefore(old, cur);
+  if (cur.id === 'icard') { old.style.position = 'absolute'; old.style.left = cur.offsetLeft + 'px'; old.style.top = cur.offsetTop + 'px'; old.style.width = cur.offsetWidth + 'px'; old.style.height = cur.offsetHeight + 'px'; old.style.margin = '0'; }
+  const a = old.animate([{ transform: 'perspective(900px) rotateX(0) translateY(0)', opacity: 1 }, { transform: `perspective(900px) rotateX(${dir > 0 ? -72 : 72}deg) translateY(-8px)`, opacity: 0 }], { duration: 220, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' });
+  a.onfinish = () => old.remove();
+  return old;
+}
+function cardEnter(dir) {
+  const cur = document.getElementById('icard') || document.getElementById('cardtext'); if (!cur) return;
+  anim(cur, [{ transform: `perspective(900px) rotateX(${dir > 0 ? 22 : -22}deg) translateY(10px) scale(.985)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 280, delay: 120, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'backwards' });
+  sound('card');
+}
+
+/* C7 — sheets leave gracefully; on the phone they can be pulled down */
+function sheetExit(done) {
+  const el = document.getElementById('sheet');
+  if (!el || QUIET()) { done(); return; }
+  const sh = el.querySelector('.sheet'), sc = el.querySelector('.scrim');
+  el.id = 'sheet-leaving'; el.style.pointerEvents = 'none';
+  const a = sh.animate(S.compact ? [{ transform: getComputedStyle(sh).transform === 'none' ? 'none' : getComputedStyle(sh).transform }, { transform: 'translateY(100%)' }] : [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(10px)' }], { duration: 240, easing: 'cubic-bezier(.4,0,1,1)', fill: 'forwards' });
+  sc.animate([{ backgroundColor: getComputedStyle(sc).backgroundColor }, { backgroundColor: 'rgba(4,5,5,0)' }], { duration: 240, fill: 'forwards' });
+  a.finished.catch(() => {}).then(() => el.remove());
+  done();
+}
+const Pull = {
+  start(e, sh) { this.sh = sh; this.y = e.clientY; this.t = Date.now(); this.dy = 0; this.id = e.pointerId; },
+  move(e) { if (!this.sh || e.pointerId !== this.id) return false; const dy = Math.max(0, e.clientY - this.y); if (!this.on && dy < 8) return false; this.on = true; this.dy = dy; this.sh.style.transform = `translateY(${dy}px)`; const sc = this.sh.parentElement; sc.style.background = `rgba(4,5,5,${(0.58 * (1 - dy / innerHeight)).toFixed(3)})`; return true; },
+  cancel() { if (!this.sh) return; const sh = this.sh; this.sh = null; this.on = false; sh.style.transform = ''; sh.parentElement.style.background = ''; },
+  end(e) {
+    if (!this.sh || e.pointerId !== this.id) return false;
+    const sh = this.sh, on = this.on; this.sh = null; this.on = false;
+    if (!on) return false;
+    const v = this.dy / Math.max(1, Date.now() - this.t);
+    if (this.dy > 120 || v > 0.5) { S.swipeAt = Date.now(); if (S.sheet && S.sheet.kind === 'add' && addDirty(S.sheet)) { sh.animate([{ transform: sh.style.transform }, { transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.3,1.2,.5,1)' }); sh.style.transform = ''; openSheet({ kind: 'confirmDiscard' }, true); return true; } closeSheet(); }
+    else { sh.animate([{ transform: sh.style.transform }, { transform: 'none' }], { duration: 260, easing: 'cubic-bezier(.3,1.2,.5,1)' }); sh.style.transform = ''; sh.parentElement.style.background = ''; }
+    return true;
+  }
+};
+
+/* C10 / C13 — a found book glows; a new book drops into place */
+function foundGlow(id) { const sp = document.querySelector(`.spine[data-id="${CSS.escape(id)}"]`); if (!sp) return; motes(sp, 12); }
+function shelveNew(id) {
+  const sp = document.querySelector(`.spine[data-id="${CSS.escape(id)}"]`); if (!sp || QUIET()) return;
+  anim(sp, [{ transform: 'translateY(-34px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.3,1.3,.5,1)', fill: 'backwards' });
+  [sp.previousElementSibling, sp.nextElementSibling].forEach((s, i) => s && s.classList.contains('spine') && anim(s, [{ transform: `translateX(${i ? -sp.offsetWidth : sp.offsetWidth}px)` }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,.8,.2,1)' }));
+  setTimeout(() => motes(sp, 16), 300);
+}
+
 /* ================= render, camera, gestures, actions ================= */
 function render(opts) {
+  if (document.body.dataset.view && document.body.dataset.view !== S.view) document.querySelectorAll('.letter:not(.open)').forEach((l) => l.remove());
   document.body.dataset.view = S.view;
   fit(opts && opts.pan);
   if (S.view === 'book') renderBook(); else if (S.view === 'cat') renderCat(); else if (S.view === 'list') renderList(); else renderWall();
@@ -2373,7 +3236,7 @@ function fit(animate) {
     const avH = H - topH - botH;
     s = Math.min(W / r.w, avH / r.h);
     tx = (W - r.w * s) / 2 - r.x * s; ty = topH + (avH - r.h * s) / 2 - r.y * s;
-    if (1180 * s >= W) tx = Math.min(0, Math.max(W - 1180 * s, tx)); // keep the room filling the screen
+    if (1180 * s >= W) tx = Math.min(0, Math.max(W - 1180 * s, tx)); // keep the room filling the screen (no black void beyond the end cases)
   } else if (S.single && S.view !== 'wall') {
     s = Math.max(W / 1180, H / 820); tx = (W - 1180 * s) / 2; ty = (H - 820 * s) / 2;
   } else {
@@ -2391,8 +3254,9 @@ addEventListener('resize', () => { clearTimeout(rsz); rsz = setTimeout(() => { i
 
 /* ---------- toast with an optional action ---------- */
 function toast(text, action, ms) {
-  S.toast = { text, action: action || null }; renderToast();
-  clearTimeout(toast._t); toast._t = setTimeout(() => { S.toast = null; renderToast(); }, ms || (action ? 6000 : 2600));
+  const fresh = !S.toast; S.toast = { text, action: action || null }; renderToast();
+  if (fresh) anim(document.getElementById('toast'), [{ transform: 'translate(-50%,12px)', opacity: 0 }, { transform: 'translate(-50%,0)', opacity: 1 }], { duration: 240, easing: 'cubic-bezier(.2,.8,.2,1)' });
+  clearTimeout(toast._t); toast._t = setTimeout(() => { const t = document.getElementById('toast'); const a = anim(t, [{ opacity: 1 }, { opacity: 0, transform: 'translate(-50%,8px)' }], { duration: 200, easing: 'ease-in', fill: 'forwards' }); setTimeout(() => { S.toast = null; renderToast(); }, a ? 200 : 0); }, ms || (action ? 6000 : 2600));
 }
 function renderToast() {
   let t = document.getElementById('toast');
@@ -2427,6 +3291,7 @@ document.addEventListener('pointerdown', (e) => {
   const rate = e.target.closest('.rating');
   if (rate) { e.preventDefault(); scrub = { el: rate, id: e.pointerId }; scrubAt(e); try { rate.setPointerCapture(e.pointerId); } catch (er) { /* */ } return; }
   if (pointers.size === 2 && S.view === 'wall' && S.zoom) { const [a, b] = [...pointers.values()]; gest = { kind: 'pinch', d0: Math.hypot(a.x - b.x, a.y - b.y) }; clearTimeout(press && press.t); press = null; return; }
+  if (S.sheet && S.compact && e.isPrimary) { const sh = e.target.closest('#sheet .sheet'); if (sh && (e.target.closest('.shead') || sh.scrollTop <= 0 && e.clientY - sh.getBoundingClientRect().top < 70) && !e.target.closest('input,textarea,select,button')) Pull.start(e, sh); }
   if (drag || S.sheet || !e.isPrimary) return;
   if (e.target.closest('input,textarea,select,.results,.topbar,.bottombar,.chips,.zoompill')) return;
   const sp = e.target.closest('.spine');
@@ -2448,12 +3313,19 @@ document.addEventListener('pointerdown', (e) => {
 document.addEventListener('pointermove', (e) => {
   if (pointers.has(e.pointerId)) pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
   if (scrub && e.pointerId === scrub.id) { scrubAt(e); return; }
+  if (Pull.sh && Pull.move(e)) { e.preventDefault(); return; }
   if (drag) { e.preventDefault(); moveDrag(e); return; }
   if (press && e.pointerId === press.id && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 9) { clearTimeout(press.t); press = null; }
   if (!gest) return;
   if (gest.kind === 'pinch') { if (pointers.size === 2) { const [a, b] = [...pointers.values()]; const d = Math.hypot(a.x - b.x, a.y - b.y); if (d < gest.d0 * 0.7) { gest = null; zoomTo(null, true); S.found = null; refreshSpines(); } } return; }
   if (e.pointerId !== gest.id) return;
   const dx = e.clientX - gest.x, dy = e.clientY - gest.y;
+  if (gest.kind === 'book' && !S.single && (gest.turning || (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.3))) {
+    if (!gest.turning) { gest.turning = Turn.begin(dx < 0 ? 1 : -1) ? 1 : -1; }
+    if (gest.turning === 1) Turn.move(dx);
+    return;
+  }
+  if (gest.kind === 'wall' && !S.zoom && !QUIET() && Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) { const w = document.getElementById('wall'); if (w) { gest.follow = true; w.style.translate = `${(dx / S.scale) * 0.3}px 0`; } }
   if (gest.kind === 'wall' && S.zoom && S.zoom.fx != null && S.compact && (gest.panning || (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)))) {
     gest.panning = true;
     const w = document.getElementById('wall'); if (w) w.style.transition = 'none';
@@ -2463,20 +3335,23 @@ document.addEventListener('pointermove', (e) => {
 function endPointer(e) {
   pointers.delete(e.pointerId);
   if (scrub && e.pointerId === scrub.id) { commitScrub(); return; }
+  if (Pull.sh && Pull.end(e)) return;
   if (press && e.pointerId === press.id) { clearTimeout(press.t); press = null; }
   if (drag) { endDrag(); S.swipeAt = Date.now(); gest = null; return; }
   if (!gest || gest.kind === 'pinch') { if (pointers.size === 0) gest = null; return; }
   if (e.pointerId !== gest.id) return;
   const g = gest; gest = null;
   const dx = e.clientX - g.x, dy = e.clientY - g.y, dt = Date.now() - g.t;
+  if (g.turning) { S.swipeAt = Date.now(); if (g.turning === 1) Turn.end(Math.abs(dx) / Math.max(1, dt)); return; }
   if (g.panning) {
     S.swipeAt = Date.now(); const w = document.getElementById('wall'); if (w) w.style.transition = '';
     const dir = dx < 0 ? 1 : -1;
     if (Math.abs(dx) > 60 && S.zoom && (g.edge0 === dir || S.zoom.edge === dir) && g.edge0 === S.zoom.edge) zoomStep(dir); // pushed past the end of the shelf
     return;
   }
-  const horiz = Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy) * 1.4 && dt < 700;
-  const vert = Math.abs(dy) >= 60 && Math.abs(dy) > Math.abs(dx) * 1.4 && dt < 700;
+  const wl = document.getElementById('wall'); if (g.follow && wl) { wl.style.translate = ''; }
+  const horiz = Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy) * 1.4 && (dt < 1100 || (g.follow && Math.abs(dx) > innerWidth * 0.3)); // a slow drag that carried the wall far enough still counts
+  const vert = Math.abs(dy) >= 60 && Math.abs(dy) > Math.abs(dx) * 1.4 && dt < 1100;
   if (g.kind === 'wall' && S.zoom && !S.compact && (horiz || vert)) { S.swipeAt = Date.now(); zoomStep(horiz ? (dx < 0 ? 1 : -1) : (dy < 0 ? 1 : -1), !horiz); return; }
   if (!horiz) return;
   if (g.kind === 'book' && (Math.abs(dx) < 80 || Math.abs(dy) > 30)) return;
@@ -2487,13 +3362,16 @@ function endPointer(e) {
   else if (g.kind === 'book' && S.bookNav) { const id = dir > 0 ? S.bookNav.next : S.bookNav.prev; if (id) openBook(id); else bump(dir); }
 }
 document.addEventListener('pointerup', endPointer);
-document.addEventListener('pointercancel', (e) => { pointers.delete(e.pointerId); if (press) { clearTimeout(press.t); press = null; } if (drag) cancelDrag(); if (scrub) commitScrub(); gest = null; });
+document.addEventListener('pointercancel', (e) => { pointers.delete(e.pointerId); Pull.cancel(); if (Turn.leaf) Turn.end(0); if (press) { clearTimeout(press.t); press = null; } if (drag) cancelDrag(); if (scrub) commitScrub(); gest = null; });
 document.addEventListener('contextmenu', (e) => { if (e.target.closest('.spine')) e.preventDefault(); });
 function cardStep(dir) {
   const labels = drawerLabels(S.catMode); const n = drawerBooks(S.catMode, labels[S.catDrawer] || '').length;
   const c = S.catCard + dir; if (c < 0 || c >= n) return;
+  const ghost = flipCard(dir); const gp = ghost && ghost.parentElement;
   S.catCard = c; renderCat(); scrollCardIntoView();
-  anim(document.getElementById('icard') || document.getElementById('cardtext'), [{ transform: `translateX(${dir * 40}px) rotate(${dir * 1.2}deg)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: 'cubic-bezier(.2,.7,.2,1)' });
+  const cur = document.getElementById('icard') || document.getElementById('cardtext');
+  if (ghost && cur && cur.parentElement) { cur.parentElement.insertBefore(ghost, cur); }
+  void gp; cardEnter(dir);
 }
 function pageIn(dir) { anim(document.querySelector('.pb') || document.querySelector('.bookview'), [{ transform: `translateX(${dir * 36}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 380, easing: 'cubic-bezier(.2,.7,.2,1)' }); }
 
@@ -2501,6 +3379,7 @@ function pageIn(dir) { anim(document.querySelector('.pb') || document.querySelec
 function scrubAt(e) {
   const r = scrub.el.getBoundingClientRect();
   const v = Math.max(0.5, Math.min(5, Math.ceil(((e.clientX - r.left) / r.width) * 10) / 2));
+  if (scrub.v != null && Math.ceil(v) > Math.ceil(scrub.v)) { const st = scrub.el.querySelectorAll('.st')[Math.ceil(v) - 1]; anim(st, [{ transform: 'scale(1)' }, { transform: 'scale(1.16)' }, { transform: 'scale(1)' }], { duration: 240, easing: 'cubic-bezier(.3,1.6,.5,1)' }); }
   scrub.v = v; refreshRating(scrub.el, v);
 }
 function commitScrub() {
@@ -2532,8 +3411,7 @@ function spineTap(el) {
   const big = el.offsetWidth * S.scale * k >= 30 && el.offsetHeight * S.scale * k >= 120;
   if (S.arrange) { if (!S.zoom || S.zoom.bay !== bay || S.zoom.shelf !== shelf) { const g = GEO.shelves[bay * 3 + shelf]; zoomTo({ bay, shelf, fx: g.x0 + el.offsetLeft + el.offsetWidth / 2 }, true); } return; }
   if (!big && (!S.zoom || S.zoom.bay !== bay || S.zoom.shelf !== shelf)) { const g = GEO.shelves[bay * 3 + shelf]; S.found = null; refreshSpines(); zoomTo({ bay, shelf, fx: g.x0 + el.offsetLeft + el.offsetWidth / 2 }, true); return; }
-  el.classList.add('lift');
-  setTimeout(() => openBook(el.dataset.id, 'wall'), REDUCED.matches ? 0 : 300);
+  takeBook(el);
 }
 async function doAction(act, el, e) {
   const b = curBook();
@@ -2561,18 +3439,26 @@ async function doAction(act, el, e) {
     case 'arrange-done': S.arrange = false; layoutCache = null; render(); return;
     case 'desk': openSheet({ kind: 'desk', tab: d('tab') || 'desk' }, S.view === 'book'); return;
     case 'desk-tab': S.sheet.tab = d('tab'); renderSheet(); return;
-    case 'random': { const pool = S.books.filter((x) => status(x) === 'read'); if (pool.length) { const pick = pool[Math.floor(Math.random() * pool.length)]; S.sheet = null; S.sheets = []; gotoBook(pick.id); const l = locate(pick.id); setTimeout(() => { openBook(pick.id, 'wall'); toast(l ? `From bookcase ${l.caseNo} — an old friend` : 'An old friend'); }, REDUCED.matches ? 100 : 1100); } return; }
+    case 'random': {
+      const pool = S.books.filter((x) => status(x) === 'read'); if (!pool.length) return;
+      const pick = pool[Math.floor(Math.random() * pool.length)]; const l = locate(pick.id);
+      S.sheet = null; S.sheets = []; renderSheet();
+      if (l && l.page === S.page && S.view === 'wall') await rollLadder(l.bay < 1 ? 1 : 2);
+      gotoBook(pick.id);
+      setTimeout(() => { const sp = document.querySelector(`.spine[data-id="${CSS.escape(pick.id)}"]`); if (sp) takeBook(sp); else openBook(pick.id, 'wall'); setTimeout(() => toast(l ? `From bookcase ${l.caseNo} — an old friend` : 'An old friend'), 900); }, QUIET() ? 100 : 1000);
+      return;
+    }
     case 'apply-update': if (window.applyUpdate) window.applyUpdate(); return;
     case 'toast-act': { const a = S.toast && S.toast.action; S.toast = null; renderToast(); if (a) a.fn(); return; }
     /* ---- book ---- */
     case 'back': if (S.view === 'book') return closeBook(); if (S.view === 'list' && S.from === 'cat') { S.view = 'cat'; render(); return; } S.view = 'wall'; S.sheet = null; render(); return;
-    case 'open': if (d('id')) openBook(d('id'), S.view === 'book' ? S.from : S.view); return;
+    case 'open': if (!d('id')) return; if (S.view === 'book' && !S.single && S.bookNav && (d('id') === S.bookNav.next || d('id') === S.bookNav.prev) && el.closest('.topbar')) return turnBook(d('id') === S.bookNav.next ? 1 : -1); openBook(d('id'), S.view === 'book' ? S.from : S.view); return;
     case 'open-from': openBook(d('id'), d('from')); return;
     case 'open-quotes': S.tab = 'quotes'; openBook(d('id'), 'quotes'); return;
     case 'show-shelf': if (b) gotoBook(b.id); return;
-    case 'tab': S.tab = d('tab'); refreshTab(); return;
+    case 'tab': if (S.tab === d('tab')) return; S.tab = d('tab'); turnTab(); return;
     case 'rate-clear': if (b) { saveBook(b.id, { rating: null }); renderBook(); } return;
-    case 'fav': if (b) { saveBook(b.id, { favourite: !b.favourite }); renderBook(); if (b.favourite) anim(document.querySelector('.heart'), [{ transform: 'scale(1)' }, { transform: 'scale(1.35)' }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(.3,1.6,.5,1)' }); } return;
+    case 'fav': if (b) { saveBook(b.id, { favourite: !b.favourite }); renderBook(); if (b.favourite) { stampSeal(document.querySelector(S.single ? '.pb .head' : '.lp-head')); } } return;
     case 'status': openSheet({ kind: 'status', id: b.id }); return;
     case 'feelings': openSheet({ kind: 'feelings', id: b.id }); return;
     case 'toggle-feel': { const f = d('f'); const cur = new Set(b.feelings || []); cur.has(f) ? cur.delete(f) : cur.add(f); saveBook(b.id, { feelings: [...cur] }); el.classList.toggle('on'); el.setAttribute('aria-pressed', cur.has(f)); return; }
@@ -2586,6 +3472,7 @@ async function doAction(act, el, e) {
     case 'cover': if (b) openSheet({ kind: 'more', id: b.id }); return;
     case 'book-more': openSheet({ kind: 'more', id: b.id }); return;
     case 'm-color': saveBook(b.id, { binding: { color: +d('c'), style: binding(b).style } }); renderSheet(); return;
+    case 'm-bind': saveBook(b.id, { binding: { color: +d('c'), style: +d('s') } }); layoutCache = null; renderSheet(); return;
     case 'm-style': saveBook(b.id, { binding: { color: binding(b).color, style: +d('s') } }); renderSheet(); return;
     case 'find-covers': S.sheet.covers = []; S.sheet.coversBusy = true; renderSheet(); { const sh = S.sheet; sh.covers = await coverChoices(b); sh.coversBusy = false; if (S.sheet === sh) renderSheet(); } return;
     case 'pick-cover': saveBook(b.id, { coverUrl: S.sheet.covers[+d('i')] }); S.sheet.covers = null; renderSheet(); toast('Cover changed'); return;
@@ -2601,7 +3488,7 @@ async function doAction(act, el, e) {
     case 'finish': openSheet({ kind: 'finish', id: d('id') }, true); return;
     case 'fin-rate-clear': S.sheet.rating = null; renderSheet(); return;
     case 'fin-feel': { const f = d('f'); const cur = new Set(S.sheet.feelings || b.feelings || []); cur.has(f) ? cur.delete(f) : cur.add(f); S.sheet.feelings = [...cur]; el.classList.toggle('on'); return; }
-    case 'fin-done': { const sh = S.sheet; const m = document.getElementById('fin-month').value || thisMonth(); setStatus(b, 'read', m); const p = {}; if (sh.rating != null) p.rating = sh.rating; if (sh.feelings) p.feelings = sh.feelings; if (Object.keys(p).length) saveBook(b.id, p); layoutCache = null; S.sheet = null; S.sheets = []; renderSheet(); gotoBook(b.id); toast(`Back on the shelf · ${secName(secOf(b))}`); return; }
+    case 'fin-done': { stampSeal(document.querySelector('#sheet .sheet')); await wait(QUIET() ? 0 : 520); const sh = S.sheet; const m = document.getElementById('fin-month').value || thisMonth(); setStatus(b, 'read', m); const p = {}; if (sh.rating != null) p.rating = sh.rating; if (sh.feelings) p.feelings = sh.feelings; if (Object.keys(p).length) saveBook(b.id, p); layoutCache = null; S.sheet = null; S.sheets = []; renderSheet(); gotoBook(b.id); toast(`Back on the shelf · ${secName(secOf(b))}`); return; }
     case 'aside': saveBook(d('id'), { pausedAt: thisMonth() }); renderSheet(); return;
     case 'resume': saveBook(d('id'), { pausedAt: null }); renderSheet(); return;
     case 'start': setStatus(S.books.find((x) => x.id === d('id')), 'reading'); layoutCache = null; S.sheet.tab = 'desk'; renderSheet(); render(); toast('On the reading desk'); return;
@@ -2622,6 +3509,8 @@ async function doAction(act, el, e) {
     case 's-ts': saveSettings({ textSize: +d('v') }); applyTextSize(); renderSheet(); return;
     case 's-pile': saveSettings({ pileMode: d('v') }); layoutCache = null; renderSheet(); return;
     case 's-qod': saveSettings({ quoteOfDay: d('v') === '1' }); renderSheet(); return;
+    case 's-motion': saveSettings({ quietMotion: d('v') === '1' }); renderSheet(); Atmos.start(); return;
+    case 's-sound': saveSettings({ sound: d('v') === '1' }); renderSheet(); sound('seal'); return;
     case 'export': return exportBackup();
     case 's-connect': {
       const repo = document.getElementById('s-repo').value.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '');
@@ -2654,7 +3543,7 @@ async function doAction(act, el, e) {
     case 'sec-add': { const i = document.getElementById('sec-new'); const name = (i.value || '').trim(); if (!name) { i.focus(); return; } addSection(name, d('after')); S.sheet = null; render(); toast(`“${name}” is ready — drag books onto its shelf`); return; }
     case 'moveto': openSheet({ kind: 'moveto', id: d('id') || b.id }); return;
     case 'moveto-go': return moveBookTo(b, d('sec'));
-    case 'welcome-keep': { const n = document.getElementById('w-name').value.trim(); saveSettings({ welcomed: true, owner: n || S.settings.owner || '' }); closeSheet(); return; }
+    case 'welcome-keep': { const n = document.getElementById('w-name').value.trim(); saveSettings({ welcomed: true, owner: n || S.settings.owner || '' }); closeSheet(); document.querySelectorAll('.flame,.halo,.cone').forEach((f, i) => anim(f, [{ opacity: 0 }, { opacity: 1 }], { duration: 900, delay: 200 + i * 120, fill: 'backwards' })); return; }
     case 'welcome-empty': { const n = document.getElementById('w-name').value.trim(); S.books.filter((x) => x.sample).forEach((x) => removeBook(x.id)); saveSettings({ welcomed: true, owner: n || '' }); S.sheet = null; layoutCache = null; render(); return; }
     /* ---- add a book ---- */
     case 'lookup': return lookup();
@@ -2668,7 +3557,7 @@ async function doAction(act, el, e) {
     case 'place-anyway': return placeBook(true);
     /* ---- catalogue & list ---- */
     case 'cat-mode': S.catMode = d('mode'); S.catDrawer = -1; S.catCard = 0; S.catFind = ''; renderCat(); return;
-    case 'drawer': S.catDrawer = +d('i'); S.catCard = 0; S.catFind = ''; renderCat(); scrollCardIntoView(); anim(document.getElementById('icard') || document.getElementById('cardtext'), [{ transform: 'translateY(10px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 300 }); return;
+    case 'drawer': S.catDrawer = +d('i'); S.catCard = 0; S.catFind = ''; renderCat(); scrollCardIntoView(); drawerOut(+d('i')); cardEnter(1); sound('drawer'); return;
     case 'card-prev': return cardStep(-1);
     case 'card-next': return cardStep(1);
     case 'card-go': { const i = +d('i'); const dir = i > S.catCard ? 1 : -1; S.catCard = i; renderCat(); scrollCardIntoView(); anim(document.getElementById('icard') || document.getElementById('cardtext'), [{ transform: `translateX(${dir * 30}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260 }); return; }
@@ -2808,11 +3697,7 @@ function quoteOfDay() {
   if (all.length < 2) return;
   const pick = all[hash(today) % all.length];
   LS.set('library.qod', today);
-  const el = document.createElement('div'); el.className = 'qod'; el.setAttribute('role', 'note');
-  el.innerHTML = `<p>“${esc(pick.q.text)}”</p><small>${esc(pick.b.title)}${pick.b.author ? ' · ' + esc(pick.b.author) : ''}${pick.q.page ? ' · p. ' + esc(pick.q.page) : ''} — tap to put it away</small>`;
-  ui.appendChild(el);
-  const bye = () => { if (!el.isConnected) return; const a = anim(el, [{ opacity: 1 }, { opacity: 0, transform: 'translate(-50%,-8px)' }], { duration: 400, fill: 'forwards' }); setTimeout(() => el.remove(), a ? 400 : 0); };
-  el.addEventListener('click', bye); setTimeout(bye, 10000);
+  setTimeout(() => letter('A line from your shelves', `“${esc(pick.q.text)}”`, `${esc(pick.b.title)}${pick.b.author ? ' · ' + esc(pick.b.author) : ''}${pick.q.page ? ' · p. ' + esc(pick.q.page) : ''}`), 1400);
 }
 function backupReminder() {
   if (Store.connected()) return;

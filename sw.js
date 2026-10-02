@@ -1,7 +1,7 @@
 /* The Library — service worker.
  * Bump VERSION on every deploy that changes any precached file, so clients pick up the new shell.
  */
-const VERSION = 'lib-v3';
+const VERSION = 'lib-v4';
 
 const SHELL_CACHE = 'shell-' + VERSION;
 const COVERS_CACHE = 'covers';          // shared across versions, capped below
@@ -12,6 +12,8 @@ const SCOPE = self.registration.scope;  // e.g. https://wilsontsh.github.io/the-
 const u = (p) => new URL(p, SCOPE).href;
 
 const SHELL_FILES = [
+  'ladder.webp',
+  'wall_blur.jpg',
   'lib/zxing-ean.js',
   'lib/scan.js',
   'lib/csv.js',
