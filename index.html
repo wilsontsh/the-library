@@ -1344,12 +1344,16 @@ function layout() {
     else { cur = { sec: sec.id, secs: [sec.id], items: [], used: 0 }; shelves.push(cur); }
     const ak = (b) => sortKey(authorSort(b) || '');
     const runs = new Map(); // first book of each author's run of 3 or more -> its length
-    for (let i = 0; i < list.length;) { let j = i; while (j < list.length && ak(list[j]) === ak(list[i]) && ak(list[i])) j++; if (j - i >= 3) runs.set(list[i], j - i); i = Math.max(j, i + 1); }
+    for (let i = 0; i < list.length;) { let j = i; while (j < list.length && ak(list[j]) === ak(list[i]) && ak(list[i])) j++; if (j - i >= 2) runs.set(list[i], { n: j - i, w: list.slice(i, j).reduce((a, x) => a + dims(x).w + 1, 0) + (j - i >= 3 ? 2 * SEP_W : 0) }); i = Math.max(j, i + 1); }
     let inRun = 0;
     for (const b of list) {
       const d = dims(b);
-      if (runs.has(b) && cur.items.length && !cur.items[cur.items.length - 1].div && !cur.items[cur.items.length - 1].sep && cur.used + SEP_W + d.w + 1 <= inner) { cur.items.push({ sep: true, d: { w: SEP_W } }); cur.used += SEP_W; }
-      if (runs.has(b)) inRun = runs.get(b);
+      const run = runs.get(b);
+      if (run && cur.items.length && cur.used + run.w > inner && run.w <= inner * 0.92) { // keep one author together: start a fresh shelf and leave the end of this one open
+        cur.endGap = inner - cur.used; cur = { sec: sec.id, secs: [sec.id], items: [], used: 0 }; shelves.push(cur);
+      }
+      if (run && run.n >= 3 && cur.items.length && !cur.items[cur.items.length - 1].div && !cur.items[cur.items.length - 1].sep && cur.used + SEP_W + d.w + 1 <= inner) { cur.items.push({ sep: true, d: { w: SEP_W } }); cur.used += SEP_W; }
+      if (run && run.n >= 3) inRun = run.n;
       const endsRun = inRun > 0 && --inRun === 0;
       if (cur.used + d.w + 1 > inner) { cur = { sec: sec.id, secs: [sec.id], items: [], used: 0 }; shelves.push(cur); }
       cur.items.push({ b, d }); cur.used += d.w + 1;
@@ -1519,7 +1523,7 @@ function spineHTML(b, d, extraCls, lean) {
 
 function wallInner(L, page) {
   const q = S.q.trim();
-  let html = `<img class="bg" src="${HIRES.wall ? 'wall@2x.webp' : 'wall.jpg'}" alt="">`;
+  let html = `<img class="bg" src="wall.jpg" alt="">`; // always paint the light image first; the sharp one is swapped in once it is decoded (see swapHires)
   html += atmosphereHTML();
   for (let bay = 0; bay < 3; bay++) {
     const caseIdx = page * 3 + bay;
@@ -1562,7 +1566,7 @@ function wallInner(L, page) {
         }
         tags.filter((tg) => !tg.range).forEach((tg, k, arr) => { const rg = tags.find((t) => t.range); const next = k + 1 < arr.length ? arr[k + 1].x : (rg ? rg.x : sw - 4); const mw = next - tg.x - 6; if (mw >= 54) html += `<span class="genre-tag" style="left:${tg.x.toFixed(1)}px;max-width:${mw.toFixed(1)}px">${esc(tg.name)}</span>`; });
         html += rangeHTML;
-        if (sh.fill < 0.45 && !S.arrange) inner += propHTML(sh, x, g.yb - g.yt);
+        if (!S.arrange && (sh.fill < 0.45 || (sh.endGap >= 90 && hash(sh.sec + ':' + sh.items.length) % 2 === 0))) inner += propHTML(sh, x, g.yb - g.yt); // a keepsake in the space left before the next author
         html += inner;
       }
       html += `</div>`;
@@ -1577,6 +1581,7 @@ function renderWall() {
   stage.innerHTML = `<section class="view wallview" aria-label="Library wall"><div class="wall" id="wall">${wallInner(L, S.page)}</div>${ladderHTML()}<div class="tod ${todClass()}" aria-hidden="true"></div></section>`;
   chrome.innerHTML = wallChrome(L);
   hydrateCovers(stage);
+  swapHires('wall');
   applyZoom(false);
   renderResults();
   bindSearch();
@@ -1644,7 +1649,12 @@ function renderBanner() {
   el.innerHTML = msgs[0];
 }
 /* sharper images once the first paint is done, or as soon as she zooms (A6) */
-const HIRES = { wall: false, cat: false, asked: {} };
+const HIRES = { wall: false, cat: false, asked: {}, imgs: {} };
+function swapHires(kind) { // after any rebuild: show the sharp image only when the browser has it decoded, so there is never a soft or blank frame
+  const im = HIRES.imgs[kind]; if (!HIRES[kind] || !im) return;
+  const src = kind === 'wall' ? 'wall@2x.webp' : 'catalogue@2x.webp';
+  (im.decode ? im.decode() : Promise.resolve()).then(() => document.querySelectorAll(kind === 'wall' ? '#wall .bg' : '.catview .bg').forEach((b) => { if (b.getAttribute('src') !== src) b.src = src; })).catch(() => {});
+}
 function upgrade(kind, now) {
   if (HIRES[kind] || HIRES.asked[kind] || !GEO.hires) return;
   if (!now && (devicePixelRatio || 1) * (S.scale || 1) < 2.2) return;
@@ -1652,7 +1662,7 @@ function upgrade(kind, now) {
   const src = kind === 'wall' ? 'wall@2x.webp' : 'catalogue@2x.webp';
   const im = new Image(); im.src = src;
   (im.decode ? im.decode() : Promise.resolve()).then(() => {
-    HIRES[kind] = true;
+    HIRES[kind] = true; HIRES.imgs[kind] = im;
     document.querySelectorAll(kind === 'wall' ? '#wall .bg' : '.catview .bg').forEach((b) => { b.src = src; });
   }).catch(() => { HIRES.asked[kind] = false; });
 }
@@ -2209,7 +2219,7 @@ function renderCat() {
     return;
   }
   const card = CAT.card, dl = CAT.dlabel;
-  let html = `<img class="bg" src="${HIRES.cat ? 'catalogue@2x.webp' : 'catalogue.jpg'}" alt="">`;
+  let html = `<img class="bg" src="catalogue.jpg" alt="">`;
   CAT.drawers.forEach((d) => {
     const l = labels[d.i] || '';
     if (!l) return;
@@ -2225,7 +2235,7 @@ function renderCat() {
   html += `<div class="card-nav" style="left:${card.x}px;top:${card.y + card.h + 116}px;width:${card.w}px">${nav}${b ? `<button class="primary" data-act="open" data-id="${esc(b.id)}">Open the book</button>` : ''}</div>`;
   html += `<div class="cpanel" style="left:${card.x + 10}px;top:112px;width:${card.w - 20}px;height:${card.y - 128}px"><div class="cph">${esc(label)} · ${plural(all.length, 'card')}</div>${index}</div>`;
   keepScroll(['cindex'], () => { stage.innerHTML = `<section class="view catview" aria-label="Card catalogue">${html}</section>`; });
-  setTimeout(() => upgrade('cat'), 800);
+  swapHires('cat'); setTimeout(() => upgrade('cat'), 800);
   chrome.innerHTML = top;
   bindCatFind();
 }
