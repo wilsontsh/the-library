@@ -885,6 +885,7 @@ body.compact .arrange-banner span{white-space:nowrap}
 /* light spines: the title sits on a small aged-paper label, clear of the tooled ornaments */
 .spine.light .t{color:#2B1A0C;font-weight:700;text-shadow:none;background:linear-gradient(90deg,rgba(214,196,150,0),rgba(236,224,190,.97) 14%,rgba(240,229,197,.98) 50%,rgba(236,224,190,.97) 86%,rgba(214,196,150,0));box-shadow:0 0 0 .6px rgba(120,90,45,.35)}
 .spine.light .t::after{content:"";position:absolute;inset:1px 12%;border:.5px solid rgba(110,78,36,.35);pointer-events:none}
+.undofoot{margin-top:22px;padding-top:12px;border-top:1px solid rgba(212,185,122,.18);text-align:center;opacity:.8}.undofoot .linkish{font-size:12.5px;color:var(--muted,#a89c84)}.undofoot .note{margin:0 0 8px}
 
 </style>
 </head>
@@ -1197,8 +1198,9 @@ function flashSaved() {
 
 /* ---------------- undo ---------------- */
 const UNDO = []; // this visit's undoable actions, newest last: the Menu can step back through them even after the toast is gone
-function undoable(text, revert) {
+function undoable(text, revert, silent) {
   const entry = { text, revert, at: Date.now() }; UNDO.push(entry); if (UNDO.length > 20) UNDO.shift();
+  if (silent) return; // still undoable from the Menu, without a pop-up
   toast(text, { label: 'Undo', fn: () => undoEntry(entry) }, 8000);
 }
 function undoEntry(entry) {
@@ -2382,9 +2384,8 @@ function renderSheet() {
 }
 
 const SHEETS = {
-  menu: () => [`${head('The Library')}
+  menu: (sh) => [`${head('The Library')}
       <div class="menu toc">
-        ${UNDO.length ? `<button class="menu-item" data-act="undo-last"><span class="mi">${ICON.left}</span><span>Undo: ${esc(UNDO[UNDO.length - 1].text)}<small>${UNDO.length > 1 ? `${UNDO.length - 1} earlier ${UNDO.length === 2 ? 'action' : 'actions'} can be undone after this` : 'The most recent thing you did. Each tap steps one further back.'}</small></span></button>` : ''}
         <button class="menu-item" data-act="desk" data-tab="desk"><span class="mi">${SVG.book}</span><span>Reading desk &amp; want-to-read pile<small>${plural(deskBooks().length, 'book')} open · ${plural(pileBooks().length, 'book')} waiting</small></span></button>
         <button class="menu-item" data-act="go-list"><span class="mi">${ICON.list}</span><span>All books<small>Every book as a list — sort, filter, jump to a letter</small></span></button>
         <button class="menu-item" data-act="quotes"><span class="mi">${SVG.quill}</span><span>Commonplace book<small>Every line you have copied out, in one place</small></span></button>
@@ -2393,7 +2394,10 @@ const SHEETS = {
         <button class="menu-item" data-act="random"><span class="mi">${SVG.candleI}</span><span>Take down a random book<small>For when you want to revisit an old friend</small></span></button>
         <button class="menu-item" data-act="arrange"><span class="mi">${SVG.ladder}</span><span>Arrange the shelves<small>Move books, make your own sections, sort a bookcase</small></span></button>
         <button class="menu-item" data-act="settings"><span class="mi">${SVG.gear}</span><span>Bookplate, sync &amp; backup<small>Your name, iPhone and iPad in step, import, export, text size</small></span></button>
-      </div>`, 480],
+      </div>
+      ${UNDO.length ? `<div class="undofoot">${sh && sh.confirmUndo
+        ? `<p class="note">Undo <b>${esc(UNDO[UNDO.length - 1].text)}</b>?</p><div class="row" style="gap:8px"><button class="ghost" data-act="undo-yes" style="color:#e2a68f">Yes, undo it</button><button class="ghost" data-act="undo-no">Keep it</button></div>`
+        : `<button class="ghost linkish" data-act="undo-ask">Undo a recent action…</button>`}</div>` : ''}`, 480],
 
   owner: () => [`${head('Whose library is this?', 'Your name goes on the bookplate inside every book.')}
       <input type="text" id="o-name" value="${esc(S.settings.owner || '')}" placeholder="Your name" autocomplete="name" enterkeyhint="done" style="margin-top:14px">
@@ -2866,7 +2870,7 @@ function applyImport() {
   }
   S.sheet.imp = null; S.sheet.msg = `Brought in ${plural(added, 'book')}${updated ? `, updated ${updated}` : ''}. Covers will be found in the background.`;
   layoutCache = null; render(); setTimeout(() => enrichAll(false), 800);
-  if (added || updated) undoable(`Import: ${plural(added, 'new book')}${updated ? `, ${updated} updated` : ''}`, () => { addedIds.forEach((id) => removeBook(id)); olds.forEach(restoreBook); layoutCache = null; });
+  if (added || updated) undoable(`Import: ${plural(added, 'new book')}${updated ? `, ${updated} updated` : ''}`, () => { addedIds.forEach((id) => removeBook(id)); olds.forEach(restoreBook); layoutCache = null; }, true);
 }
 async function exportCSV() {
   const csv = '﻿' + window.LibraryCSV.toCSV(S.books);
@@ -3705,7 +3709,9 @@ async function doAction(act, el, e) {
     case 'rs-replace-yes': return applyRestore(true);
     case 'rs-add': return applyRestore(false);
     case 's-clear': S.sheet.confirmClear = true; renderSheet(); return;
-    case 'undo-last': { const e = UNDO[UNDO.length - 1]; if (!e) return; S.sheet = null; S.sheets = []; undoEntry(e); return; }
+    case 'undo-ask': S.sheet.confirmUndo = true; renderSheet(); return;
+    case 'undo-no': S.sheet.confirmUndo = false; renderSheet(); return;
+    case 'undo-yes': { const e = UNDO[UNDO.length - 1]; if (!e) return; S.sheet = null; S.sheets = []; undoEntry(e); return; }
     case 's-clear-own': { const ex = S.books.filter((x) => x.sample); const ids = ex.map((x) => x.id); ex.forEach((x) => saveBook(x.id, { sample: false, wasSample: true }, true)); S.sheet.confirmClear = false; layoutCache = null; renderSheet(); render(); undoable(`Kept ${plural(ids.length, 'book')} as your own`, () => { ids.forEach((id) => saveBook(id, { sample: true, wasSample: false }, true)); layoutCache = null; }); return; }
     case 's-clear-no': S.sheet.confirmClear = false; renderSheet(); return;
     case 's-ex-toggle': { const k = new Set(S.sheet.keep || []); const id = d('id'); k.has(id) ? k.delete(id) : k.add(id); S.sheet.keep = [...k]; renderSheet(); return; }
