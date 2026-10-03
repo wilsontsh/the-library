@@ -882,6 +882,9 @@ body.compact .arrange-banner span{white-space:nowrap}
 .exlist .exchip{margin:0}
 .divider.author-sep{width:5px;height:58%;margin:0 3px}
 .spine.vlabel::before{content:"";position:absolute;left:0;top:15.5%;height:68%;width:9%;background:linear-gradient(90deg,#0f0b08,#1b1511);pointer-events:none;z-index:0}
+/* light spines: the title sits on a small aged-paper label, clear of the tooled ornaments */
+.spine.light .t{color:#2B1A0C;font-weight:700;text-shadow:none;background:linear-gradient(90deg,rgba(214,196,150,0),rgba(236,224,190,.97) 14%,rgba(240,229,197,.98) 50%,rgba(236,224,190,.97) 86%,rgba(214,196,150,0));box-shadow:0 0 0 .6px rgba(120,90,45,.35)}
+.spine.light .t::after{content:"";position:absolute;inset:1px 12%;border:.5px solid rgba(110,78,36,.35);pointer-events:none}
 
 </style>
 </head>
@@ -1346,7 +1349,7 @@ function orderInSection(list) {
   });
 }
 const DIV_W = 16, SEP_W = 12; // SEP_W: the thin board either side of an author with three or more books
-const GAPS = [0, 30, 78]; // breathing space after a book: none, a little, a lot
+const GAPS = [0, 15, 39]; // breathing space after a book: none, a little, a lot
 let layoutCache = null, layoutKey = '';
 function layout() {
   const key = S.books.length + ':' + S.books.reduce((a, b) => Math.max(a, b.updatedAt || 0), 0) + ':' + (S.settings.updatedAt || 0) + ':' + S.arrange;
@@ -2451,6 +2454,8 @@ const SHEETS = {
     const reads = readsOf(b);
     return [`${head('Reading life', esc(b.title))}
       <div class="seg wide-seg" role="group" aria-label="Status" style="margin-top:14px">${[['read', 'Read'], ['reading', 'Reading'], ['want', 'Want to read'], ['aside', 'Put aside'], ['dnf', 'Did not finish']].map((s) => `<button class="${st === s[0] ? 'on' : ''}" data-act="st-set" data-s="${s[0]}" aria-pressed="${st === s[0]}">${s[1]}</button>`).join('')}</div>
+      <div class="row lentrow" style="flex-wrap:wrap;gap:8px;margin-top:10px"><button class="pick ${b.lentTo ? 'on' : ''}" data-act="st-lent" aria-pressed="${!!b.lentTo}">Lent out</button>${b.lentTo ? `<input type="text" id="s-lent" value="${esc(b.lentTo === 'Someone' ? '' : b.lentTo)}" placeholder="Lent to…" style="flex:1;min-width:140px">` : '<span class="note">Tick it when a friend has the book. It works alongside any status.</span>'}</div>
+      <p class="note" style="margin-top:10px"><b>Put aside</b>: paused, you mean to come back to it (it waits on the reading desk). <b>Did not finish</b>: you stopped for good (it stays on the shelf, marked).</p>
       <h3 class="sh3">Readings</h3>
       <div class="reads">${reads.length ? reads.map((r, i) => `<div class="readrow"><label class="f">Started<input type="month" data-rd="${i}" data-k="start" value="${esc(r.start || '')}"></label><label class="f">Finished<input type="month" data-rd="${i}" data-k="finish" value="${esc(r.finish || '')}"></label><button class="ghost xbtn" data-act="rd-del" data-i="${i}" aria-label="Remove this reading">${ICON.close}</button></div>`).join('') : '<p class="note">No dates yet.</p>'}</div>
       <div class="row" style="flex-wrap:wrap;gap:8px;margin-top:12px">${status(b) === 'read' ? `<button class="icon-btn wide" data-act="reread">Read it again</button>` : ''}<button class="ghost" data-act="rd-add">+ Add a reading</button></div>
@@ -2514,6 +2519,7 @@ const SHEETS = {
       ${sh.linkdev ? linkDeviceHTML() : ''}
       <h3 class="sh3">Covers &amp; details</h3>
       <div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-enrich">Find missing covers and details</button><span class="note">${plural(S.books.filter((b) => !b.coverUrl).length, 'book')} without a cover</span></div>
+      <div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-update">Check for a new version</button><span class="note">${S.appVersion ? 'You have ' + esc(S.appVersion) : ''}</span></div>
       ${Store.connected() ? `<div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-backup-now">Back up now</button><span class="note">A backup is saved to your private repository every month${LS.get('library.backupMonth', '') ? ` · last one: ${esc(LS.get('library.backupMonth', ''))}` : ''}</span></div>` : ''}
       <div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-regenre">Sort books into better shelves</button><span class="note">Re-checks books that are on the Fiction shelf</span></div>
       ${untitledBooks().length ? `<div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-untitled">Remove ${plural(untitledBooks().length, 'book')} without a title</button></div>` : ''}
@@ -2611,6 +2617,7 @@ const BIND = {
     const b = curBook();
     el.querySelectorAll('[data-rd]').forEach((inp) => inp.addEventListener('change', () => { const r = readsOf(b).map((x) => Object.assign({}, x)); r[+inp.dataset.rd][inp.dataset.k] = inp.value || null; saveBook(b.id, { reads: r, dateRead: r.map((x) => x.finish).filter(Boolean).sort().pop() || null }); }));
     const w = el.querySelector('#s-want'); if (w) w.addEventListener('input', () => saveBook(b.id, { wantNote: w.value }));
+    const ln = el.querySelector('#s-lent'); if (ln) ln.addEventListener('input', () => saveBook(b.id, { lentTo: ln.value.trim() || 'Someone', lentAt: b.lentAt || thisMonth() }));
   },
   finish: (sh, el) => { const m = el.querySelector('#fin-month'); m.addEventListener('change', () => { S.sheet.month = m.value; }); },
   sort: (sh, el) => { el.querySelectorAll('[data-secname]').forEach((inp) => inp.addEventListener('change', () => { const v = inp.value.trim(); if (!v) return; const list = sections().map((s) => s.id === inp.dataset.secname ? Object.assign({}, s, { name: v }) : s); saveSections(list); layoutCache = null; renderWall(); renderSync(); })); },
@@ -3629,6 +3636,7 @@ async function doAction(act, el, e) {
     case 'm-delete-no': S.sheet.confirmDelete = false; renderSheet(); return;
     case 'm-delete-yes': { const old = removeBook(b.id); S.sheet = null; S.sheets = []; S.view = 'wall'; S.book = null; layoutCache = null; render(); undoable('Removed from the library', () => { restoreBook(old); layoutCache = null; }); return; }
     /* ---- reading life ---- */
+    case 'st-lent': if (b.lentTo) saveBook(b.id, { lentTo: null, lentAt: null }); else saveBook(b.id, { lentTo: 'Someone', lentAt: thisMonth() }); layoutCache = null; renderSheet(); return;
     case 'st-set': { const s = d('s'); if (s === 'dnf') { const fe = new Set(b.feelings || []); fe.add('Did not finish'); if (status(b) !== 'read') setStatus(b, 'read'); saveBook(b.id, { feelings: [...fe], pausedAt: null }); } else if (s === 'aside') { if (status(b) !== 'reading') setStatus(b, 'reading'); saveBook(b.id, { pausedAt: thisMonth() }); } else if (s === 'read' && status(b) !== 'read') { openSheet({ kind: 'finish', id: b.id }, true); return; } else { if ((b.feelings || []).includes('Did not finish')) saveBook(b.id, { feelings: (b.feelings || []).filter((f) => f !== 'Did not finish') }); setStatus(b, s); } layoutCache = null; renderSheet(); return; }
     case 'rd-del': { const r = readsOf(b).slice(); r.splice(+d('i'), 1); saveBook(b.id, { reads: r, dateRead: r.map((x) => x.finish).filter(Boolean).sort().pop() || null }); renderSheet(); return; }
     case 'rd-add': { const r = readsOf(b).map((x) => Object.assign({}, x)); r.push({ finish: thisMonth() }); saveBook(b.id, { reads: r, dateRead: r.map((x) => x.finish).filter(Boolean).sort().pop() }); renderSheet(); return; }
@@ -3674,6 +3682,17 @@ async function doAction(act, el, e) {
     case 's-linkdev': S.sheet.linkdev = !S.sheet.linkdev; renderSheet(); return;
     case 's-copylink': try { await navigator.clipboard.writeText(d('url')); toast('Link copied'); } catch (er) { toast('Couldn’t copy — long-press the code instead'); } return;
     case 's-backup-now': { S.sheet.msg = 'Saving a backup…'; renderSheet(); Store.monthlyBackup(true).then((ok) => { if (S.sheet && S.sheet.kind === 'settings') { S.sheet.msg = ok ? 'Backup saved to your private repository.' : 'Couldn’t save the backup. Check your connection and the key’s permissions.'; renderSheet(); } }); return; }
+    case 's-update': {
+      S.sheet.msg = 'Looking for a new version…'; renderSheet();
+      (async () => {
+        try {
+          const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
+          if (!reg) { location.reload(); return; }
+          await reg.update(); await new Promise((r) => setTimeout(r, 2500));
+          if (reg.waiting || window.libraryUpdateReady) { if (window.applyUpdate) window.applyUpdate(); }
+          else if (S.sheet && S.sheet.kind === 'settings') { S.sheet.msg = 'You already have the newest version.'; renderSheet(); }
+        } catch (e) { if (S.sheet && S.sheet.kind === 'settings') { S.sheet.msg = 'Couldn’t check just now. Try again with a connection.'; renderSheet(); } }
+      })(); return; }
     case 's-regenre': S.sheet.msg = 'Checking genres in the background…'; renderSheet(); regenre(); return;
     case 's-untitled': removeUntitled(); return;
     case 's-enrich': S.sheet.msg = 'Looking for covers and details in the background…'; renderSheet(); enrichAll(true); return;
@@ -3916,6 +3935,7 @@ function backupReminder() {
   LS.set('library.remindAt', Date.now());
   setTimeout(() => toast(lb ? `Your last backup was ${ago(lb)}` : 'Your books live only on this device so far', { label: 'Back up', fn: exportBackup }, 9000), 2500);
 }
+try { navigator.serviceWorker && navigator.serviceWorker.addEventListener('message', (e) => { if (e.data && e.data.type === 'VERSION') S.appVersion = e.data.version; }); if (navigator.serviceWorker && navigator.serviceWorker.controller) navigator.serviceWorker.controller.postMessage({ type: 'GET_VERSION' }); } catch (e) { /* */ }
 (async () => {
   updateMode();
   linkFromHash();

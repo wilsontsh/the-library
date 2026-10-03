@@ -1,5 +1,5 @@
 ﻿"# HOW TO FILL THIS IN: delete these # lines and the example rows, then add your books. Only Title is required. This is the same layout the app exports, so you can also export, edit and import back."
-"# Status: read | reading | want to read | put aside | did not finish (Chinese 已讀 / 在讀 / 想讀 / 暫停 / 未讀完 also work). Blank = read if there is a rating or date, otherwise want to read."
+"# Status: read | reading | want to read | put aside | did not finish | lent out (Chinese 已讀 / 在讀 / 想讀 / 暫停 / 未讀完 / 借出 also work). Put aside = paused, you will come back; did not finish = you stopped for good; lent out = a friend has it (fill Lent To with their name). Blank = read if there is a rating or date, otherwise want to read."
 "# Rating: 0.5 to 5 (4.5), stars (★★★★) or 8/10.   Date Read: 2024-11 (several: 2022-03; 2024-11).   Feelings: words from the How-it-felt list, separated by ;"
 # Genre: Fiction | Fantasy & Childhood | Chinese Literature | Poetry & Drama | History | Biography & Memoir | Philosophy & Religion | Essays & Criticism | Society & Ideas | Science & Nature | Art & Design | Travel & Food (or one of your own section names). Blank = found automatically.
 # Favourite: yes. Series No: 2. Tags: separate with commas. Quotes: separate with || and put the page last like (p. 12).
