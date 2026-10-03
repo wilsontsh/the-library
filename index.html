@@ -887,10 +887,11 @@ const PAGES = { L: { x: 95, y: 114.3, w: 495, h: 642 }, R: { x: 590, y: 114.3, w
 const GENRES = ['Fiction', 'Fantasy & Childhood', 'Chinese Literature', 'Poetry & Drama', 'History', 'Biography & Memoir', 'Philosophy & Religion', 'Essays & Criticism', 'Society & Ideas', 'Science & Nature', 'Art & Design', 'Travel & Food'];
 const GCODE = { 'Fiction': 'FIC', 'Fantasy & Childhood': 'FAN', 'Chinese Literature': 'CHI', 'Poetry & Drama': 'POE', 'History': 'HIS', 'Biography & Memoir': 'BIO', 'Philosophy & Religion': 'PHI', 'Essays & Criticism': 'ESS', 'Society & Ideas': 'SOC', 'Science & Nature': 'SCI', 'Art & Design': 'ART', 'Travel & Food': 'TRV' };
 const FEELINGS = [
-  ['The writing', ['Beautifully written', 'Lyrical', 'Witty', 'Spare & precise', 'Hard going', 'Atmospheric', 'Elegant', 'Vivid', 'Understated', 'Slow burn']],
-  ['The ideas', ['Insightful', 'Thought-provoking', 'Eye-opening', 'Profound', 'Wise', 'Original', 'Challenging', 'Timely']],
-  ['How it felt', ['Moving', 'Haunting', 'Gripping', 'Comforting', 'Funny', 'Melancholy', 'Heartbreaking', 'Tender', 'Nostalgic', 'Uplifting', 'Unsettling', 'Quietly devastating']],
-  ['Verdict', ['Life-changing', 'Will re-read', 'Overrated', 'Did not finish', 'Underrated', 'Worth the hype', 'Must recommend']]
+  ['The writing', ['Beautifully written', 'Lyrical', 'Witty', 'Spare & precise', 'Hard going', 'Atmospheric', 'Elegant', 'Vivid', 'Understated', 'Slow burn', 'Poetic', 'Sharp', 'Dense', 'Playful', 'Immersive', 'Lush', 'Crisp', 'Dreamlike', 'Meandering', 'Stylish']],
+  ['The ideas', ['Insightful', 'Thought-provoking', 'Eye-opening', 'Profound', 'Wise', 'Original', 'Challenging', 'Timely', 'Humane', 'Rigorous', 'Practical', 'Bold', 'Mind-bending', 'Clarifying', 'Contrarian', 'Humbling']],
+  ['How it felt', ['Moving', 'Haunting', 'Gripping', 'Comforting', 'Funny', 'Melancholy', 'Heartbreaking', 'Tender', 'Nostalgic', 'Uplifting', 'Unsettling', 'Quietly devastating', 'Cosy', 'Bittersweet', 'Dark', 'Cathartic', 'Lonely', 'Warm', 'Wistful', 'Eerie', 'Hopeful', 'Absorbing', 'Bleak', 'Whimsical']],
+  ['Verdict', ['Life-changing', 'Will re-read', 'Overrated', 'Did not finish', 'Underrated', 'Worth the hype', 'Must recommend', 'Instant favourite', 'Disappointing', 'Forgettable', 'Worth the effort', 'Great on audio', 'Gift it', 'One for later']],
+  ['Story & characters', ['Unforgettable characters', 'Twisty', 'Clever plot', 'Page-turner', 'Richly imagined', 'Sense of place', 'Quiet drama', 'Epic', 'Character-driven', 'Bold ending']]
 ];
 const WRITING_WORDS = new Set(FEELINGS[0][1]);
 const FORMATS = ['Hardback', 'Paperback', 'Ebook', 'Audiobook', 'Library loan', 'Borrowed'];
@@ -1561,7 +1562,7 @@ function wallChrome(L) {
     <div class="wordmark"><b>The Library</b><span>${S.compact ? '' : (owner ? esc(owner) + '’s library' : 'Your library') + ' · '}${plural(n, 'book')}${S.compact ? ' ' : ' · '}<button id="sync" class="syncbtn" data-act="settings"></button></span></div>
     <button class="icon-btn search-toggle" data-act="search-toggle" aria-label="Search" aria-expanded="${S.searchOpen || !!S.q}">${ICON.search}</button>
     <div class="search ${(S.searchOpen || S.q) && !(S.compact && S.resultsHidden) ? 'open' : ''}">${ICON.search}<input id="q" type="search" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="search" placeholder="Find a title, author or feeling" value="${esc(S.q)}" aria-label="Search the library">${S.q ? `<button class="clear" data-act="search-clear" aria-label="Clear search">${ICON.close}</button>` : ''}<div id="results"></div></div>
-    <button class="icon-btn" data-act="go-cat" aria-label="Card catalogue">${ICON.drawers}<span class="lbl">Catalogue</span></button>
+    <button class="icon-btn" data-act="go-list" aria-label="All books">${ICON.list}<span class="lbl">All books</span></button>
     <button class="primary addbtn" data-act="add" aria-label="Add a book">${ICON.plus}<span class="lbl"> Add a book</span></button>
     <button class="icon-btn" data-act="menu" aria-label="Menu">${ICON.menu}</button>
   </header>`;
@@ -1929,7 +1930,7 @@ function tabBodyHTML(b) {
   return {
     review: `<div class="sec-h"><h2>My review</h2><span class="saved" id="saved">${b.sample ? 'Example book' : ''}</span></div>${!b.review && !b.pullLine ? `<div class="fl-rule">${FLEURON}</div>` : ''}
       <textarea class="inkarea pull" id="f-pull" data-field="pullLine" rows="2" placeholder="One line you would say about it…" style="margin-top:12px">${esc(b.pullLine || '')}</textarea>
-      <textarea class="inkarea ${b.review ? '' : 'ruled'}" id="f-review" data-field="review" ${isZh(b.review) ? 'lang="zh-Hant"' : ''} rows="11" placeholder="What did it leave you with? English or 中文 both work." style="margin-top:12px">${esc(b.review || '')}</textarea>`,
+      <textarea class="inkarea ${b.review ? '' : 'ruled'}" id="f-review" data-field="review" ${isZh(b.review) ? 'lang="zh-Hant"' : ''} rows="11" placeholder="What did it leave you with?" style="margin-top:12px">${esc(b.review || '')}</textarea>`,
     synopsis: `<div class="sec-h"><h2>Synopsis</h2><span class="saved" id="saved"></span></div>
       <textarea class="inkarea" id="f-synopsis" data-field="synopsis" rows="14" placeholder="A short summary, no spoilers." style="margin-top:14px">${esc(b.synopsis || '')}</textarea>`,
     quotes: `<div class="sec-h"><h2>Quotations</h2><span class="saved" id="saved">${quotes.filter((q) => (q.text || '').trim()).length ? plural(quotes.filter((q) => (q.text || '').trim()).length, 'saved', 'saved') : ''}</span></div>
@@ -2230,7 +2231,7 @@ function renderList() {
     const l = az ? letterOf(b) : '';
     const head = az && l !== lastL ? `<div class="lhead" id="L-${esc(l)}">${esc(l)}</div>` : '';
     lastL = l;
-    return `${head}<button class="lrow" data-act="open" data-id="${esc(b.id)}"><span class="lthumb" style="${spineCrop(b, 30, 44)}">${coverImg(b, '', '')}</span><span class="lt"><b>${esc(b.title)}</b><small>${esc(b.author || '')}${b.series ? ' · ' + esc(b.series) + (b.seriesNo ? ' ' + esc(b.seriesNo) : '') : ''}</small></span><span class="lr">${b.rating != null ? starsSVG(b.rating, 12) : ''}<small>${b.favourite ? '<i class="sealdot" title="A favourite"></i>' : ''}${esc(status(b) === 'read' ? (lastFinish(b) ? monthLabel(lastFinish(b), true) : '') : status(b) === 'reading' ? 'Reading' : 'To read')}</small></span></button>`;
+    return `${head}<button class="lrow" data-act="open" data-id="${esc(b.id)}"><span class="lthumb" style="${spineCrop(b, 30, 44)}">${coverImg(b, '', '')}</span><span class="lt"><b>${esc(b.title || 'Untitled')}</b><small>${esc(b.author || '')}${b.series ? ' · ' + esc(b.series) + (b.seriesNo ? ' ' + esc(b.seriesNo) : '') : ''}</small></span><span class="lr">${b.rating != null ? starsSVG(b.rating, 12) : ''}<small>${b.favourite ? '<i class="sealdot" title="A favourite"></i>' : ''}${esc(status(b) === 'read' ? (lastFinish(b) ? monthLabel(lastFinish(b), true) : '') : status(b) === 'reading' ? 'Reading' : 'To read')}</small></span></button>`;
   }).join('');
   const letters = az ? [...new Set(books.map(letterOf))] : [];
   const feelings = [...new Set(S.books.flatMap((b) => b.feelings || []))].sort();
@@ -2379,7 +2380,7 @@ const SHEETS = {
     const b = curBook();
     return [`${head('Finished — how was it?', esc(b.title))}
       <div class="raterow" style="margin-top:14px">${ratingHTML(sh.rating ?? b.rating, true, 'fin-rate')}</div>
-      <div class="feelgroups compactfeel">${FEELINGS.slice(2).concat([['Writing', FEELINGS[0][1].slice(0, 5)]]).map((g) => `<div class="feel-row"><span class="note">${g[0]}</span><div>${g[1].map((f) => `<button class="pick ${(sh.feelings || b.feelings || []).includes(f) ? 'on' : ''}" data-act="fin-feel" data-f="${esc(f)}">${esc(f)}</button>`).join('')}</div></div>`).join('')}</div>
+      <div class="feelgroups compactfeel">${FEELINGS.slice(2, 4).concat([['Writing', FEELINGS[0][1].slice(0, 5)]]).map((g) => `<div class="feel-row"><span class="note">${g[0]}</span><div>${g[1].map((f) => `<button class="pick ${(sh.feelings || b.feelings || []).includes(f) ? 'on' : ''}" data-act="fin-feel" data-f="${esc(f)}">${esc(f)}</button>`).join('')}</div></div>`).join('')}</div>
       <label class="f" style="margin-top:12px">Finished<input type="month" id="fin-month" value="${esc(sh.month || thisMonth())}"></label>
       <div class="sfoot"><button class="ghost" data-act="close">Not yet</button><button class="primary" data-act="fin-done">Put it on the shelf</button></div>`, 620];
   },
@@ -2431,8 +2432,10 @@ const SHEETS = {
       ${sh.linkdev ? linkDeviceHTML() : ''}
       <h3 class="sh3">Covers &amp; details</h3>
       <div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-enrich">Find missing covers and details</button><span class="note">${plural(S.books.filter((b) => !b.coverUrl).length, 'book')} without a cover</span></div>
+      <div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-regenre">Sort books into better shelves</button><span class="note">Re-checks books that are on the Fiction shelf</span></div>
+      ${untitledBooks().length ? `<div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-untitled">Remove ${plural(untitledBooks().length, 'book')} without a title</button></div>` : ''}
       <h3 class="sh3">Bring books in, take them out</h3>
-      <div class="row" style="flex-wrap:wrap;gap:8px"><label class="icon-btn wide">Import from Goodreads or StoryGraph<input type="file" accept=".csv,text/csv" id="s-csv" hidden></label><button class="icon-btn wide" data-act="s-csv-out">Export as a spreadsheet (CSV)</button></div>
+      <div class="row" style="flex-wrap:wrap;gap:8px"><label class="icon-btn wide">Import from Goodreads or StoryGraph<input type="file" accept=".csv,text/csv" id="s-csv" hidden></label><button class="icon-btn wide" data-act="s-csv-out">Export as a spreadsheet (CSV)</button><a class="icon-btn wide" href="book-template.csv" download="book-template.csv">Download a blank import template</a></div>
       ${sh.imp ? importHTML(sh.imp) : ''}
       <h3 class="sh3">Backup</h3>
       <p class="note">${lb ? `Last backup: ${ago(lb)}.` : 'No backup made from this device yet.'}${Store.connected() ? ' GitHub sync also keeps a copy.' : ''}</p>
@@ -2476,7 +2479,7 @@ const SHEETS = {
   write: (sh) => {
     const b = curBook(); const lab = { review: 'My review', pullLine: 'One line', synopsis: 'Synopsis', notes: 'Notes' }[sh.field];
     return [`<div class="shead"><div><h2 id="sh-title">${lab}</h2><p class="lede"><i>${esc(b.title)}</i> · <span id="saved">Saved as you write</span></p></div><button class="primary" data-act="close">Done</button></div>
-      <textarea id="w-text" class="writer ${sh.field === 'notes' ? 'lined' : ''}" placeholder="${sh.field === 'review' ? 'What did it leave you with? English or 中文 both work.' : ''}">${esc(b[sh.field] || '')}</textarea>`, 860, 'parchment-sheet writer-sheet'];
+      <textarea id="w-text" class="writer ${sh.field === 'notes' ? 'lined' : ''}" placeholder="${sh.field === 'review' ? 'What did it leave you with?' : ''}">${esc(b[sh.field] || '')}</textarea>`, 860, 'parchment-sheet writer-sheet'];
   },
 
   welcome: () => [`<div class="welcome"><div class="wseal">${sealSVG(58, ownerInitial())}</div><p class="exl">Ex libris</p><h2 id="sh-title">Welcome to your library</h2>
@@ -2712,11 +2715,12 @@ async function readCSV(ev) {
   } catch (e) { S.sheet.msg = 'That file couldn’t be read. Export it again from Goodreads (My Books › Import and export) or StoryGraph (Manage account › Export).'; }
   renderSheet();
 }
+const canonFeel = (w) => { const all = FEELINGS.flatMap((g) => g[1]).concat(S.settings.myWords || []); return all.find((f) => f.toLowerCase() === String(w).toLowerCase().trim()) || w; };
 function applyImport() {
   const imp = S.sheet.imp; let added = 0, updated = 0;
   for (const x of imp.books) {
     const dup = findDuplicate(x.title, x.author, x.isbn);
-    const doc = { autoGenre: !(x.tags && x.tags.length), title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: x.feelings || [], series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: [], notes: '', links: [], createdAt: x.createdAt || Date.now() };
+    const doc = { autoGenre: !(x.tags && x.tags.length), title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: (x.feelings || []).map(canonFeel), series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: [], notes: '', links: [], createdAt: x.createdAt || Date.now() };
     if (dup) {
       if (imp.mode !== 'update') continue;
       const p = {}; for (const [k, v] of Object.entries(doc)) { if (k === 'genre' || k === 'createdAt') continue; const cur = dup[k]; if ((cur == null || cur === '' || (Array.isArray(cur) && !cur.length)) && v != null && v !== '' && !(Array.isArray(v) && !v.length)) p[k] = v; }
@@ -3536,6 +3540,8 @@ async function doAction(act, el, e) {
     case 's-disconnect': Store.gh = { repo: Store.gh.repo, token: '' }; LS.set('library.github', Store.gh); Store.status = 'local'; renderSync(); S.sheet.msg = 'This device no longer syncs. Your books stay here.'; S.sheet.linkdev = false; renderSheet(); return;
     case 's-linkdev': S.sheet.linkdev = !S.sheet.linkdev; renderSheet(); return;
     case 's-copylink': try { await navigator.clipboard.writeText(d('url')); toast('Link copied'); } catch (er) { toast('Couldn’t copy — long-press the code instead'); } return;
+    case 's-regenre': S.sheet.msg = 'Checking genres in the background…'; renderSheet(); regenre(); return;
+    case 's-untitled': removeUntitled(); return;
     case 's-enrich': S.sheet.msg = 'Looking for covers and details in the background…'; renderSheet(); enrichAll(true); return;
     case 's-csv-out': return exportCSV();
     case 'imp-mode': S.sheet.imp.mode = d('v'); renderSheet(); return;
@@ -3590,23 +3596,40 @@ const GENRE_RULES = [
   [/philosoph|religio|buddhis|christian|taoism|confucian|ethics|stoic/i, 'Philosophy & Religion'],
   [/essays|criticism|literary criticism/i, 'Essays & Criticism'],
   [/history|historical(?! fiction)|war, \d|civilization|ancient/i, 'History'],
-  [/politic|economic|sociology|social science|law|feminism/i, 'Society & Ideas'],
+  [/politic|economic|sociolog|social|statistic|psycholog|self-help|self help|business|management|critical thinking|leadership|motivation|\blaw\b|feminism/i, 'Society & Ideas'],
   [/science|nature|biology|physics|mathemat|ecology|natural history|medicine|cosmolog|astronom|universe|evolution/i, 'Science & Nature'],
   [/\bart\b|design|architecture|photograph|painting|music/i, 'Art & Design'],
   [/travel|cooking|food|wine|voyages/i, 'Travel & Food'],
   [/fiction|novel|stories/i, 'Fiction']
 ];
+const SUBJ_NOISE = /^nyt:|bestseller|reviewed|accessible book|large type|protected daisy|in library|overdrive|open library|lending|^internet archive/i;
 function guessGenre(subjects, title, author) {
-  const s = (subjects || []).join(' | ');
+  const raw = (subjects || []).map((x) => String(x).toLowerCase().trim()).filter((x) => x && !SUBJ_NOISE.test(x));
   if (isZh(title) || isZh(author)) {
-    if (/history|歷史|历史/i.test(s)) return 'History';
-    if (/biograph|傳記|传记|memoir|回憶/i.test(s)) return 'Biography & Memoir';
-    if (/philosoph|哲學|religio/i.test(s)) return 'Philosophy & Religion';
+    const z = raw.join(' | ');
+    if (/history|歷史|历史/i.test(z)) return 'History';
+    if (/biograph|傳記|传记|memoir|回憶/i.test(z)) return 'Biography & Memoir';
+    if (/philosoph|哲學|religio/i.test(z)) return 'Philosophy & Religion';
     return 'Chinese Literature';
   }
-  if (/fiction/i.test(s) && !/juvenile|fantasy/i.test(s)) return 'Fiction';
-  for (const [re, g] of GENRE_RULES) if (re.test(s)) return g;
-  return 'Fiction';
+  const nonfic = raw.some((x) => /non-?fiction/.test(x));
+  const fic = raw.filter((x) => !/non-?fiction/.test(x) && /(^|[ ,])(fiction|novels?|stories|short stories)\b|\bfiction$|^juvenile fiction/.test(x)).length;
+  const text = raw.filter((x) => !/non-?fiction/.test(x)).join(' | ').replace(/science fiction|fantasy fiction|historical fiction|fiction, history/g, ' ');
+  const hits = {};
+  for (const [re, g] of GENRE_RULES) { if (g === 'Fiction') continue; const m = raw.filter((x) => re.test(x.replace(/science fiction|fantasy fiction|historical fiction/g, ' '))).length; if (m) hits[g] = m; }
+  const top = Object.entries(hits).filter(([g]) => g !== 'Fantasy & Childhood' && g !== 'Poetry & Drama').sort((a, b) => (b[1] - (/^(History|Society)/.test(b[0]) ? 0.5 : 0)) - (a[1] - (/^(History|Society)/.test(a[0]) ? 0.5 : 0)))[0]; // ties go to the more specific shelf
+  const poetry = hits['Poetry & Drama'] || 0, fantasy = hits['Fantasy & Childhood'] || 0;
+  if (fic > 0 && !nonfic) {
+    if (top && top[1] >= 3 && top[1] > fic * 1.5) return top[0]; // a work of non-fiction mislabelled once
+    if (poetry >= 2 && /poetry|poems/.test(text)) return 'Poetry & Drama';
+    const all = raw.join(' | '), kid = /juvenile|children/.test(all), fan = raw.filter((x) => /fantasy|magic|wizard/.test(x)).length;
+    if ((kid && fan) || (fan >= 3 && !/dystopi|science fiction|thriller/.test(all))) return 'Fantasy & Childhood';
+    return 'Fiction';
+  }
+  if (poetry && /poetry|poems/.test(text) && (!top || poetry >= top[1])) return 'Poetry & Drama';
+  if (top) return top[0];
+  if (fic > 0) return 'Fiction';
+  return nonfic ? 'Society & Ideas' : 'Fiction';
 }
 const olCover = (d) => d.cover_i ? `https://covers.openlibrary.org/b/id/${d.cover_i}-L.jpg` : null;
 const gbCover = (v) => { const l = v.imageLinks && (v.imageLinks.thumbnail || v.imageLinks.smallThumbnail); return l ? l.replace(/^http:/, 'https:').replace('&edge=curl', '') + '&fife=w600' : null; };
@@ -3618,7 +3641,7 @@ async function searchOL(q) {
   return (j.docs || []).map((d) => ({
     src: 'Open Library', title: d.title, author: (d.author_name || [])[0] || null, year: d.first_publish_year || null,
     publisher: (d.publisher || [])[0] || null, pages: d.number_of_pages_median || null, isbn: (d.isbn || []).find((x) => x.length === 13) || (d.isbn || [])[0] || null,
-    subjects: (d.subject || []).slice(0, 8), coverUrl: olCover(d), olKey: d.key, language: (d.language || [])[0] || null, synopsis: ''
+    subjects: (d.subject || []).slice(0, 60), coverUrl: olCover(d), olKey: d.key, language: (d.language || [])[0] || null, synopsis: ''
   }));
 }
 async function searchGB(q) {
@@ -3697,6 +3720,31 @@ async function coverChoices(b) {
   const urls = c.map((x) => x.coverUrl).filter(Boolean);
   try { const j = await getJSON(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=12&fields=cover_i,edition_key`); (j.docs || []).forEach((d) => { if (d.cover_i) urls.push(`https://covers.openlibrary.org/b/id/${d.cover_i}-L.jpg`); }); } catch (e) { /* offline */ }
   return [...new Set(urls)].filter((u) => u !== b.coverUrl).slice(0, 12);
+}
+
+/* re-check the genre of books still sitting in the default Fiction shelf, from Open Library subjects; one Undo puts them all back */
+let regenring = false;
+async function regenre() {
+  if (regenring) return; regenring = true;
+  const todo = S.books.filter((b) => !b.sample && !b.sectionId && (!b.genre || b.genre === 'Fiction') && (b.title || '').trim());
+  const old = {}; let n = 0;
+  for (const b of todo) {
+    try {
+      const c = (await findBooks([b.title, b.author].filter(Boolean).join(' ')))[0];
+      if (c && c.subjects && c.subjects.length && c.genre && c.genre !== 'Fiction') { old[b.id] = b.genre || 'Fiction'; saveBook(b.id, { genre: c.genre, autoGenre: false }, true); n++; if (n % 5 === 0) { layoutCache = null; render(); } }
+      else if (!b.enriched) saveBook(b.id, { autoGenre: false }, true);
+    } catch (e) { if (String(e.message) === 'offline') break; }
+    await new Promise((r) => setTimeout(r, 350));
+  }
+  regenring = false; layoutCache = null; render();
+  if (n) undoable(`Moved ${plural(n, 'book')} to a better shelf`, () => { for (const [id, g] of Object.entries(old)) saveBook(id, { genre: g }, true); layoutCache = null; });
+  else toast('Nothing to move: everything is already on the right shelf');
+}
+function untitledBooks() { return S.books.filter((b) => !(b.title || '').trim()); }
+function removeUntitled() {
+  const list = untitledBooks(); if (!list.length) { toast('No books without a title'); return; }
+  const olds = list.map((b) => removeBook(b.id)); layoutCache = null; render();
+  undoable(`Removed ${plural(list.length, 'book')} without a title`, () => { olds.forEach((o) => restoreBook(o)); layoutCache = null; });
 }
 
 /* ================= boot ================= */
