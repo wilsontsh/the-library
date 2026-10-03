@@ -1,9 +1,10 @@
-﻿"# HOW TO FILL THIS IN: delete these # lines and the 3 example rows, then add your books below. Only Title is required."
-# Title: the book title.   Author: the author (leave blank if unsure).
-"# Status (one of): read | reading | want to read | put aside | did not finish  (Chinese 已讀 / 在讀 / 想讀 / 暫停 / 未讀完 also work). If blank: a rating or Date Read means read, otherwise want to read."
-# Rating: 0.5 to 5 (4.5)  or  stars (★★★★)  or  8/10.   Date Read: 2024-11 or 2024-11-23.
-"# Feelings: words from the ""How it felt"" list, separated by ; (for example: Moving; Tender).   Review: anything you like."
-Title,Author,Status,Rating,Date Read,Feelings,Review
-Never Let Me Go,Kazuo Ishiguro,read,5,2024-11,Quietly devastating; Tender,
-Klara and the Sun,Kazuo Ishiguro,want to read,,,,
-Sapiens,Yuval Noah Harari,read,4.5,2023-06,Eye-opening,
+﻿"# HOW TO FILL THIS IN: delete these # lines and the example rows, then add your books. Only Title is required. This is the same layout the app exports, so you can also export, edit and import back."
+"# Status: read | reading | want to read | put aside | did not finish (Chinese 已讀 / 在讀 / 想讀 / 暫停 / 未讀完 also work). Blank = read if there is a rating or date, otherwise want to read."
+"# Rating: 0.5 to 5 (4.5), stars (★★★★) or 8/10.   Date Read: 2024-11 (several: 2022-03; 2024-11).   Feelings: words from the How-it-felt list, separated by ;"
+# Genre: Fiction | Fantasy & Childhood | Chinese Literature | Poetry & Drama | History | Biography & Memoir | Philosophy & Religion | Essays & Criticism | Society & Ideas | Science & Nature | Art & Design | Travel & Food (or one of your own section names). Blank = found automatically.
+# Favourite: yes. Series No: 2. Tags: separate with commas. Quotes: separate with || and put the page last like (p. 12).
+"# Importing books that are already in your library: a filled cell updates the book, a BLANK cell never changes it."
+Title,Author,Status,Rating,Date Read,Feelings,Review,Genre,Series,Series No,Year,Publisher,Pages,ISBN,Tags,Favourite,Lent To,Format,Translator,Second Title,Want Note,Notes,Quotes
+Never Let Me Go,Kazuo Ishiguro,read,5,2024-11,Quietly devastating; Tender,,Fiction,,,,,,,,yes,,,,,,,"A line you want to remember (p. 12)"
+Klara and the Sun,Kazuo Ishiguro,want to read,,,,,,,,,,,,,,,,,,Recommended by a friend,,
+Sapiens,Yuval Noah Harari,read,4.5,2023-06,Eye-opening,,History,,,2011,,,,,,,,,,,,

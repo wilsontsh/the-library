@@ -1105,6 +1105,23 @@ const Store = {
       renderSync(); return false;
     }
   },
+  /* a snapshot of the whole library once a month, kept next to library.json in the private repo (backups/library-YYYY-MM.json) */
+  async monthlyBackup(force) {
+    if (!this.connected() || !this.data || !Object.keys(this.data.books || {}).length) return false;
+    const month = new Date().toISOString().slice(0, 7), path = `backups/library-${month}.json`;
+    if (!force && LS.get('library.backupMonth', '') === month) return true;
+    try {
+      const r = await this.api('GET', null, false, path);
+      let sha = null;
+      if (r.ok) { if (!force) { LS.set('library.backupMonth', month); return true; } sha = (await r.json()).sha; }
+      else if (r.status !== 404) return false;
+      const body = { message: 'Monthly backup ' + month, content: b64e(JSON.stringify({ exportedAt: new Date().toISOString(), books: this.data.books, settings: this.data.settings, deleted: this.data.deleted })) };
+      if (sha) body.sha = sha;
+      const w = await this.api('PUT', body, false, path);
+      if (!w.ok) return false;
+      LS.set('library.backupMonth', month); LS.set('library.backupAt', Date.now()); return true;
+    } catch (e) { return false; }
+  },
   async push(force, keepalive) {
     if (!this.connected()) { this.status = 'local'; renderSync(); return; }
     if (this.pushing) { this.again = true; return; }
@@ -2495,11 +2512,12 @@ const SHEETS = {
       ${sh.linkdev ? linkDeviceHTML() : ''}
       <h3 class="sh3">Covers &amp; details</h3>
       <div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-enrich">Find missing covers and details</button><span class="note">${plural(S.books.filter((b) => !b.coverUrl).length, 'book')} without a cover</span></div>
+      ${Store.connected() ? `<div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-backup-now">Back up now</button><span class="note">A backup is saved to your private repository every month${LS.get('library.backupMonth', '') ? ` · last one: ${esc(LS.get('library.backupMonth', ''))}` : ''}</span></div>` : ''}
       <div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-regenre">Sort books into better shelves</button><span class="note">Re-checks books that are on the Fiction shelf</span></div>
       ${untitledBooks().length ? `<div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-untitled">Remove ${plural(untitledBooks().length, 'book')} without a title</button></div>` : ''}
       <h3 class="sh3">Bring books in, take them out</h3>
       <div class="row" style="flex-wrap:wrap;gap:8px"><label class="icon-btn wide">Import from Goodreads or StoryGraph<input type="file" accept=".csv,text/csv" id="s-csv" hidden></label><button class="icon-btn wide" data-act="s-csv-out">Export as a spreadsheet (CSV)</button><a class="icon-btn wide" href="book-template.csv" download="book-template.csv">Download a blank import template</a></div>
-      <p class="note" style="margin-top:6px">Columns: Title, Author, Status (read · reading · want to read · put aside · did not finish), Rating (4.5, ★★★★ or 8/10), Date Read, Feelings, Review. The template explains each one.</p>
+      <p class="note" style="margin-top:6px">Export and import use the same columns, so you can export, edit in a spreadsheet and import it back: a filled cell updates the book, a blank cell never changes it. The template explains each column.</p>
       ${sh.imp ? importHTML(sh.imp) : ''}
       <h3 class="sh3">Backup</h3>
       <p class="note">${lb ? `Last backup: ${ago(lb)}.` : 'No backup made from this device yet.'}${Store.connected() ? ' GitHub sync also keeps a copy.' : ''}</p>
@@ -2735,7 +2753,7 @@ function linkDeviceHTML() {
 }
 function importHTML(imp) {
   return `<div class="imp"><p class="lede" style="font-size:15px">${imp.source === 'goodreads' ? 'From Goodreads' : imp.source === 'storygraph' ? 'From StoryGraph' : 'From a spreadsheet'}: <b style="color:var(--text)">${plural(imp.books.length, 'book')}</b> · ${imp.books.filter((b) => b.status === 'read').length} read · ${imp.books.filter((b) => b.status === 'want').length} to read · ${imp.books.filter((b) => b.status === 'reading').length} reading${imp.dups ? ` · ${imp.dups} already here` : ''}</p>
-    ${imp.dups ? `<div class="seg" style="margin-top:6px"><button class="${imp.mode !== 'update' ? 'on' : ''}" data-act="imp-mode" data-v="skip">Skip books already here</button><button class="${imp.mode === 'update' ? 'on' : ''}" data-act="imp-mode" data-v="update">Fill in their missing details</button></div>` : ''}
+    ${imp.dups ? `<div class="seg" style="margin-top:6px"><button class="${imp.mode === 'update' ? 'on' : ''}" data-act="imp-mode" data-v="update">Update them (blank cells change nothing)</button><button class="${imp.mode !== 'update' ? 'on' : ''}" data-act="imp-mode" data-v="skip">Leave them alone</button></div>` : ''}
     <div class="row" style="justify-content:flex-end;gap:8px;margin-top:10px"><button class="ghost" data-act="imp-cancel">Cancel</button><button class="primary" data-act="imp-go">Bring them in</button></div></div>`;
 }
 function restoreHTML(r) {
@@ -2791,26 +2809,55 @@ async function readCSV(ev) {
   try {
     const r = window.LibraryCSV.parse(await f.text());
     if (!r.books.length) throw new Error('none');
-    r.dups = r.books.filter((b) => findDuplicate(b.title, b.author, b.isbn)).length; r.mode = 'skip';
+    r.dups = r.books.filter((b) => findDuplicate(b.title, b.author, b.isbn)).length; r.mode = 'update';
     S.sheet.imp = r; S.sheet.msg = '';
   } catch (e) { S.sheet.msg = 'That file couldn’t be read. Export it again from Goodreads (My Books › Import and export) or StoryGraph (Manage account › Export).'; }
   renderSheet();
 }
 const canonFeel = (w) => { const all = FEELINGS.flatMap((g) => g[1]).concat(S.settings.myWords || []); return all.find((f) => f.toLowerCase() === String(w).toLowerCase().trim()) || w; };
+function genreFromText(txt) {
+  const g = String(txt || '').trim().toLowerCase(); if (!g) return null;
+  const hit = GENRES.find((x) => x.toLowerCase() === g); if (hit) return { genre: hit };
+  const sec = sections().find((s) => s.name.toLowerCase() === g);
+  return sec ? (sec.genre ? { genre: sec.genre } : { sectionId: sec.id }) : null;
+}
 function applyImport() {
   const imp = S.sheet.imp; let added = 0, updated = 0;
+  const addedIds = [], olds = [];
   for (const x of imp.books) {
     const dup = findDuplicate(x.title, x.author, x.isbn);
-    const doc = { autoGenre: !(x.tags && x.tags.length), title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: (x.feelings || []).map(canonFeel), pausedAt: x.pausedAt || null, series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: [], notes: '', links: [], createdAt: x.createdAt || Date.now() };
+    const H = x._has || {};
+    const gen = genreFromText(x.genreText);
+    const doc = { autoGenre: !(x.tags && x.tags.length) && !gen, title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', pausedAt: x.pausedAt || null, reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: (x.feelings || []).map(canonFeel), series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: (x.quotes || []).map((q) => ({ text: q.text, page: q.page || '', addedAt: Date.now() })), notes: x.notes || '', links: [], favourite: !!x.favourite, lentTo: x.lentTo || null, format: x.format || null, translator: x.translator || null, titleAlt: x.titleAlt || null, wantNote: x.wantNote || null, createdAt: x.createdAt || Date.now() };
+    if (gen) Object.assign(doc, gen);
     if (dup) {
       if (imp.mode !== 'update') continue;
-      const p = {}; for (const [k, v] of Object.entries(doc)) { if (k === 'genre' || k === 'createdAt') continue; const cur = dup[k]; if ((cur == null || cur === '' || (Array.isArray(cur) && !cur.length)) && v != null && v !== '' && !(Array.isArray(v) && !v.length)) p[k] = v; }
-      if (dup.sample) p.sample = false, p.wasSample = true; // a book she imported is hers, not an example
-      if (Object.keys(p).length) { saveBook(dup.id, p, true); updated++; }
-    } else { addBook(doc); added++; }
+      // a filled cell updates the book; a blank cell never touches what is already there
+      const want = {};
+      if (H.status) { want.status = doc.status; want.pausedAt = doc.pausedAt; }
+      if (H.reads) { want.reads = doc.reads; want.dateRead = doc.dateRead; }
+      if (H.rating) want.rating = doc.rating;
+      if (H.review) want.review = doc.review;
+      if (H.feelings) want.feelings = doc.feelings;
+      if (H.tags) want.tags = doc.tags;
+      if (H.year) want.year = doc.year;
+      if (H.pages) want.pages = doc.pages;
+      if (H.publisher) want.publisher = doc.publisher;
+      if (H.isbn) want.isbn = doc.isbn;
+      if (H.series) { want.series = doc.series; want.seriesNo = doc.seriesNo; }
+      if (H.favourite) want.favourite = doc.favourite;
+      for (const k of ['lentTo', 'format', 'translator', 'titleAlt', 'notes', 'wantNote']) if (H[k]) want[k] = doc[k];
+      if (H.author) want.author = doc.author;
+      if (H.genre && gen) Object.assign(want, gen);
+      if (H.quotes) { const old = dup.quotes || []; want.quotes = doc.quotes.map((q) => { const m = old.find((o) => o.text === q.text); return m ? Object.assign({}, m, { page: q.page || m.page }) : q; }); }
+      const p = {}; for (const [k, v] of Object.entries(want)) if (JSON.stringify(v) !== JSON.stringify(dup[k] ?? null) && !(v == null && dup[k] == null)) p[k] = v;
+      if (dup.sample) { p.sample = false; p.wasSample = true; } // a book she imported is hers, not an example
+      if (Object.keys(p).length) { olds.push(JSON.parse(JSON.stringify(dup))); saveBook(dup.id, p, true); updated++; }
+    } else { const nb = addBook(doc); addedIds.push(nb.id); added++; }
   }
-  S.sheet.imp = null; S.sheet.msg = `Brought in ${plural(added, 'book')}${updated ? `, filled in ${updated}` : ''}. Covers will be found in the background.`;
+  S.sheet.imp = null; S.sheet.msg = `Brought in ${plural(added, 'book')}${updated ? `, updated ${updated}` : ''}. Covers will be found in the background.`;
   layoutCache = null; render(); setTimeout(() => enrichAll(false), 800);
+  if (added || updated) undoable(`Import: ${plural(added, 'new book')}${updated ? `, ${updated} updated` : ''}`, () => { addedIds.forEach((id) => removeBook(id)); olds.forEach(restoreBook); layoutCache = null; });
 }
 async function exportCSV() {
   const csv = '﻿' + window.LibraryCSV.toCSV(S.books);
@@ -3624,6 +3671,7 @@ async function doAction(act, el, e) {
     case 's-disconnect': Store.gh = { repo: Store.gh.repo, token: '' }; LS.set('library.github', Store.gh); Store.status = 'local'; renderSync(); S.sheet.msg = 'This device no longer syncs. Your books stay here.'; S.sheet.linkdev = false; renderSheet(); return;
     case 's-linkdev': S.sheet.linkdev = !S.sheet.linkdev; renderSheet(); return;
     case 's-copylink': try { await navigator.clipboard.writeText(d('url')); toast('Link copied'); } catch (er) { toast('Couldn’t copy — long-press the code instead'); } return;
+    case 's-backup-now': { S.sheet.msg = 'Saving a backup…'; renderSheet(); Store.monthlyBackup(true).then((ok) => { if (S.sheet && S.sheet.kind === 'settings') { S.sheet.msg = ok ? 'Backup saved to your private repository.' : 'Couldn’t save the backup. Check your connection and the key’s permissions.'; renderSheet(); } }); return; }
     case 's-regenre': S.sheet.msg = 'Checking genres in the background…'; renderSheet(); regenre(); return;
     case 's-untitled': removeUntitled(); return;
     case 's-enrich': S.sheet.msg = 'Looking for covers and details in the background…'; renderSheet(); enrichAll(true); return;
@@ -3885,6 +3933,7 @@ function backupReminder() {
     if (Store._examples && !Object.keys(Store.data.books).length && !Object.keys(Store.data.deleted).length) { for (const [id, b] of Object.entries(Store._examples)) Store.data.books[id] = Object.assign({}, b, { id }); Store.touch(); onData(); }
   }
   applyTextSize(); renderSync();
+  if (Store.connected()) setTimeout(() => Store.monthlyBackup(), 6000); // once a month, quietly
   if (!S.settings.welcomed && S.books.some((b) => b.sample)) openSheet({ kind: 'welcome' });
   else { quoteOfDay(); backupReminder(); }
   setTimeout(() => enrichAll(false), 1500);
