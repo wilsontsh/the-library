@@ -1,4 +1,9 @@
-﻿Title,Author,Status,Rating,Date Read,Feelings,Review
+﻿"# HOW TO FILL THIS IN: delete these # lines and the 3 example rows, then add your books below. Only Title is required."
+# Title: the book title.   Author: the author (leave blank if unsure).
+"# Status (one of): read | reading | want to read | put aside | did not finish  (Chinese 已讀 / 在讀 / 想讀 / 暫停 / 未讀完 also work). If blank: a rating or Date Read means read, otherwise want to read."
+# Rating: 0.5 to 5 (4.5)  or  stars (★★★★)  or  8/10.   Date Read: 2024-11 or 2024-11-23.
+"# Feelings: words from the ""How it felt"" list, separated by ; (for example: Moving; Tender).   Review: anything you like."
+Title,Author,Status,Rating,Date Read,Feelings,Review
 Never Let Me Go,Kazuo Ishiguro,read,5,2024-11,Quietly devastating; Tender,
-Klara and the Sun,Kazuo Ishiguro,to-read,,,,
+Klara and the Sun,Kazuo Ishiguro,want to read,,,,
 Sapiens,Yuval Noah Harari,read,4.5,2023-06,Eye-opening,

@@ -83,7 +83,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .wall{position:absolute;inset:0;transform-origin:0 0;transition:transform .55s cubic-bezier(.2,.7,.2,1)}
 .plate{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;font:600 12px var(--f-display);letter-spacing:.12em;text-transform:uppercase;color:#2b1f0e;text-shadow:0 1px 0 rgba(255,236,190,.35),0 -1px 0 rgba(0,0,0,.35);white-space:nowrap;overflow:hidden;opacity:.92}
 .shelf{position:absolute;display:flex;align-items:flex-end;gap:1px;padding:0 4px;box-sizing:border-box}
-.shelf .genre-tag{z-index:6}.shelf::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.42) 0,rgba(0,0,0,.1) 30%,rgba(0,0,0,0) 55%,rgba(0,0,0,.08) 100%);z-index:3}
+.shelf .genre-tag{z-index:6}.shelf::after{content:"";position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.24) 0,rgba(0,0,0,.06) 30%,rgba(0,0,0,0) 55%,rgba(0,0,0,.08) 100%);z-index:3}
 .shelf .genre-tag{position:absolute;left:8px;bottom:-12px;font-size:10.5px;letter-spacing:.04em;color:rgba(240,222,180,.85);text-shadow:0 1px 2px rgba(0,0,0,.8);z-index:4;pointer-events:none}
 .spine{position:relative;flex-shrink:0;padding:0;border:0;cursor:pointer;background-repeat:no-repeat;border-radius:2px 2px 1px 1px;box-shadow:1px 0 1px rgba(0,0,0,.6),-1px 0 1px rgba(0,0,0,.35);transform-origin:50% 100%;transition:transform .35s cubic-bezier(.2,.7,.2,1),filter .3s,box-shadow .3s;z-index:1}
 .spine.lean{transform-origin:100% 100%}
@@ -595,9 +595,9 @@ h2[tabindex="-1"]:focus{outline:none}
 .wall.zoomed .plate{opacity:.92}
 .wall.zoomed .atmos{opacity:.4}
 .atmos{position:absolute;inset:0;pointer-events:none;z-index:2;transition:opacity .5s}
-.cone{position:absolute;width:320px;height:440px;clip-path:polygon(31% 0,69% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(255,214,150,.10),rgba(255,214,150,.03) 60%,transparent 85%);mix-blend-mode:screen;opacity:.6;animation:breathe 9s ease-in-out infinite}
+.cone{position:absolute;width:320px;height:440px;clip-path:polygon(31% 0,69% 0,100% 100%,0 100%);background:linear-gradient(180deg,rgba(255,214,150,.06),rgba(255,214,150,.02) 60%,transparent 85%);mix-blend-mode:screen;opacity:.6;animation:breathe 9s ease-in-out infinite}
 @keyframes breathe{0%,100%{opacity:.55}50%{opacity:.65}}
-.halo{position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,190,110,.20),rgba(255,190,110,.08) 35%,transparent 70%);mix-blend-mode:soft-light;animation:flick 3.7s ease-in-out infinite}
+.halo{position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,190,110,.12),rgba(255,190,110,.05) 35%,transparent 70%);mix-blend-mode:soft-light;animation:flick 3.7s ease-in-out infinite}
 .flame{position:absolute;width:6px;height:14px;border-radius:50% 50% 45% 45%;background:radial-gradient(ellipse at 50% 70%,#fff6d8,#ffcf7a 40%,rgba(255,180,90,0) 72%);mix-blend-mode:screen;transform-origin:50% 100%;animation:flick 2.3s ease-in-out infinite,sway 5.9s ease-in-out infinite}
 @keyframes flick{0%,100%{opacity:.92;transform:scale(1)}23%{opacity:.86;transform:scale(.97)}41%{opacity:1;transform:scale(1.03)}67%{opacity:.9;transform:scale(.99)}83%{opacity:.97;transform:scale(1.02)}}
 @keyframes sway{0%,100%{translate:0 0}30%{translate:.4px 0}60%{translate:-.4px 0}}
@@ -866,6 +866,19 @@ body.compact .arrange-banner span{white-space:nowrap}
 /* A4 re-render has its own soft gutter: the E19 stop-gap shadow only needs to be a whisper now */
 .bookview::after{opacity:.5}
 .shelf .range-tag{position:absolute;bottom:-16px;height:14px;padding:0 7px;font:600 9px/14px var(--f-ui);color:#2B1F0E;background:linear-gradient(#CDB27A,#9A7A42);border-radius:1.5px;box-shadow:0 1px 1px rgba(0,0,0,.6),inset 0 0 0 .5px rgba(60,40,10,.45);white-space:nowrap;z-index:6;pointer-events:none}
+.exlist{display:flex;flex-wrap:wrap;gap:4px 6px;max-height:150px;overflow:auto;margin:8px 0;padding:8px;border-radius:6px;background:rgba(0,0,0,.25);font-size:12.5px;color:var(--text)}.exlist span{padding:2px 7px;border-radius:10px;background:rgba(212,185,122,.12)}
+/* lighter shelves: tinted vellum spines, face-out covers, breathing space */
+.spine.tinted::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;mix-blend-mode:multiply;background:var(--tint,transparent)}
+.spine[data-tint=oat]{--tint:#EBDDBE}.spine[data-tint=ivory]{--tint:#FAF4E4}.spine[data-tint=pistachio]{--tint:#D3E0B6}.spine[data-tint=blush]{--tint:#F0CFC8}.spine[data-tint=mist]{--tint:#D3DDE0}
+.spine.tinted .t{position:relative;z-index:1}
+.gapblock{flex:0 0 auto;display:inline-block;height:1px;pointer-events:none}
+.spine.face{background:#2a1d12;border-radius:1px 2px 2px 1px;box-shadow:0 3px 4px rgba(0,0,0,.45),1px 0 0 rgba(255,255,255,.1) inset,-2px 0 0 rgba(0,0,0,.35) inset;overflow:visible;transform-origin:50% 100%}
+.spine.face .faceimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:1px 2px 2px 1px;display:block}
+.spine.face::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.28),rgba(255,255,255,.06) 6%,rgba(0,0,0,0) 14%,rgba(0,0,0,.12))}
+.fplain{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px 6px;box-sizing:border-box;text-align:center;border-radius:inherit;background-image:linear-gradient(90deg,rgba(0,0,0,.35),rgba(255,255,255,.05) 10%,rgba(0,0,0,.2))}
+.fplain b{font:600 10px/1.15 "Cormorant Garamond",Georgia,serif;color:#E2C88A;text-shadow:0 1px 0 rgba(0,0,0,.6)}.fplain small{font:500 7px/1.1 "EB Garamond",Georgia,serif;color:#D9BC7A;opacity:.85}
+.spine.face .slip{left:50%;top:-8px}
+.shelfpick{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 4px}.shelfpick>div{flex:1 1 170px}.shelfpick .seg{margin-top:6px}
 
 </style>
 </head>
@@ -1160,7 +1173,15 @@ function flashSaved() {
 }
 
 /* ---------------- undo ---------------- */
-function undoable(text, revert) { toast(text, { label: 'Undo', fn: () => { revert(); render(); toast('Undone'); } }, 8000); }
+const UNDO = []; // this visit's undoable actions, newest last: the Menu can step back through them even after the toast is gone
+function undoable(text, revert) {
+  const entry = { text, revert, at: Date.now() }; UNDO.push(entry); if (UNDO.length > 20) UNDO.shift();
+  toast(text, { label: 'Undo', fn: () => undoEntry(entry) }, 8000);
+}
+function undoEntry(entry) {
+  const i = UNDO.indexOf(entry); if (i < 0) return; UNDO.splice(i, 1);
+  entry.revert(); layoutCache = null; render(); toast('Undone: ' + entry.text);
+}
 
 /* ---------------- cover photos: kept in IndexedDB, copied to the private repo ---------------- */
 const Covers = {
@@ -1221,7 +1242,7 @@ function binding(b) {
   if (b.binding && b.binding.color != null) return b.binding;
   const r = rnd(b.id, 'c');
   // curated old-library palette: mostly browns, then greens/navies, some vellum, a little faded red
-  const weights = [10, 9, 8, 7, 8, 6, 7, 7, 4, 7, 5, 4, 8];
+  const weights = [10, 9, 8, 7, 8, 6, 7, 7, 4, 7, 5, 4, 24]; // vellum (the light, tinted spines) is about a quarter of the shelf
   let acc = 0, ci = 0; const tot = weights.reduce((a, c) => a + c, 0);
   for (let i = 0; i < weights.length; i++) { acc += weights[i] / tot; if (r < acc) { ci = i; break; } }
   const zh = isZh(b.title);
@@ -1231,6 +1252,7 @@ function binding(b) {
   return { color: ci, style: STYLES.indexOf(style) };
 }
 function dims(b) {
+  if (b.display === 'face') { const h = Math.round((b.heightM || (0.245 + rnd(b.id, 'h') * 0.085)) * PXM * 0.86); return { w: Math.round(h * 0.64), h, face: true }; }
   const pages = b.pages || (180 + rnd(b.id, 'p') * 420);
   const wm = Math.min(0.06, Math.max(0.025, 0.019 + pages * 0.00007));
   const hm = b.heightM || (0.245 + rnd(b.id, 'h') * 0.085);
@@ -1302,6 +1324,7 @@ function orderInSection(list) {
   });
 }
 const DIV_W = 16;
+const GAPS = [0, 30, 78]; // breathing space after a book: none, a little, a lot
 let layoutCache = null, layoutKey = '';
 function layout() {
   const key = S.books.length + ':' + S.books.reduce((a, b) => Math.max(a, b.updatedAt || 0), 0) + ':' + (S.settings.updatedAt || 0) + ':' + S.arrange;
@@ -1320,6 +1343,7 @@ function layout() {
       const d = dims(b);
       if (cur.used + d.w + 1 > inner) { cur = { sec: sec.id, secs: [sec.id], items: [], used: 0 }; shelves.push(cur); }
       cur.items.push({ b, d }); cur.used += d.w + 1;
+      const gap = GAPS[b.gapAfter || 0]; if (gap && b !== list[list.length - 1] && cur.used + gap < inner) { cur.items.push({ gap: true, d: { w: gap } }); cur.used += gap; }
     }
   }
   shelves.forEach((s) => { s.fill = s.used / inner; });
@@ -1449,13 +1473,25 @@ function spineFitFor(b, base, style) {
   fitCache.set(key, r);
   return r;
 }
+const SPINE_TINTS = ['oat', 'ivory', 'pistachio', 'blush', 'mist', 'oat', 'ivory'];
+function faceHTML(b, d, extraCls) {
+  const bd = binding(b), col = colorOf(b);
+  const img = coverImg(b, 'faceimg', b.title);
+  const label = `${b.title}${b.author ? ', ' + b.author : ''}${status(b) === 'want' ? ', want to read' : ''}, face out`;
+  const tilt = (rnd(b.id, 'ft') - 0.5) * 3;
+  const plain = img ? '' : `<span class="fplain" style="background:${col}"><b>${esc(b.title)}</b><small>${esc(b.author || '')}</small></span>`;
+  return `<button class="spine face ${extraCls || ''}" data-act="spine" data-id="${esc(b.id)}" aria-label="${esc(label)}" style="width:${d.w}px;height:${d.h}px;transform:rotate(${tilt.toFixed(2)}deg)">${img}${plain}${status(b) === 'want' ? '<i class="slip" aria-hidden="true"></i>' : ''}${b.favourite ? '<i class="fav" aria-hidden="true"></i>' : ''}</button>`;
+}
 function spineHTML(b, d, extraCls, lean) {
+  if (d.face) return faceHTML(b, d, extraCls);
   const bd = binding(b);
   const col = bd.color, row = bd.style;
   const cw = SPR.cw, ch = SPR.ch;
   const kx = d.w / cw, ky = d.h / ch;
   const style = STYLES[row];
-  const light = COLORS[col] === 'VELLUM' && style !== 'label';
+  const vellum = COLORS[col] === 'VELLUM';
+  const light = vellum && style !== 'label';
+  const tint = vellum ? SPINE_TINTS[Math.floor(rnd(b.id, 'tint') * SPINE_TINTS.length)] : '';
   const f = d.fit || spineFitFor(b, d, style).f;
   const fam = f.zh ? 'zh' : famFor(f.fs);
   const t = `<span class="t ${f.zh ? 'zh' : 'v'} ${fam} ${f.caps ? 'caps' : ''}" style="top:${f.top.toFixed(1)}px;height:${f.L.toFixed(1)}px;font-size:${f.fs.toFixed(2)}px">${f.lines.map(esc).join('<br>')}</span>`;
@@ -1467,7 +1503,7 @@ function spineHTML(b, d, extraCls, lean) {
   const tilt = !lean && rnd(b.id, 'tilt') < 0.15 ? (rnd(b.id, 'td') - 0.5) * 1.2 : 0;
   const leanCss = lean ? `transform:rotate(${lean}deg);margin-left:9px;` : tilt ? `transform:rotate(${tilt.toFixed(2)}deg);` : '';
   const label = `${b.title}${b.author ? ', ' + b.author : ''}${status(b) === 'want' ? ', want to read' : ''}${b.lentTo ? ', lent to ' + b.lentTo : ''}`;
-  return `<button class="spine ${extraCls || ''} ${lean ? 'lean' : ''} ${light ? 'light' : ''}" data-act="spine" data-id="${esc(b.id)}" aria-label="${esc(label)}" style="width:${d.w}px;height:${d.h}px;background-image:url(spines.webp);background-size:${(SPR.cols * cw * kx).toFixed(1)}px ${(SPR.rows * ch * ky).toFixed(1)}px;background-position:-${(col * cw * kx).toFixed(1)}px -${(row * ch * ky).toFixed(1)}px;${leanCss}">${t}${marks}</button>`;
+  return `<button class="spine ${extraCls || ''} ${lean ? 'lean' : ''} ${light ? 'light' : ''} ${tint ? 'tinted' : ''}" ${tint ? `data-tint="${tint}"` : ''} data-act="spine" data-id="${esc(b.id)}" aria-label="${esc(label)}" style="width:${d.w}px;height:${d.h}px;background-image:url(spines.webp);background-size:${(SPR.cols * cw * kx).toFixed(1)}px ${(SPR.rows * ch * ky).toFixed(1)}px;background-position:-${(col * cw * kx).toFixed(1)}px -${(row * ch * ky).toFixed(1)}px;${leanCss}">${t}${marks}</button>`;
 }
 
 function wallInner(L, page) {
@@ -1494,6 +1530,7 @@ function wallInner(L, page) {
         const books = sh.items.filter((it) => it.b);
         let inner = '';
         sh.items.forEach((it, i) => {
+          if (it.gap) { inner += `<span class="gapblock" aria-hidden="true" style="width:${it.d.w}px"></span>`; x += it.d.w; return; }
           if (it.div) { inner += `<span class="divider" aria-hidden="true"></span>`; tags.push({ x: x + 8, name: secName(it.div) }); x += it.d.w; return; }
           const isLast = it === books[books.length - 1] && i === sh.items.length - 1;
           const lean = isLast && sh.fill < 0.82 && books.length > 2 && !S.arrange ? -(Math.asin(9 / it.d.h) * 180 / Math.PI) : 0;
@@ -1527,6 +1564,7 @@ function renderWall() {
   if (S.page >= L.pages) S.page = L.pages - 1;
   stage.innerHTML = `<section class="view wallview" aria-label="Library wall"><div class="wall" id="wall">${wallInner(L, S.page)}</div>${ladderHTML()}<div class="tod ${todClass()}" aria-hidden="true"></div></section>`;
   chrome.innerHTML = wallChrome(L);
+  hydrateCovers(stage);
   applyZoom(false);
   renderResults();
   bindSearch();
@@ -1550,7 +1588,7 @@ function chipsHTML() {
   let h = '';
   if (S.compact) return desk.length || pile.length ? `<button class="deskchip mini" data-act="desk" data-tab="${desk.length ? 'desk' : 'pile'}" aria-label="Reading desk: ${desk.length} open, ${pile.length} to read">${ICON.desk}<b>${desk.length}</b><span class="sep"></span>${ICON.pile}<b>${pile.length}</b></button>` : '';
   if (desk.length) { const b = desk[0]; h += `<button class="deskchip" data-act="desk" data-tab="desk" aria-label="Reading desk: ${esc(desk.map((x) => x.title).join(', '))}"><span class="thumb" style="${spineCrop(b, 26, 38)}">${coverImg(b, '', '')}</span><span><small>On the desk</small><b>${esc(b.title)}</b></span>${desk.length > 1 ? `<em>+${desk.length - 1}</em>` : ''}</button>`; }
-  if (pile.length && S.settings.pileMode !== 'shelf') h += `<button class="deskchip pilechip" data-act="desk" data-tab="pile" aria-label="To-read pile, ${plural(pile.length, 'book')}">${ICON.pile}<span><small>To read</small><b>${pile.length}</b></span></button>`;
+  if (pile.length && S.settings.pileMode !== 'shelf') h += `<button class="deskchip pilechip" data-act="desk" data-tab="pile" aria-label="Want-to-read pile, ${plural(pile.length, 'book')}">${ICON.pile}<span><small>Want to read</small><b>${pile.length}</b></span></button>`;
   if (!h && !S.compact) h = `<button class="deskchip quiet" data-act="desk" data-tab="desk"><span><small>The reading desk</small><b>Nothing open just now</b></span></button>`;
   return h;
 }
@@ -2075,7 +2113,7 @@ function drawerLabels(mode) {
   if (mode === 'genre') return pad(sections().map((s) => s.name));
   if (mode === 'author') return pad(LETTERS.concat(['Anonymous']));
   if (mode === 'title') return pad(LETTERS.slice());
-  if (mode === 'status') return pad(['Reading', 'To read', 'Favourites', 'Lent out', 'Did not finish', 'Read twice or more', 'Examples']);
+  if (mode === 'status') return pad(['Reading', 'Want to read', 'Favourites', 'Lent out', 'Did not finish', 'Read twice or more', 'Examples']);
   const yrs = new Set(); S.books.forEach((b) => readsOf(b).forEach((r) => r.finish && yrs.add(r.finish.slice(0, 4))));
   const ys = [...yrs].sort().reverse().slice(0, 26);
   return pad(ys.concat(['Undated']));
@@ -2096,7 +2134,7 @@ function drawerBooks(mode, label) {
     if (mode === 'genre') { const s = secs.find((x) => x.name === label); return s && secOf(b) === s.id; }
     if (mode === 'author') return label === 'Anonymous' ? !b.author : (b.author && inLetter(label, authorSort(b)));
     if (mode === 'title') return inLetter(label, b.title);
-    if (mode === 'status') return { 'Reading': status(b) === 'reading', 'To read': status(b) === 'want', 'Favourites': !!b.favourite, 'Lent out': !!b.lentTo, 'Did not finish': (b.feelings || []).includes('Did not finish'), 'Read twice or more': readsOf(b).filter((r) => r.finish).length > 1, 'Examples': !!b.sample }[label];
+    if (mode === 'status') return { 'Reading': status(b) === 'reading', 'Want to read': status(b) === 'want', 'Favourites': !!b.favourite, 'Lent out': !!b.lentTo, 'Did not finish': (b.feelings || []).includes('Did not finish'), 'Read twice or more': readsOf(b).filter((r) => r.finish).length > 1, 'Examples': !!b.sample }[label];
     if (label === 'Undated') return status(b) === 'read' && !lastFinish(b);
     return readsOf(b).some((r) => (r.finish || '').startsWith(label));
   });
@@ -2197,7 +2235,7 @@ function scrollCardIntoView() {
 
 /* ================= all books, as a list ================= */
 const LIST_SORTS = [['author', 'Author'], ['title', 'Title'], ['added', 'Recently added'], ['rating', 'My rating'], ['read', 'Date read']];
-const LIST_FILTERS = [['all', 'All'], ['read', 'Read'], ['reading', 'Reading'], ['want', 'To read'], ['fav', 'Favourites'], ['lent', 'Lent out'], ['dnf', 'Did not finish']];
+const LIST_FILTERS = [['all', 'All'], ['read', 'Read'], ['reading', 'Reading'], ['want', 'Want to read'], ['aside', 'Put aside'], ['dnf', 'Did not finish'], ['fav', 'Favourites'], ['lent', 'Lent out']];
 function listBooks() {
   const L = S.list;
   let list = S.books.filter((b) => {
@@ -2205,7 +2243,7 @@ function listBooks() {
     if (L.genre && (b.genre || 'Fiction') !== L.genre) return false;
     if (L.feeling && !(b.feelings || []).includes(L.feeling)) return false;
     switch (L.filter) {
-      case 'read': return status(b) === 'read'; case 'reading': return status(b) === 'reading'; case 'want': return status(b) === 'want';
+      case 'read': return status(b) === 'read'; case 'reading': return status(b) === 'reading' && !b.pausedAt; case 'aside': return status(b) === 'reading' && !!b.pausedAt; case 'want': return status(b) === 'want';
       case 'fav': return !!b.favourite; case 'lent': return !!b.lentTo; case 'dnf': return (b.feelings || []).includes('Did not finish');
       default: return true;
     }
@@ -2231,7 +2269,7 @@ function renderList() {
     const l = az ? letterOf(b) : '';
     const head = az && l !== lastL ? `<div class="lhead" id="L-${esc(l)}">${esc(l)}</div>` : '';
     lastL = l;
-    return `${head}<button class="lrow" data-act="open" data-id="${esc(b.id)}"><span class="lthumb" style="${spineCrop(b, 30, 44)}">${coverImg(b, '', '')}</span><span class="lt"><b>${esc(b.title || 'Untitled')}</b><small>${esc(b.author || '')}${b.series ? ' · ' + esc(b.series) + (b.seriesNo ? ' ' + esc(b.seriesNo) : '') : ''}</small></span><span class="lr">${b.rating != null ? starsSVG(b.rating, 12) : ''}<small>${b.favourite ? '<i class="sealdot" title="A favourite"></i>' : ''}${esc(status(b) === 'read' ? (lastFinish(b) ? monthLabel(lastFinish(b), true) : '') : status(b) === 'reading' ? 'Reading' : 'To read')}</small></span></button>`;
+    return `${head}<button class="lrow" data-act="open" data-id="${esc(b.id)}"><span class="lthumb" style="${spineCrop(b, 30, 44)}">${coverImg(b, '', '')}</span><span class="lt"><b>${esc(b.title || 'Untitled')}</b><small>${esc(b.author || '')}${b.series ? ' · ' + esc(b.series) + (b.seriesNo ? ' ' + esc(b.seriesNo) : '') : ''}</small></span><span class="lr">${b.rating != null ? starsSVG(b.rating, 12) : ''}<small>${b.favourite ? '<i class="sealdot" title="A favourite"></i>' : ''}${esc(status(b) === 'read' ? (lastFinish(b) ? monthLabel(lastFinish(b), true) : '') : status(b) === 'reading' ? 'Reading' : 'Want to read')}</small></span></button>`;
   }).join('');
   const letters = az ? [...new Set(books.map(letterOf))] : [];
   const feelings = [...new Set(S.books.flatMap((b) => b.feelings || []))].sort();
@@ -2302,7 +2340,8 @@ function renderSheet() {
 const SHEETS = {
   menu: () => [`${head('The Library')}
       <div class="menu toc">
-        <button class="menu-item" data-act="desk" data-tab="desk"><span class="mi">${SVG.book}</span><span>Reading desk &amp; to-read pile<small>${plural(deskBooks().length, 'book')} open · ${plural(pileBooks().length, 'book')} waiting</small></span></button>
+        ${UNDO.length ? `<button class="menu-item" data-act="undo-last"><span class="mi">${ICON.left}</span><span>Undo: ${esc(UNDO[UNDO.length - 1].text)}<small>${UNDO.length > 1 ? `${UNDO.length - 1} earlier ${UNDO.length === 2 ? 'action' : 'actions'} can be undone after this` : 'The most recent thing you did. Each tap steps one further back.'}</small></span></button>` : ''}
+        <button class="menu-item" data-act="desk" data-tab="desk"><span class="mi">${SVG.book}</span><span>Reading desk &amp; want-to-read pile<small>${plural(deskBooks().length, 'book')} open · ${plural(pileBooks().length, 'book')} waiting</small></span></button>
         <button class="menu-item" data-act="go-list"><span class="mi">${ICON.list}</span><span>All books<small>Every book as a list — sort, filter, jump to a letter</small></span></button>
         <button class="menu-item" data-act="quotes"><span class="mi">${SVG.quill}</span><span>Commonplace book<small>Every line you have copied out, in one place</small></span></button>
         <button class="menu-item" data-act="ledger"><span class="mi">${SVG.ledger}</span><span>Reading ledger<small>What you have read and how it felt</small></span></button>
@@ -2331,6 +2370,8 @@ const SHEETS = {
     const f = (id, label, val, extra) => `<label class="f">${label}<input type="text" id="${id}" data-mf="${id.slice(2)}" value="${esc(val ?? '')}" ${extra || ''}></label>`;
     return [`${head('Binding &amp; details', 'Changes are saved as you go.')}
       <div class="bindpick"><span class="note">Binding</span><div class="bindrow">${STYLES.map((s, si) => COLORS.map((c, ci) => `<button class="bthumb ${bd.color === ci && bd.style === si ? 'on' : ''}" data-act="m-bind" data-c="${ci}" data-s="${si}" aria-label="${{ antique: 'Raised bands', smooth: 'Smooth', label: 'Leather label' }[s]}, colour ${ci + 1}" aria-pressed="${bd.color === ci && bd.style === si}" style="${spineCrop({ id: b.id, binding: { color: ci, style: si } }, 22, 64)}"></button>`).join('')).join('')}</div></div>
+      <div class="shelfpick"><div><span class="note">On the shelf</span><div class="seg" role="group" aria-label="Display">${[['spine', 'Spine'], ['face', 'Face out']].map((o) => `<button class="${(b.display || 'spine') === o[0] ? 'on' : ''}" data-act="m-display" data-v="${o[0]}">${o[1]}</button>`).join('')}</div></div>
+        <div><span class="note">Space after it</span><div class="seg" role="group" aria-label="Space after this book">${['None', 'A little', 'A lot'].map((o, i) => `<button class="${(b.gapAfter || 0) === i ? 'on' : ''}" data-act="m-gap" data-v="${i}">${o}</button>`).join('')}</div></div></div>
       <div class="grid2" style="margin-top:14px">
         ${f('m-title', 'Title', b.title)}${f('m-author', 'Author', b.author)}
         ${f('m-titleAlt', 'Second title (original or Chinese)', b.titleAlt)}${f('m-year', 'Year published', b.year, 'inputmode="numeric"')}
@@ -2365,10 +2406,10 @@ const SHEETS = {
   },
 
   status: (sh) => {
-    const b = curBook(); const st = b.pausedAt ? 'aside' : status(b);
+    const b = curBook(); const st = (b.feelings || []).includes('Did not finish') && status(b) === 'read' ? 'dnf' : b.pausedAt ? 'aside' : status(b);
     const reads = readsOf(b);
     return [`${head('Reading life', esc(b.title))}
-      <div class="seg wide-seg" role="group" aria-label="Status" style="margin-top:14px">${[['read', 'Read'], ['reading', 'Reading'], ['want', 'Want to read'], ['aside', 'Put aside']].map((s) => `<button class="${st === s[0] ? 'on' : ''}" data-act="st-set" data-s="${s[0]}" aria-pressed="${st === s[0]}">${s[1]}</button>`).join('')}</div>
+      <div class="seg wide-seg" role="group" aria-label="Status" style="margin-top:14px">${[['read', 'Read'], ['reading', 'Reading'], ['want', 'Want to read'], ['aside', 'Put aside'], ['dnf', 'Did not finish']].map((s) => `<button class="${st === s[0] ? 'on' : ''}" data-act="st-set" data-s="${s[0]}" aria-pressed="${st === s[0]}">${s[1]}</button>`).join('')}</div>
       <h3 class="sh3">Readings</h3>
       <div class="reads">${reads.length ? reads.map((r, i) => `<div class="readrow"><label class="f">Started<input type="month" data-rd="${i}" data-k="start" value="${esc(r.start || '')}"></label><label class="f">Finished<input type="month" data-rd="${i}" data-k="finish" value="${esc(r.finish || '')}"></label><button class="ghost xbtn" data-act="rd-del" data-i="${i}" aria-label="Remove this reading">${ICON.close}</button></div>`).join('') : '<p class="note">No dates yet.</p>'}</div>
       <div class="row" style="flex-wrap:wrap;gap:8px;margin-top:12px">${status(b) === 'read' ? `<button class="icon-btn wide" data-act="reread">Read it again</button>` : ''}<button class="ghost" data-act="rd-add">+ Add a reading</button></div>
@@ -2391,9 +2432,9 @@ const SHEETS = {
     const deskHTML = desk.length ? desk.map((b) => `<div class="deskrow"><button class="dthumb" data-act="open-from" data-from="desk" data-id="${esc(b.id)}" style="background:${colorOf(b)}">${coverImg(b, '', '')}</button><div class="dt"><b>${esc(b.title)}</b><small>${esc(b.author || '')} · ${esc(statusLabel(b))}</small><div class="row" style="flex-wrap:wrap;gap:6px;margin-top:8px"><button class="pick" data-act="finish" data-id="${esc(b.id)}">Finished it</button><button class="pick" data-act="${b.pausedAt ? 'resume' : 'aside'}" data-id="${esc(b.id)}">${b.pausedAt ? 'Pick it up again' : 'Put it aside'}</button><button class="pick" data-act="open-from" data-from="desk" data-id="${esc(b.id)}">Open</button></div></div></div>`).join('') : `<p class="lede" style="margin-top:14px">Nothing open on the desk. When you start a book, mark it “Reading” and it will wait for you here.</p>`;
     const pileHTML = pile.length ? pile.map((b, i) => `<div class="deskrow"><button class="dthumb" data-act="open-from" data-from="desk" data-id="${esc(b.id)}" style="background:${colorOf(b)}">${coverImg(b, '', '')}</button><div class="dt"><b>${esc(b.title)}</b><small>${esc(b.author || '')}${b.wantNote ? ' · ' + esc(b.wantNote) : ''}</small><div class="row" style="flex-wrap:wrap;gap:6px;margin-top:8px"><button class="pick" data-act="start" data-id="${esc(b.id)}">Start reading</button>${i > 0 ? `<button class="pick" data-act="pile-up" data-id="${esc(b.id)}" aria-label="Move up">↑ Up</button>` : ''}${i < pile.length - 1 ? `<button class="pick" data-act="pile-down" data-id="${esc(b.id)}" aria-label="Move down">↓ Down</button>` : ''}</div></div></div>`).join('') : `<p class="lede" style="margin-top:14px">The pile is empty. Add a book as “Want to read” and it will be stacked here.</p>`;
     return [`${head('The reading desk')}
-      <div class="seg wide-seg" role="tablist" style="margin-top:12px"><button class="${tab === 'desk' ? 'on' : ''}" data-act="desk-tab" data-tab="desk" role="tab" aria-selected="${tab === 'desk'}">On the desk · ${desk.length}</button><button class="${tab === 'pile' ? 'on' : ''}" data-act="desk-tab" data-tab="pile" role="tab" aria-selected="${tab === 'pile'}">To-read pile · ${pile.length}</button></div>
+      <div class="seg wide-seg" role="tablist" style="margin-top:12px"><button class="${tab === 'desk' ? 'on' : ''}" data-act="desk-tab" data-tab="desk" role="tab" aria-selected="${tab === 'desk'}">On the desk · ${desk.length}</button><button class="${tab === 'pile' ? 'on' : ''}" data-act="desk-tab" data-tab="pile" role="tab" aria-selected="${tab === 'pile'}">Want-to-read pile · ${pile.length}</button></div>
       <div class="desklist">${tab === 'desk' ? deskHTML : pileHTML}</div>
-      ${tab === 'pile' ? `<p class="note" style="margin-top:14px">${S.settings.pileMode === 'shelf' ? 'To-read books also stand on the shelves, with a paper slip.' : 'To-read books wait here rather than on the shelves.'} <button class="ghost linkish" data-act="pile-mode">${S.settings.pileMode === 'shelf' ? 'Keep them only on the pile' : 'Shelve them too'}</button></p>` : ''}`, 620];
+      ${tab === 'pile' ? `<p class="note" style="margin-top:14px">${S.settings.pileMode === 'shelf' ? 'Want-to-read books also stand on the shelves, with a paper slip.' : 'Want-to-read books wait here rather than on the shelves.'} <button class="ghost linkish" data-act="pile-mode">${S.settings.pileMode === 'shelf' ? 'Keep them only on the pile' : 'Shelve them too'}</button></p>` : ''}`, 620];
   },
 
   ledger: () => [ledgerHTML(), 760],
@@ -2409,7 +2450,7 @@ const SHEETS = {
       <label class="f" style="margin-top:14px">Name on the bookplate<div class="row"><input type="text" id="s-owner" value="${esc(S.settings.owner || '')}" placeholder="Your name"><button class="primary" data-act="s-save">Save</button></div></label>
       <h3 class="sh3">Comfort</h3>
       <div class="row" style="flex-wrap:wrap"><span class="note" style="width:84px">Text size</span><div class="seg">${[[0.92, 'Small'], [1, 'Default'], [1.15, 'Large'], [1.3, 'Larger']].map((x) => `<button class="${(S.settings.textSize || 1) === x[0] ? 'on' : ''}" data-act="s-ts" data-v="${x[0]}">${x[1]}</button>`).join('')}</div></div>
-      <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">To-read</span><div class="seg"><button class="${S.settings.pileMode !== 'shelf' ? 'on' : ''}" data-act="s-pile" data-v="pile">On a pile by the desk</button><button class="${S.settings.pileMode === 'shelf' ? 'on' : ''}" data-act="s-pile" data-v="shelf">On the shelves too</button></div></div>
+      <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">Want to read</span><div class="seg"><button class="${S.settings.pileMode !== 'shelf' ? 'on' : ''}" data-act="s-pile" data-v="pile">On a pile by the desk</button><button class="${S.settings.pileMode === 'shelf' ? 'on' : ''}" data-act="s-pile" data-v="shelf">On the shelves too</button></div></div>
       <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">On opening</span><div class="seg"><button class="${S.settings.quoteOfDay !== false ? 'on' : ''}" data-act="s-qod" data-v="1">Show a saved quotation</button><button class="${S.settings.quoteOfDay === false ? 'on' : ''}" data-act="s-qod" data-v="0">Just the shelves</button></div></div>
       <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">Motion</span><div class="seg"><button class="${!S.settings.quietMotion ? 'on' : ''}" data-act="s-motion" data-v="0">Living room</button><button class="${S.settings.quietMotion ? 'on' : ''}" data-act="s-motion" data-v="1">Quiet motion</button></div></div>
       <div class="row" style="flex-wrap:wrap;margin-top:8px"><span class="note" style="width:84px">Sound</span><div class="seg"><button class="${!S.settings.sound ? 'on' : ''}" data-act="s-sound" data-v="0">Silent</button><button class="${S.settings.sound ? 'on' : ''}" data-act="s-sound" data-v="1">Pages, drawers &amp; seals</button></div></div>
@@ -2436,6 +2477,7 @@ const SHEETS = {
       ${untitledBooks().length ? `<div class="row" style="flex-wrap:wrap"><button class="icon-btn wide" data-act="s-untitled">Remove ${plural(untitledBooks().length, 'book')} without a title</button></div>` : ''}
       <h3 class="sh3">Bring books in, take them out</h3>
       <div class="row" style="flex-wrap:wrap;gap:8px"><label class="icon-btn wide">Import from Goodreads or StoryGraph<input type="file" accept=".csv,text/csv" id="s-csv" hidden></label><button class="icon-btn wide" data-act="s-csv-out">Export as a spreadsheet (CSV)</button><a class="icon-btn wide" href="book-template.csv" download="book-template.csv">Download a blank import template</a></div>
+      <p class="note" style="margin-top:6px">Columns: Title, Author, Status (read · reading · want to read · put aside · did not finish), Rating (4.5, ★★★★ or 8/10), Date Read, Feelings, Review. The template explains each one.</p>
       ${sh.imp ? importHTML(sh.imp) : ''}
       <h3 class="sh3">Backup</h3>
       <p class="note">${lb ? `Last backup: ${ago(lb)}.` : 'No backup made from this device yet.'}${Store.connected() ? ' GitHub sync also keeps a copy.' : ''}</p>
@@ -2445,7 +2487,9 @@ const SHEETS = {
       </div>
       ${sh.restore ? restoreHTML(sh.restore) : ''}
       ${examples.length ? `<h3 class="sh3">The example books</h3><p class="note">${plural(examples.length, 'example')} still on the shelves${adopted ? ` · ${adopted} you have written in are yours now and will stay` : ''}.</p>
-        ${sh.confirmClear ? `<div class="row" style="flex-wrap:wrap"><span class="err">Remove ${plural(examples.length, 'example book')}?</span><button class="ghost" data-act="s-clear-yes" style="color:#e2a68f">Remove</button><button class="ghost" data-act="s-clear-no">Keep</button></div>` : `<button class="icon-btn wide" data-act="s-clear">Remove the example books</button>`}` : ''}
+        <p class="note" style="margin-top:6px">Not sure which these are? Tap to see the list first. Books you imported are never removed unless they are on this list.</p>
+        ${sh.confirmClear ? `<div class="exlist">${examples.slice(0, 40).map((b) => `<span>${esc(b.title || 'Untitled')}</span>`).join('')}${examples.length > 40 ? `<span>and ${examples.length - 40} more…</span>` : ''}</div>
+          <div class="row" style="flex-wrap:wrap;gap:8px"><button class="ghost" data-act="s-clear-yes" style="color:#e2a68f">Remove these ${plural(examples.length, 'book')}</button><button class="ghost" data-act="s-clear-own">These are mine — keep them</button><button class="ghost" data-act="s-clear-no">Cancel</button></div>` : `<button class="icon-btn wide" data-act="s-clear">Show the example books…</button>`}` : ''}
       ${sh.msg ? `<p class="note" role="status" style="margin-top:12px">${esc(sh.msg)}</p>` : ''}`, 700];
   },
 
@@ -2720,11 +2764,12 @@ function applyImport() {
   const imp = S.sheet.imp; let added = 0, updated = 0;
   for (const x of imp.books) {
     const dup = findDuplicate(x.title, x.author, x.isbn);
-    const doc = { autoGenre: !(x.tags && x.tags.length), title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: (x.feelings || []).map(canonFeel), series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: [], notes: '', links: [], createdAt: x.createdAt || Date.now() };
+    const doc = { autoGenre: !(x.tags && x.tags.length), title: x.title, author: x.author || null, isbn: x.isbn || null, year: x.year || null, publisher: x.publisher || null, pages: x.pages || null, rating: x.rating ?? null, status: x.status || 'read', reads: x.reads || [], dateRead: x.dateRead || null, review: x.review || '', tags: x.tags || [], feelings: (x.feelings || []).map(canonFeel), pausedAt: x.pausedAt || null, series: x.series || null, seriesNo: x.seriesNo ?? null, genre: guessGenre(x.tags || [], x.title, x.author), quotes: [], notes: '', links: [], createdAt: x.createdAt || Date.now() };
     if (dup) {
       if (imp.mode !== 'update') continue;
       const p = {}; for (const [k, v] of Object.entries(doc)) { if (k === 'genre' || k === 'createdAt') continue; const cur = dup[k]; if ((cur == null || cur === '' || (Array.isArray(cur) && !cur.length)) && v != null && v !== '' && !(Array.isArray(v) && !v.length)) p[k] = v; }
-      if (Object.keys(p).length) { saveBook(dup.id, p); updated++; }
+      if (dup.sample) p.sample = false, p.wasSample = true; // a book she imported is hers, not an example
+      if (Object.keys(p).length) { saveBook(dup.id, p, true); updated++; }
     } else { addBook(doc); added++; }
   }
   S.sheet.imp = null; S.sheet.msg = `Brought in ${plural(added, 'book')}${updated ? `, filled in ${updated}` : ''}. Covers will be found in the background.`;
@@ -3488,6 +3533,8 @@ async function doAction(act, el, e) {
     case 'book-more': openSheet({ kind: 'more', id: b.id }); return;
     case 'm-color': saveBook(b.id, { binding: { color: +d('c'), style: binding(b).style } }); renderSheet(); return;
     case 'm-bind': saveBook(b.id, { binding: { color: +d('c'), style: +d('s') } }); layoutCache = null; renderSheet(); return;
+    case 'm-display': saveBook(b.id, { display: d('v') === 'face' ? 'face' : null }); layoutCache = null; renderSheet(); return;
+    case 'm-gap': saveBook(b.id, { gapAfter: +d('v') || 0 }); layoutCache = null; renderSheet(); return;
     case 'm-style': saveBook(b.id, { binding: { color: binding(b).color, style: +d('s') } }); renderSheet(); return;
     case 'find-covers': S.sheet.covers = []; S.sheet.coversBusy = true; renderSheet(); { const sh = S.sheet; sh.covers = await coverChoices(b); sh.coversBusy = false; if (S.sheet === sh) renderSheet(); } return;
     case 'pick-cover': saveBook(b.id, { coverUrl: S.sheet.covers[+d('i')] }); S.sheet.covers = null; renderSheet(); toast('Cover changed'); return;
@@ -3496,7 +3543,7 @@ async function doAction(act, el, e) {
     case 'm-delete-no': S.sheet.confirmDelete = false; renderSheet(); return;
     case 'm-delete-yes': { const old = removeBook(b.id); S.sheet = null; S.sheets = []; S.view = 'wall'; S.book = null; layoutCache = null; render(); undoable('Removed from the library', () => { restoreBook(old); layoutCache = null; }); return; }
     /* ---- reading life ---- */
-    case 'st-set': { const s = d('s'); if (s === 'aside') { if (status(b) !== 'reading') setStatus(b, 'reading'); saveBook(b.id, { pausedAt: thisMonth() }); } else if (s === 'read' && status(b) !== 'read') { openSheet({ kind: 'finish', id: b.id }, true); return; } else setStatus(b, s); layoutCache = null; renderSheet(); return; }
+    case 'st-set': { const s = d('s'); if (s === 'dnf') { const fe = new Set(b.feelings || []); fe.add('Did not finish'); if (status(b) !== 'read') setStatus(b, 'read'); saveBook(b.id, { feelings: [...fe], pausedAt: null }); } else if (s === 'aside') { if (status(b) !== 'reading') setStatus(b, 'reading'); saveBook(b.id, { pausedAt: thisMonth() }); } else if (s === 'read' && status(b) !== 'read') { openSheet({ kind: 'finish', id: b.id }, true); return; } else { if ((b.feelings || []).includes('Did not finish')) saveBook(b.id, { feelings: (b.feelings || []).filter((f) => f !== 'Did not finish') }); setStatus(b, s); } layoutCache = null; renderSheet(); return; }
     case 'rd-del': { const r = readsOf(b).slice(); r.splice(+d('i'), 1); saveBook(b.id, { reads: r, dateRead: r.map((x) => x.finish).filter(Boolean).sort().pop() || null }); renderSheet(); return; }
     case 'rd-add': { const r = readsOf(b).map((x) => Object.assign({}, x)); r.push({ finish: thisMonth() }); saveBook(b.id, { reads: r, dateRead: r.map((x) => x.finish).filter(Boolean).sort().pop() }); renderSheet(); return; }
     case 'reread': setStatus(b, 'reading'); layoutCache = null; renderSheet(); toast('On the desk again'); return;
@@ -3552,6 +3599,8 @@ async function doAction(act, el, e) {
     case 'rs-replace-yes': return applyRestore(true);
     case 'rs-add': return applyRestore(false);
     case 's-clear': S.sheet.confirmClear = true; renderSheet(); return;
+    case 'undo-last': { const e = UNDO[UNDO.length - 1]; if (!e) return; S.sheet = null; S.sheets = []; undoEntry(e); return; }
+    case 's-clear-own': { const ex = S.books.filter((x) => x.sample); const ids = ex.map((x) => x.id); ex.forEach((x) => saveBook(x.id, { sample: false, wasSample: true }, true)); S.sheet.confirmClear = false; layoutCache = null; renderSheet(); render(); undoable(`Kept ${plural(ids.length, 'book')} as your own`, () => { ids.forEach((id) => saveBook(id, { sample: true, wasSample: false }, true)); layoutCache = null; }); return; }
     case 's-clear-no': S.sheet.confirmClear = false; renderSheet(); return;
     case 's-clear-yes': { const ex = S.books.filter((x) => x.sample); const olds = ex.map((x) => removeBook(x.id)); S.sheet = null; layoutCache = null; render(); undoable(`Removed ${plural(ex.length, 'example book')}`, () => { olds.forEach(restoreBook); layoutCache = null; }); return; }
     case 'do-sort': return sortSection(S.sheet.secs, d('by'));
