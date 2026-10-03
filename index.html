@@ -1442,7 +1442,7 @@ function findDuplicate(title, author, isbn) {
 const measureCtx = document.createElement('canvas').getContext('2d');
 const mCache = new Map(), fitCache = new Map();
 function textW(s, font) { const k = font + '|' + s; let w = mCache.get(k); if (w == null) { measureCtx.font = font; w = measureCtx.measureText(s).width; mCache.set(k, w); } return w; }
-const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.3, 0.58] }; // [top, length] as a share of the spine height
+const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.2, 0.64] }; // [top, length] as a share of the spine height
 const famFor = (fs) => (fs >= 11 ? 'cg' : 'eb');
 const fontStr = (fam, fs) => fam === 'cg' ? `700 ${fs}px "Cormorant Garamond", Georgia, serif` : `600 ${fs}px "EB Garamond", Georgia, serif`;
 function perPx(s, fam, track) { return textW(s, fontStr(fam, 20)) / 20 + [...s].length * track; }
