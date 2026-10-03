@@ -1258,24 +1258,26 @@ async function setCoverPhoto(b, file) {
 }
 
 /* ================= the model: bindings, sections, reading life, layout, search ================= */
+/* one author, one look: colour, style and height come from the author, so their books stand as a matching set */
+const styleKey = (b) => String(b.author || '').trim().toLowerCase().replace(/\s+/g, ' ') || b.id;
 function binding(b) {
   if (b.binding && b.binding.color != null) return b.binding;
-  const r = rnd(b.id, 'c');
+  const r = rnd(styleKey(b), 'c');
   // curated old-library palette: mostly browns, then greens/navies, some vellum, a little faded red
   const weights = [10, 9, 8, 7, 8, 6, 7, 7, 4, 7, 5, 4, 24]; // vellum (the light, tinted spines) is about a quarter of the shelf
   let acc = 0, ci = 0; const tot = weights.reduce((a, c) => a + c, 0);
   for (let i = 0; i < weights.length; i++) { acc += weights[i] / tot; if (r < acc) { ci = i; break; } }
   const zh = isZh(b.title);
-  const rs = rnd(b.id, 's');
+  const rs = rnd(styleKey(b), 's');
   let style = zh ? (rs < 0.6 ? 'smooth' : 'label') : (rs < 0.3 ? 'antique' : rs < 0.7 ? 'smooth' : 'label');
   if (ci === 1 || ci === 5) style = 'label'; // light tan leathers: gilt needs a dark lettering piece to read
   return { color: ci, style: STYLES.indexOf(style) };
 }
 function dims(b) {
-  if (b.display === 'face') { const h = Math.round((b.heightM || (0.245 + rnd(b.id, 'h') * 0.085)) * PXM * 0.86); return { w: Math.round(h * 0.64), h, face: true }; }
+  if (b.display === 'face') { const h = Math.round((b.heightM || (0.245 + rnd(styleKey(b), 'h') * 0.085)) * PXM * 0.86); return { w: Math.round(h * 0.64), h, face: true }; }
   const pages = b.pages || (180 + rnd(b.id, 'p') * 420);
   const wm = Math.min(0.06, Math.max(0.025, 0.019 + pages * 0.00007));
-  const hm = b.heightM || (0.245 + rnd(b.id, 'h') * 0.085);
+  const hm = b.heightM || (0.245 + rnd(styleKey(b), 'h') * 0.085);
   const base = { w: Math.round(wm * PXM * 1.1), h: Math.round(hm * PXM) }; // 10% wider so titles can be set larger
   const r = spineFitFor(b, base, STYLES[binding(b).style]); // a long title may widen the spine a little
   return { w: base.w + r.boost, h: base.h, fit: r.f };
@@ -1523,7 +1525,7 @@ function spineHTML(b, d, extraCls, lean) {
   const style = STYLES[row];
   const vellum = COLORS[col] === 'VELLUM';
   const light = vellum && style !== 'label';
-  const tint = vellum && style !== 'label' ? SPINE_TINTS[Math.floor(rnd(b.id, 'tint') * SPINE_TINTS.length)] : '';
+  const tint = vellum && style !== 'label' ? SPINE_TINTS[Math.floor(rnd(styleKey(b), 'tint') * SPINE_TINTS.length)] : '';
   const f = d.fit || spineFitFor(b, d, style).f;
   const fam = f.zh ? 'zh' : famFor(f.fs);
   const t = `<span class="t ${f.zh ? 'zh' : 'v'} ${fam} ${f.caps ? 'caps' : ''}" style="top:${f.top.toFixed(1)}px;height:${f.L.toFixed(1)}px;font-size:${f.fs.toFixed(2)}px">${f.lines.map(esc).join('<br>')}</span>`;
