@@ -870,7 +870,6 @@ body.compact .arrange-banner span{white-space:nowrap}
 /* lighter shelves: tinted vellum spines, face-out covers, breathing space */
 .spine.tinted::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;mix-blend-mode:multiply;background:var(--tint,transparent)}
 .spine[data-tint=oat]{--tint:#EBDDBE}.spine[data-tint=ivory]{--tint:#FAF4E4}.spine[data-tint=pistachio]{--tint:#D3E0B6}.spine[data-tint=blush]{--tint:#F0CFC8}.spine[data-tint=mist]{--tint:#D3DDE0}
-.spine.tinted .t{position:relative;z-index:1}
 .gapblock{flex:0 0 auto;display:inline-block;height:1px;pointer-events:none}
 .spine.face{background:#2a1d12;border-radius:1px 2px 2px 1px;box-shadow:0 3px 4px rgba(0,0,0,.45),1px 0 0 rgba(255,255,255,.1) inset,-2px 0 0 rgba(0,0,0,.35) inset;overflow:visible;transform-origin:50% 100%}
 .spine.face .faceimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:1px 2px 2px 1px;display:block}
@@ -879,6 +878,10 @@ body.compact .arrange-banner span{white-space:nowrap}
 .fplain b{font:600 10px/1.15 "Cormorant Garamond",Georgia,serif;color:#E2C88A;text-shadow:0 1px 0 rgba(0,0,0,.6)}.fplain small{font:500 7px/1.1 "EB Garamond",Georgia,serif;color:#D9BC7A;opacity:.85}
 .spine.face .slip{left:50%;top:-8px}
 .shelfpick{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 4px}.shelfpick>div{flex:1 1 170px}.shelfpick .seg{margin-top:6px}
+.exchip{border:0;cursor:pointer;color:var(--text);font:inherit;font-size:12.5px;padding:3px 9px;border-radius:12px;background:rgba(212,185,122,.12)}.exchip.keep{background:#c9a45a;color:#2a1c0b;font-weight:600}
+.exlist .exchip{margin:0}
+.divider.author-sep{width:5px;height:58%;margin:0 3px}
+.spine.vlabel::before{content:"";position:absolute;left:0;top:15.5%;height:68%;width:9%;background:linear-gradient(90deg,#0f0b08,#1b1511);pointer-events:none;z-index:0}
 
 </style>
 </head>
@@ -1068,7 +1071,7 @@ const Store = {
       const a = (local.books || {})[id], b = (remote.books || {})[id];
       const pick = !a ? b : !b ? a : this.mergeDoc(a, b);
       const delAt = out.deleted[id];
-      if (pick && !(delAt && delAt >= (pick.updatedAt || pick.createdAt || 0))) { out.books[id] = pick; pick.id = id; delete out.deleted[id]; }
+      if (pick && !(delAt && (delAt >= (pick.updatedAt || pick.createdAt || 0) || pick.sample))) { /* a removed example stays removed, even if another device touched it later */ out.books[id] = pick; pick.id = id; delete out.deleted[id]; }
     }
     out.settings = this.mergeDoc(local.settings || {}, remote.settings || {});
     return out;
@@ -1323,7 +1326,7 @@ function orderInSection(list) {
       sortKey(a.title).localeCompare(sortKey(b.title));
   });
 }
-const DIV_W = 16;
+const DIV_W = 16, SEP_W = 12; // SEP_W: the thin board either side of an author with three or more books
 const GAPS = [0, 30, 78]; // breathing space after a book: none, a little, a lot
 let layoutCache = null, layoutKey = '';
 function layout() {
@@ -1339,14 +1342,22 @@ function layout() {
     const share = cur && cur.used + DIV_W + need <= inner && (list.length <= 3 || cur.used / inner < 0.4);
     if (share) { cur.items.push({ div: sec.id, d: { w: DIV_W } }); cur.used += DIV_W; cur.secs.push(sec.id); }
     else { cur = { sec: sec.id, secs: [sec.id], items: [], used: 0 }; shelves.push(cur); }
+    const ak = (b) => sortKey(authorSort(b) || '');
+    const runs = new Map(); // first book of each author's run of 3 or more -> its length
+    for (let i = 0; i < list.length;) { let j = i; while (j < list.length && ak(list[j]) === ak(list[i]) && ak(list[i])) j++; if (j - i >= 3) runs.set(list[i], j - i); i = Math.max(j, i + 1); }
+    let inRun = 0;
     for (const b of list) {
       const d = dims(b);
+      if (runs.has(b) && cur.items.length && !cur.items[cur.items.length - 1].div && !cur.items[cur.items.length - 1].sep && cur.used + SEP_W + d.w + 1 <= inner) { cur.items.push({ sep: true, d: { w: SEP_W } }); cur.used += SEP_W; }
+      if (runs.has(b)) inRun = runs.get(b);
+      const endsRun = inRun > 0 && --inRun === 0;
       if (cur.used + d.w + 1 > inner) { cur = { sec: sec.id, secs: [sec.id], items: [], used: 0 }; shelves.push(cur); }
       cur.items.push({ b, d }); cur.used += d.w + 1;
+      if (endsRun && b !== list[list.length - 1] && cur.used + SEP_W < inner) { cur.items.push({ sep: true, d: { w: SEP_W } }); cur.used += SEP_W; }
       const gap = GAPS[b.gapAfter || 0]; if (gap && b !== list[list.length - 1] && cur.used + gap < inner) { cur.items.push({ gap: true, d: { w: gap } }); cur.used += gap; }
     }
   }
-  shelves.forEach((s) => { s.fill = s.used / inner; });
+  shelves.forEach((s) => { while (s.items.length && s.items[0].sep) { s.used -= SEP_W; s.items.shift(); } while (s.items.length && s.items[s.items.length - 1].sep) { s.used -= SEP_W; s.items.pop(); } s.fill = s.used / inner; });
   const cases = [];
   for (let i = 0; i < shelves.length; i += 3) cases.push(shelves.slice(i, i + 3));
   layoutCache = { shelves, cases, pages: Math.max(1, Math.ceil(cases.length / 3)) }; layoutKey = key;
@@ -1405,7 +1416,7 @@ function findDuplicate(title, author, isbn) {
 const measureCtx = document.createElement('canvas').getContext('2d');
 const mCache = new Map(), fitCache = new Map();
 function textW(s, font) { const k = font + '|' + s; let w = mCache.get(k); if (w == null) { measureCtx.font = font; w = measureCtx.measureText(s).width; mCache.set(k, w); } return w; }
-const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.2, 0.6] }; // [top, length] as a share of the spine height
+const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.3, 0.58] }; // [top, length] as a share of the spine height
 const famFor = (fs) => (fs >= 11 ? 'cg' : 'eb');
 const fontStr = (fam, fs) => fam === 'cg' ? `700 ${fs}px "Cormorant Garamond", Georgia, serif` : `600 ${fs}px "EB Garamond", Georgia, serif`;
 function perPx(s, fam, track) { return textW(s, fontStr(fam, 20)) / 20 + [...s].length * track; }
@@ -1491,7 +1502,7 @@ function spineHTML(b, d, extraCls, lean) {
   const style = STYLES[row];
   const vellum = COLORS[col] === 'VELLUM';
   const light = vellum && style !== 'label';
-  const tint = vellum ? SPINE_TINTS[Math.floor(rnd(b.id, 'tint') * SPINE_TINTS.length)] : '';
+  const tint = vellum && style !== 'label' ? SPINE_TINTS[Math.floor(rnd(b.id, 'tint') * SPINE_TINTS.length)] : '';
   const f = d.fit || spineFitFor(b, d, style).f;
   const fam = f.zh ? 'zh' : famFor(f.fs);
   const t = `<span class="t ${f.zh ? 'zh' : 'v'} ${fam} ${f.caps ? 'caps' : ''}" style="top:${f.top.toFixed(1)}px;height:${f.L.toFixed(1)}px;font-size:${f.fs.toFixed(2)}px">${f.lines.map(esc).join('<br>')}</span>`;
@@ -1503,7 +1514,7 @@ function spineHTML(b, d, extraCls, lean) {
   const tilt = !lean && rnd(b.id, 'tilt') < 0.15 ? (rnd(b.id, 'td') - 0.5) * 1.2 : 0;
   const leanCss = lean ? `transform:rotate(${lean}deg);margin-left:9px;` : tilt ? `transform:rotate(${tilt.toFixed(2)}deg);` : '';
   const label = `${b.title}${b.author ? ', ' + b.author : ''}${status(b) === 'want' ? ', want to read' : ''}${b.lentTo ? ', lent to ' + b.lentTo : ''}`;
-  return `<button class="spine ${extraCls || ''} ${lean ? 'lean' : ''} ${light ? 'light' : ''} ${tint ? 'tinted' : ''}" ${tint ? `data-tint="${tint}"` : ''} data-act="spine" data-id="${esc(b.id)}" aria-label="${esc(label)}" style="width:${d.w}px;height:${d.h}px;background-image:url(spines.webp);background-size:${(SPR.cols * cw * kx).toFixed(1)}px ${(SPR.rows * ch * ky).toFixed(1)}px;background-position:-${(col * cw * kx).toFixed(1)}px -${(row * ch * ky).toFixed(1)}px;${leanCss}">${t}${marks}</button>`;
+  return `<button class="spine ${extraCls || ''} ${lean ? 'lean' : ''} ${light ? 'light' : ''} ${tint ? 'tinted' : ''} ${vellum && style === 'label' ? 'vlabel' : ''}" ${tint ? `data-tint="${tint}"` : ''} data-act="spine" data-id="${esc(b.id)}" aria-label="${esc(label)}" style="width:${d.w}px;height:${d.h}px;background-image:url(spines.webp);background-size:${(SPR.cols * cw * kx).toFixed(1)}px ${(SPR.rows * ch * ky).toFixed(1)}px;background-position:-${(col * cw * kx).toFixed(1)}px -${(row * ch * ky).toFixed(1)}px;${leanCss}">${t}${marks}</button>`;
 }
 
 function wallInner(L, page) {
@@ -1530,6 +1541,7 @@ function wallInner(L, page) {
         const books = sh.items.filter((it) => it.b);
         let inner = '';
         sh.items.forEach((it, i) => {
+          if (it.sep) { inner += `<span class="divider author-sep" aria-hidden="true"></span>`; x += it.d.w; return; }
           if (it.gap) { inner += `<span class="gapblock" aria-hidden="true" style="width:${it.d.w}px"></span>`; x += it.d.w; return; }
           if (it.div) { inner += `<span class="divider" aria-hidden="true"></span>`; tags.push({ x: x + 8, name: secName(it.div) }); x += it.d.w; return; }
           const isLast = it === books[books.length - 1] && i === sh.items.length - 1;
@@ -2488,8 +2500,10 @@ const SHEETS = {
       ${sh.restore ? restoreHTML(sh.restore) : ''}
       ${examples.length ? `<h3 class="sh3">The example books</h3><p class="note">${plural(examples.length, 'example')} still on the shelves${adopted ? ` · ${adopted} you have written in are yours now and will stay` : ''}.</p>
         <p class="note" style="margin-top:6px">Not sure which these are? Tap to see the list first. Books you imported are never removed unless they are on this list.</p>
-        ${sh.confirmClear ? `<div class="exlist">${examples.slice(0, 40).map((b) => `<span>${esc(b.title || 'Untitled')}</span>`).join('')}${examples.length > 40 ? `<span>and ${examples.length - 40} more…</span>` : ''}</div>
-          <div class="row" style="flex-wrap:wrap;gap:8px"><button class="ghost" data-act="s-clear-yes" style="color:#e2a68f">Remove these ${plural(examples.length, 'book')}</button><button class="ghost" data-act="s-clear-own">These are mine — keep them</button><button class="ghost" data-act="s-clear-no">Cancel</button></div>` : `<button class="icon-btn wide" data-act="s-clear">Show the example books…</button>`}` : ''}
+        ${sh.confirmClear ? `<p class="note">Tap any book that is really yours to keep it. Everything left will be removed.</p>
+          <div class="exlist">${examples.map((b) => `<button class="exchip ${(sh.keep || []).includes(b.id) ? 'keep' : ''}" data-act="s-ex-toggle" data-id="${esc(b.id)}" aria-pressed="${(sh.keep || []).includes(b.id)}">${esc(b.title || 'Untitled')}</button>`).join('')}</div>
+          <div class="row" style="flex-wrap:wrap;gap:8px"><label class="icon-btn wide">Keep the ones in my list (choose CSV)<input type="file" accept=".csv,text/csv" id="s-keepcsv" hidden></label></div>
+          <div class="row" style="flex-wrap:wrap;gap:8px;margin-top:8px"><button class="ghost" data-act="s-clear-yes" style="color:#e2a68f">Remove ${plural(examples.length - (sh.keep || []).length, 'book')}${(sh.keep || []).length ? `, keep ${(sh.keep || []).length}` : ''}</button><button class="ghost" data-act="s-clear-own">All of them are mine</button><button class="ghost" data-act="s-clear-no">Cancel</button></div>` : `<button class="icon-btn wide" data-act="s-clear">Show the example books…</button>`}` : ''}
       ${sh.msg ? `<p class="note" role="status" style="margin-top:12px">${esc(sh.msg)}</p>` : ''}`, 700];
   },
 
@@ -2573,6 +2587,7 @@ const BIND = {
   settings: (sh, el) => {
     const imp = el.querySelector('#s-import'); if (imp) imp.addEventListener('change', readBackup);
     const csv = el.querySelector('#s-csv'); if (csv) csv.addEventListener('change', readCSV);
+    const kcsv = el.querySelector('#s-keepcsv'); if (kcsv) kcsv.addEventListener('change', keepFromCSV);
     const g = el.querySelector('#s-goal'); if (g) g.addEventListener('change', () => saveSettings({ goal: +g.value || null }));
   },
   write: (sh, el) => { const t = el.querySelector('#w-text'); const b = curBook(); t.addEventListener('input', () => saveBook(b.id, { [sh.field]: t.value })); fitWriter(); },
@@ -2748,6 +2763,18 @@ function applyRestore(replace) {
   if (replace && r.settings) Store.data.settings = Object.assign({}, r.settings, { updatedAt: Date.now() });
   Store.saveLocal(); Store.touch(); onData();
   S.sheet.restore = null; S.sheet.msg = `Restored ${plural(n, 'book')}.`; renderSheet();
+}
+async function keepFromCSV(ev) {
+  const f = ev.target.files && ev.target.files[0]; if (!f) return;
+  try {
+    const r = window.LibraryCSV.parse(await f.text());
+    const nm = (s) => String(s || '').toLowerCase().replace(/^(the|a|an) /, '').replace(/[^\p{L}\p{N}]/gu, '');
+    const mine = new Set(r.books.map((b) => nm(b.title)));
+    const keep = new Set(S.sheet.keep || []);
+    S.books.filter((b) => b.sample && mine.has(nm(b.title))).forEach((b) => keep.add(b.id));
+    S.sheet.keep = [...keep]; S.sheet.msg = `${plural(keep.size, 'example')} also in your list will be kept.`;
+  } catch (e) { S.sheet.msg = 'That file couldn’t be read.'; }
+  renderSheet();
 }
 async function readCSV(ev) {
   const f = ev.target.files && ev.target.files[0]; if (!f) return;
@@ -3602,7 +3629,13 @@ async function doAction(act, el, e) {
     case 'undo-last': { const e = UNDO[UNDO.length - 1]; if (!e) return; S.sheet = null; S.sheets = []; undoEntry(e); return; }
     case 's-clear-own': { const ex = S.books.filter((x) => x.sample); const ids = ex.map((x) => x.id); ex.forEach((x) => saveBook(x.id, { sample: false, wasSample: true }, true)); S.sheet.confirmClear = false; layoutCache = null; renderSheet(); render(); undoable(`Kept ${plural(ids.length, 'book')} as your own`, () => { ids.forEach((id) => saveBook(id, { sample: true, wasSample: false }, true)); layoutCache = null; }); return; }
     case 's-clear-no': S.sheet.confirmClear = false; renderSheet(); return;
-    case 's-clear-yes': { const ex = S.books.filter((x) => x.sample); const olds = ex.map((x) => removeBook(x.id)); S.sheet = null; layoutCache = null; render(); undoable(`Removed ${plural(ex.length, 'example book')}`, () => { olds.forEach(restoreBook); layoutCache = null; }); return; }
+    case 's-ex-toggle': { const k = new Set(S.sheet.keep || []); const id = d('id'); k.has(id) ? k.delete(id) : k.add(id); S.sheet.keep = [...k]; renderSheet(); return; }
+    case 's-clear-yes': {
+      const keep = new Set(S.sheet.keep || []); const all = S.books.filter((x) => x.sample);
+      const ex = all.filter((x) => !keep.has(x.id)), kept = all.filter((x) => keep.has(x.id));
+      const olds = ex.map((x) => removeBook(x.id)); kept.forEach((x) => saveBook(x.id, { sample: false, wasSample: true }, true));
+      S.sheet = null; layoutCache = null; render();
+      undoable(`Removed ${plural(ex.length, 'example book')}${kept.length ? `, kept ${kept.length}` : ''}`, () => { olds.forEach(restoreBook); kept.forEach((x) => saveBook(x.id, { sample: true, wasSample: false }, true)); layoutCache = null; }); return; }
     case 'do-sort': return sortSection(S.sheet.secs, d('by'));
     case 'sec-up': case 'sec-down': moveSection(d('id'), act === 'sec-up' ? -1 : 1); renderWall(); renderSync(); renderSheet(); return;
     case 'sec-del': removeSection(d('id')); S.sheet = null; render(); return;
@@ -3747,7 +3780,7 @@ async function enrichAll(force) {
   if (force) tried.clear();
   if (enriching) return; enriching = true; // a running pass picks up newly added books on its next step
   let n = 0;
-  const next = () => S.books.filter((b) => !tried.has(b.id) && (force ? !b.coverUrl : !b.enriched))
+  const next = () => S.books.filter((b) => !b.sample && !tried.has(b.id) && (force ? !b.coverUrl : !b.enriched))
     .sort((a, b) => (a.sample ? 1 : 0) - (b.sample ? 1 : 0) || (b.createdAt || 0) - (a.createdAt || 0))[0]; // her own books first, newest first
   for (let b = next(); b; b = next()) {
     tried.add(b.id);
