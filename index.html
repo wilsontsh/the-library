@@ -1300,13 +1300,16 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
   for (const list of g.values()) {
     if (list.length < 2) continue;
     const rows = list.map((b) => ({ b, d: rawDims(b), pg: b.pages || 0 }));
+    const lat = rows.filter((r) => !isZh(r.b.title));
+    if (lat.some((r) => r.d.fit.caps) && lat.some((r) => !r.d.fit.caps)) { // never mix ALL CAPS with Title Case in one run
+      NOCAPS = true; try { for (const r of lat) if (r.d.fit.caps) r.d = rawDims(r.b); } finally { NOCAPS = false; }
+    }
     const pgs = rows.map((r) => r.pg).filter(Boolean).sort((x, y) => x - y);
     const med = pgs.length ? pgs[pgs.length >> 1] : 0;
     const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
     if (inl.length < 2) continue;
     const w = Math.max(...inl.map((r) => r.d.w)), fs = Math.min(...inl.map((r) => r.d.fit.fs));
-    const byAuthor = inl[0].b.series ? false : !isZh(inl[0].b.title); // same author, no series: match widths only
-    for (const r of inl) grpMemo.set(r.b.id, { w, fs: byAuthor ? 99 : fs });
+    for (const r of inl) grpMemo.set(r.b.id, { w, fs });
   }
   return grpMemo;
 }
@@ -1378,13 +1381,17 @@ const isExample = (b) => !!b.sample;
 function seriesBooks(name) { return S.books.filter((x) => x.series && x.series === name).sort((a, b) => (a.seriesNo ?? 99) - (b.seriesNo ?? 99)); }
 
 /* ---------- layout: sections flow shelf by shelf, three bookcases per wall ---------- */
+const ZHN = { '〇': 0, '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9 };
+function zhNum(t) { const m = /[（(]\s*([一二三四五六七八九十〇\d]+)\s*[）)]\s*$/.exec(t || ''); if (!m) return null; const x = m[1]; if (/^\d+$/.test(x)) return +x; if (x[0] === '十') return 10 + (ZHN[x[1]] || 0); const i = x.indexOf('十'); if (i > 0) return ZHN[x[0]] * 10 + (ZHN[x[i + 1]] || 0); return ZHN[x] ?? null; }
+const famKey = (b) => b.series || (isZh(b.title) ? String(b.title).replace(/\s*[（(][^）)]*[）)]\s*$/, '') : b.title);
+const volNo = (b) => b.seriesNo ?? zhNum(b.title) ?? 99;
 function orderInSection(list) {
   return list.slice().sort((a, b) => {
     const pa = a.pos ?? 1e9, pb = b.pos ?? 1e9;
     if (pa !== pb) return pa - pb;
     return sortKey(authorSort(a)).localeCompare(sortKey(authorSort(b))) ||
-      sortKey(a.series || a.title).localeCompare(sortKey(b.series || b.title)) || // a series stays together, in volume order
-      (a.seriesNo ?? 99) - (b.seriesNo ?? 99) ||
+      sortKey(famKey(a)).localeCompare(sortKey(famKey(b))) || // a series stays together, in volume order
+      volNo(a) - volNo(b) ||
       sortKey(a.title).localeCompare(sortKey(b.title));
   });
 }
@@ -1423,6 +1430,15 @@ function layout() {
       const gap = GAPS[b.gapAfter || 0]; if (gap && b !== list[list.length - 1] && cur.used + gap < inner) { cur.items.push({ gap: true, d: { w: gap } }); cur.used += gap; }
     }
   }
+  shelves.forEach((s) => { // Chinese volumes read right to left: volume one stands at the right-hand end of its run
+    const it = s.items; let i = 0;
+    while (i < it.length) {
+      const k = it[i].b && isZh(it[i].b.title) ? famKey(it[i].b) + '|' + it[i].b.author : null;
+      let j = i + 1; while (k && j < it.length && it[j].b && isZh(it[j].b.title) && famKey(it[j].b) + '|' + it[j].b.author === k) j++;
+      if (j - i > 1) { const seg = it.slice(i, j).reverse(); for (let x = 0; x < seg.length; x++) it[i + x] = seg[x]; }
+      i = Math.max(j, i + 1);
+    }
+  });
   shelves.forEach((s) => { while (s.items.length && s.items[0].sep) { s.used -= SEP_W; s.items.shift(); } while (s.items.length && s.items[s.items.length - 1].sep) { s.used -= SEP_W; s.items.pop(); } s.fill = s.used / inner; });
   const cases = [];
   for (let i = 0; i < shelves.length; i += 3) cases.push(shelves.slice(i, i + 3));
@@ -1481,6 +1497,7 @@ function findDuplicate(title, author, isbn) {
 /* ---------- spine typography: always vertical, Title Case, measured to fit; never cut to two words ---------- */
 const measureCtx = document.createElement('canvas').getContext('2d');
 const mCache = new Map(), fitCache = new Map();
+let NOCAPS = false; // set while re-fitting a group whose neighbours cannot all be set in capitals
 function textW(s, font) { const k = font + '|' + s; let w = mCache.get(k); if (w == null) { measureCtx.font = font; w = measureCtx.measureText(s).width; mCache.set(k, w); } return w; }
 const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.2, 0.64] }; // [top, length] as a share of the spine height
 const famFor = (fs) => (fs >= 11 ? 'cg' : 'eb');
@@ -1495,7 +1512,7 @@ function seriesShort(b, t) {
   const m = /\b(and the|and|:)\s+/i.exec(t); return m ? t.slice(m.index + m[0].length) : t;
 }
 function tryLatin(text, W, L, minF, maxF, track) {
-  const caps = [...text].length <= 10;
+  const caps = !NOCAPS && [...text].length <= 10;
   const go = (s, tr) => { // one line, choosing the family that the size calls for
     let fs = Math.min(maxF, L / perPx(s, 'eb', tr));
     if (fs >= 11) fs = Math.min(maxF, L / perPx(s, 'cg', tr));
@@ -1533,7 +1550,7 @@ function fitZh(b, W, H, style, minF) {
   return null;
 }
 function spineFitFor(b, base, style) {
-  const key = [b.id, b.title, b.spineTitle, b.series, base.w, base.h, style].join('|');
+  const key = [b.id, b.title, b.spineTitle, b.series, base.w, base.h, style, NOCAPS].join('|');
   let r = fitCache.get(key); if (r) return r;
   const zh = isZh(b.spineTitle || b.title);
   const maxBoost = b.pages ? 4 : 8;
