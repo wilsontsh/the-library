@@ -1286,7 +1286,35 @@ function binding(b) {
   if (ci === 1 || ci === 5) style = 'label'; // light tan leathers: gilt needs a dark lettering piece to read
   return { color: ci, style: STYLES.indexOf(style) };
 }
+let grpMemo = null, grpKey = '';
+function seriesGroups() { // books of one series (or one Chinese author's title family) share a spine width and lettering size
+  const key = S.books.length + ':' + S.books.reduce((a, x) => Math.max(a, x.updatedAt || 0), 0);
+  if (grpMemo && key === grpKey) return grpMemo;
+  grpKey = key; grpMemo = new Map();
+  const g = new Map();
+  for (const b of S.books) {
+    if (b.display === 'face') continue;
+    const k = b.series ? 's:' + b.series : isZh(b.title) && b.author ? 'z:' + b.author + '|' + [...b.title].slice(0, 2).join('') : '';
+    if (k) (g.get(k) || g.set(k, []).get(k)).push(b);
+  }
+  for (const list of g.values()) {
+    if (list.length < 2) continue;
+    const rows = list.map((b) => ({ b, d: rawDims(b), pg: b.pages || 0 }));
+    const pgs = rows.map((r) => r.pg).filter(Boolean).sort((x, y) => x - y);
+    const med = pgs.length ? pgs[pgs.length >> 1] : 0;
+    const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
+    if (inl.length < 2) continue;
+    const w = Math.max(...inl.map((r) => r.d.w)), fs = Math.min(...inl.map((r) => r.d.fit.fs));
+    for (const r of inl) grpMemo.set(r.b.id, { w, fs });
+  }
+  return grpMemo;
+}
 function dims(b) {
+  const d = rawDims(b), g = seriesGroups().get(b.id);
+  if (!g) return d;
+  return { w: g.w, h: d.h, fit: Object.assign({}, d.fit, { fs: Math.min(d.fit.fs, g.fs) }) };
+}
+function rawDims(b) {
   if (b.display === 'face') { const h = Math.round((b.heightM || (0.245 + rnd(styleKey(b), 'h') * 0.085)) * PXM * 0.86); return { w: Math.round(h * 0.64), h, face: true }; }
   const pages = b.pages || (180 + rnd(b.id, 'p') * 420);
   const wm = Math.min(0.06, Math.max(0.025, 0.019 + pages * 0.00007));
@@ -1354,7 +1382,8 @@ function orderInSection(list) {
     const pa = a.pos ?? 1e9, pb = b.pos ?? 1e9;
     if (pa !== pb) return pa - pb;
     return sortKey(authorSort(a)).localeCompare(sortKey(authorSort(b))) ||
-      (a.series && a.series === b.series ? (a.seriesNo ?? 99) - (b.seriesNo ?? 99) : 0) ||
+      sortKey(a.series || a.title).localeCompare(sortKey(b.series || b.title)) || // a series stays together, in volume order
+      (a.seriesNo ?? 99) - (b.seriesNo ?? 99) ||
       sortKey(a.title).localeCompare(sortKey(b.title));
   });
 }
@@ -1486,7 +1515,7 @@ function tryLatin(text, W, L, minF, maxF, track) {
 }
 function fitLatin(b, W, H, style, minF, track) {
   const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = H * lf * 0.94;
-  const maxF = Math.min(W * 0.62, 14);
+  const maxF = Math.min(W * 0.62, 12.5);
   const t0 = (b.spineTitle || b.title || '').trim();
   const cands = [t0, stripArticle(t0), stripSubtitle(t0), stripArticle(stripSubtitle(t0)), seriesShort(b, stripSubtitle(t0))];
   cands.push(cands[cands.length - 1].replace(/\s+and\s+/gi, ' & '));
@@ -1497,9 +1526,9 @@ function fitZh(b, W, H, style, minF) {
   const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = H * lf * 0.95;
   const VF = { '（': '︵', '）': '︶', '(': '︵', ')': '︶', '「': '﹁', '」': '﹂', '『': '﹃', '』': '﹄', '《': '︽', '》': '︾', '〈': '︿', '〉': '﹀', '【': '︻', '】': '︼' }; // upright text keeps brackets sideways; use the vertical forms
   const ch = [...(b.spineTitle || b.title || '').replace(/\s+/g, '')].map((c) => VF[c] || c); const n = ch.length;
-  let fs = Math.min(W * 0.62, 15, L / (n * 1.1));
+  let fs = Math.min(W * 0.62, 13.5, L / (n * 1.1));
   if (fs >= minF) return { zh: true, lines: [ch.join('')], fs, top: H * top, L: H * lf };
-  if (W >= 22 && n > 6) { let half = Math.ceil(n / 2); const ob = ch.findIndex((c) => '︵﹁﹃︽︿︻'.includes(c)); if (ob > 1 && ob < n - 1) half = ob; /* split before a bracketed volume/subtitle */ fs = Math.min(W * 0.4, 15, L / (Math.max(half, n - half) * 1.1)); if (fs >= minF) return { zh: true, lines: [ch.slice(0, half).join(''), ch.slice(half).join('')], fs, top: H * top, L: H * lf }; }
+  if (W >= 22 && n > 6) { let half = Math.ceil(n / 2); const ob = ch.findIndex((c) => '︵﹁﹃︽︿︻'.includes(c)); if (ob > 1 && ob < n - 1) half = ob; /* split before a bracketed volume/subtitle */ fs = Math.min(W * 0.4, 13.5, L / (Math.max(half, n - half) * 1.1)); if (fs >= minF) return { zh: true, lines: [ch.slice(0, half).join(''), ch.slice(half).join('')], fs, top: H * top, L: H * lf }; }
   return null;
 }
 function spineFitFor(b, base, style) {
