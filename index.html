@@ -1502,7 +1502,7 @@ function textW(s, font) { const k = font + '|' + s; let w = mCache.get(k); if (w
 const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.2, 0.64] }; // [top, length] as a share of the spine height
 const famFor = (fs) => (fs >= 11 ? 'cg' : 'eb');
 const fontStr = (fam, fs) => fam === 'cg' ? `700 ${fs}px "Cormorant Garamond", Georgia, serif` : `600 ${fs}px "EB Garamond", Georgia, serif`;
-function perPx(s, fam, track) { return (textW(s, fontStr(fam, 20)) / 20 + [...s].length * track) * (LIGHT ? 1.14 : 1); }
+function perPx(s, fam, track) { return (textW(s, fontStr(fam, 20)) / 20 + [...s].length * track) * (LIGHT ? 1.32 : 1); }
 function stripArticle(t) { return t.replace(/^(The|A|An)\s+/i, ''); }
 function stripSubtitle(t) { return t.split(/\s*[:：—–]\s+|\s+-\s+/)[0]; }
 function seriesShort(b, t) {
