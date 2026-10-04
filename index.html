@@ -1307,9 +1307,8 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
     const pgs = rows.map((r) => r.pg).filter(Boolean).sort((x, y) => x - y);
     const med = pgs.length ? pgs[pgs.length >> 1] : 0;
     const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
-    if (inl.length < 2) continue;
-    const w = Math.max(...inl.map((r) => r.d.w)), fs = Math.min(...inl.map((r) => r.d.fit.fs));
-    for (const r of inl) grpMemo.set(r.b.id, { w, fs, fit: r.d.fit });
+    const w = inl.length ? Math.max(...inl.map((r) => r.d.w)) : 0, fs = Math.min(...rows.map((r) => r.d.fit.fs));
+    for (const r of rows) grpMemo.set(r.b.id, { w: inl.includes(r) && inl.length > 1 ? w : r.d.w, fs, fit: r.d.fit }); // thick or thin outliers keep their width but share the lettering
   }
   return grpMemo;
 }
