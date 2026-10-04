@@ -1307,7 +1307,7 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
     const pgs = rows.map((r) => r.pg).filter(Boolean).sort((x, y) => x - y);
     const med = pgs.length ? pgs[pgs.length >> 1] : 0;
     const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
-    const w = inl.length ? Math.max(...inl.map((r) => r.d.w)) : 0, fs = (() => { const f = rows.map((r) => r.d.fit.fs).sort((x, y) => x - y); let i = 0; while (i < f.length - 2 && f[i] < f[i + 1] * 0.85) i++; return f[i]; })(); // one cramped title must not shrink the whole run: it keeps its own smaller size
+    const w = inl.length ? Math.max(...inl.map((r) => r.d.w)) : 0, fs = (() => { const f = rows.map((r) => r.d.fit.fs).sort((x, y) => x - y); return f[f.length >> 1]; })(); // one cramped title must not shrink the whole run: it keeps its own smaller size
     for (const r of rows) grpMemo.set(r.b.id, { w: inl.includes(r) && inl.length > 1 ? w : r.d.w, fs, fit: r.d.fit }); // thick or thin outliers keep their width but share the lettering
   }
   return grpMemo;
@@ -1496,12 +1496,13 @@ function findDuplicate(title, author, isbn) {
 /* ---------- spine typography: always vertical, Title Case, measured to fit; never cut to two words ---------- */
 const measureCtx = document.createElement('canvas').getContext('2d');
 const mCache = new Map(), fitCache = new Map();
+let LIGHT = false; // vellum spines letter in bold on a cream label: measure wider
 let NOCAPS = false; // set while re-fitting a group whose neighbours cannot all be set in capitals
 function textW(s, font) { const k = font + '|' + s; let w = mCache.get(k); if (w == null) { measureCtx.font = font; w = measureCtx.measureText(s).width; mCache.set(k, w); } return w; }
 const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.2, 0.64] }; // [top, length] as a share of the spine height
 const famFor = (fs) => (fs >= 11 ? 'cg' : 'eb');
 const fontStr = (fam, fs) => fam === 'cg' ? `700 ${fs}px "Cormorant Garamond", Georgia, serif` : `600 ${fs}px "EB Garamond", Georgia, serif`;
-function perPx(s, fam, track) { return textW(s, fontStr(fam, 20)) / 20 + [...s].length * track; }
+function perPx(s, fam, track) { return (textW(s, fontStr(fam, 20)) / 20 + [...s].length * track) * (LIGHT ? 1.14 : 1); }
 function stripArticle(t) { return t.replace(/^(The|A|An)\s+/i, ''); }
 function stripSubtitle(t) { return t.split(/\s*[:：—–]\s+|\s+-\s+/)[0]; }
 function seriesShort(b, t) {
@@ -1550,8 +1551,14 @@ function fitZh(b, W, H, style, minF) {
   return null;
 }
 function spineFitFor(b, base, style) {
-  const key = [b.id, b.title, b.spineTitle, b.series, base.w, base.h, style, NOCAPS].join('|');
+  const lightSp = COLORS[binding(b).color] === 'VELLUM' && style !== 'label';
+  const key = [b.id, b.title, b.spineTitle, b.series, base.w, base.h, style, NOCAPS, lightSp].join('|');
   let r = fitCache.get(key); if (r) return r;
+  LIGHT = lightSp; try { r = spineFitInner(b, base, style); } finally { LIGHT = false; }
+  fitCache.set(key, r); return r;
+}
+function spineFitInner(b, base, style) {
+  let r;
   const zh = isZh(b.spineTitle || b.title);
   const maxBoost = b.pages ? 4 : 8;
   const fit = (W, minF, track) => (zh ? fitZh(b, W, base.h, style, minF) : fitLatin(b, W, base.h, style, minF, track));
@@ -1572,7 +1579,6 @@ function spineFitFor(b, base, style) {
     if (zh) { const c = [...(b.title || '')]; const k = Math.max(2, Math.floor(L / (fs * 1.1)) - 1); r = { boost: maxBoost, f: { zh: true, lines: [c.slice(0, k).join('') + '…'], fs, top: base.h * top, L: base.h * lf } }; }
     else { while (words.length > 1 && perPx(words.join(' ') + '…', 'eb', 0) * fs > L) words = words.slice(0, -1); r = { boost: maxBoost, f: { lines: [words.join(' ') + '…'], fs, top: base.h * top, L: base.h * lf } }; }
   }
-  fitCache.set(key, r);
   return r;
 }
 const SPINE_TINTS = ['oat', 'ivory', 'pistachio', 'blush', 'mist', 'oat', 'ivory'];
