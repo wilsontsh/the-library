@@ -1294,7 +1294,7 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
   const g = new Map();
   for (const b of S.books) {
     if (b.display === 'face') continue;
-    const k = b.series ? 's:' + b.series : isZh(b.title) && b.author ? 'z:' + b.author + '|' + [...b.title].slice(0, 2).join('') : b.author ? 'a:' + styleKey(b) : '';
+    const k = isZh(b.title) && b.author ? 'z:' + b.author + '|' + [...b.title].slice(0, 2).join('') : b.author ? 'a:' + styleKey(b) : b.series ? 's:' + b.series : ''; // a whole author's books match, series or not
     if (k) (g.get(k) || g.set(k, []).get(k)).push(b);
   }
   for (const list of g.values()) {
