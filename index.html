@@ -1309,14 +1309,14 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
     const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
     if (inl.length < 2) continue;
     const w = Math.max(...inl.map((r) => r.d.w)), fs = Math.min(...inl.map((r) => r.d.fit.fs));
-    for (const r of inl) grpMemo.set(r.b.id, { w, fs });
+    for (const r of inl) grpMemo.set(r.b.id, { w, fs, fit: r.d.fit });
   }
   return grpMemo;
 }
 function dims(b) {
   const d = rawDims(b), g = seriesGroups().get(b.id);
   if (!g) return d;
-  return { w: g.w, h: d.h, fit: Object.assign({}, d.fit, { fs: Math.min(d.fit.fs, g.fs) }) };
+  return { w: g.w, h: d.h, fit: Object.assign({}, g.fit, { fs: Math.min(g.fit.fs, g.fs) }) };
 }
 function rawDims(b) {
   if (b.display === 'face') { const h = Math.round((b.heightM || (0.245 + rnd(styleKey(b), 'h') * 0.085)) * PXM * 0.86); return { w: Math.round(h * 0.64), h, face: true }; }
