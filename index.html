@@ -3410,8 +3410,7 @@ function fit(animate) {
     s = Math.min(Math.max(W / 1180, H / 820), W / 1100, H / 764);
     tx = (W - 1180 * s) / 2; ty = (H - 820 * s) / 2;
     if (S.view === 'wall') { // iPad landscape: keep the brass case plates (room y≈85) clear of the top bar
-      const room = Math.min(2000, 700 - 85);
-      s = Math.min(s, (H - botH - topH - 10) / room); tx = (W - 1180 * s) / 2; ty = Math.max((H - 820 * s) / 2, topH + 10 - 85 * s);
+      ty = Math.max(ty, topH + 10 - 85 * s); // only shift down, never shrink the room
     }
   }
   S.scale = s; S.cam = { s, tx, ty };
