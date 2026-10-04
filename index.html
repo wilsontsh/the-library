@@ -1301,14 +1301,15 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
     if (list.length < 2) continue;
     const rows = list.map((b) => ({ b, d: rawDims(b), pg: b.pages || 0 }));
     const lat = rows.filter((r) => !isZh(r.b.title));
-    if (lat.some((r) => r.d.fit.caps) && lat.some((r) => !r.d.fit.caps)) { // never mix ALL CAPS with Title Case in one run
+    const mixed = lat.some((r) => r.d.fit.caps) && lat.some((r) => !r.d.fit.caps);
+    if (mixed) { // never mix ALL CAPS with Title Case in one run
       NOCAPS = true; try { for (const r of lat) if (r.d.fit.caps) r.d = rawDims(r.b); } finally { NOCAPS = false; }
     }
     const pgs = rows.map((r) => r.pg).filter(Boolean).sort((x, y) => x - y);
     const med = pgs.length ? pgs[pgs.length >> 1] : 0;
     const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
     const w0 = inl.length > 1 ? Math.max(...inl.map((r) => r.d.w)) : 0;
-    if (w0) { FORCEW = w0; try { for (const r of inl) if (r.d.w < w0) r.d = rawDims(r.b); } finally { FORCEW = 0; } } // refit the narrower volumes at the shared width, so they are set the same way
+    if (w0) { FORCEW = w0; NOCAPS = mixed; try { for (const r of inl) if (r.d.w < w0) r.d = rawDims(r.b); } finally { FORCEW = 0; NOCAPS = false; } } // refit the narrower volumes at the shared width, so they are set the same way
     const w = inl.length ? Math.max(...inl.map((r) => r.d.w)) : 0, fs = (() => { const f = rows.map((r) => r.d.fit.fs).sort((x, y) => x - y); return f[f.length >> 1]; })(); // one cramped title must not shrink the whole run: it keeps its own smaller size
     for (const r of rows) grpMemo.set(r.b.id, { w: inl.includes(r) && inl.length > 1 ? w : r.d.w, fs, fit: r.d.fit }); // thick or thin outliers keep their width but share the lettering
   }
