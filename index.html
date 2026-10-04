@@ -1307,7 +1307,7 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
     const pgs = rows.map((r) => r.pg).filter(Boolean).sort((x, y) => x - y);
     const med = pgs.length ? pgs[pgs.length >> 1] : 0;
     const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
-    const w = inl.length ? Math.max(...inl.map((r) => r.d.w)) : 0, fs = Math.min(...rows.map((r) => r.d.fit.fs));
+    const w = inl.length ? Math.max(...inl.map((r) => r.d.w)) : 0, fs = (() => { const f = rows.map((r) => r.d.fit.fs).sort((x, y) => x - y); let i = 0; while (i < f.length - 2 && f[i] < f[i + 1] * 0.85) i++; return f[i]; })(); // one cramped title must not shrink the whole run: it keeps its own smaller size
     for (const r of rows) grpMemo.set(r.b.id, { w: inl.includes(r) && inl.length > 1 ? w : r.d.w, fs, fit: r.d.fit }); // thick or thin outliers keep their width but share the lettering
   }
   return grpMemo;
@@ -1554,15 +1554,15 @@ function spineFitFor(b, base, style) {
   const zh = isZh(b.spineTitle || b.title);
   const maxBoost = b.pages ? 4 : 8;
   const fit = (W, minF, track) => (zh ? fitZh(b, W, base.h, style, minF) : fitLatin(b, W, base.h, style, minF, track));
-  for (const [minF, track] of zh ? [[9, 0], [7.5, 0]] : [[8.2, 0.01], [7.4, 0]]) {
+  for (const [minF, track] of zh ? [[10, 0], [8.5, 0]] : [[9.2, 0.01], [8.4, 0]]) {
     for (let boost = 0; boost <= maxBoost; boost++) { const f = fit(base.w + boost, minF, track); if (f) { r = { boost, f }; break; } }
     if (r) break;
   }
   if (!r && !zh) { // long title: let the spine grow wider and set it on two lines before ever truncating
-    for (let boost = maxBoost + 1; boost <= 14 && !r; boost++) { const f = fitLatin(b, base.w + boost, base.h, style, 6.8, 0); if (f) r = { boost, f }; }
+    for (let boost = maxBoost + 1; boost <= 14 && !r; boost++) { const f = fitLatin(b, base.w + boost, base.h, style, 7.8, 0); if (f) r = { boost, f }; }
   }
   if (!r) { // last resort: end at a word boundary, never mid-word
-    const W = base.w + maxBoost; const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = base.h * lf * 0.94; const fs = 7;
+    const W = base.w + maxBoost; const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = base.h * lf * 0.94; const fs = 8;
     let words = stripArticle(stripSubtitle(b.spineTitle || b.title || '')).split(/\s+/);
     if (zh) { const c = [...(b.title || '')]; const k = Math.max(2, Math.floor(L / (fs * 1.1)) - 1); r = { boost: maxBoost, f: { zh: true, lines: [c.slice(0, k).join('') + '…'], fs, top: base.h * top, L: base.h * lf } }; }
     else { while (words.length > 1 && perPx(words.join(' ') + '…', 'eb', 0) * fs > L) words = words.slice(0, -1); r = { boost: maxBoost, f: { lines: [words.join(' ') + '…'], fs, top: base.h * top, L: base.h * lf } }; }
