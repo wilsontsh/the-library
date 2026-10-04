@@ -1495,10 +1495,11 @@ function fitLatin(b, W, H, style, minF, track) {
 }
 function fitZh(b, W, H, style, minF) {
   const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = H * lf * 0.95;
-  const ch = [...(b.spineTitle || b.title || '').replace(/\s+/g, '')]; const n = ch.length;
+  const VF = { '（': '︵', '）': '︶', '(': '︵', ')': '︶', '「': '﹁', '」': '﹂', '『': '﹃', '』': '﹄', '《': '︽', '》': '︾', '〈': '︿', '〉': '﹀', '【': '︻', '】': '︼' }; // upright text keeps brackets sideways; use the vertical forms
+  const ch = [...(b.spineTitle || b.title || '').replace(/\s+/g, '')].map((c) => VF[c] || c); const n = ch.length;
   let fs = Math.min(W * 0.62, 15, L / (n * 1.1));
   if (fs >= minF) return { zh: true, lines: [ch.join('')], fs, top: H * top, L: H * lf };
-  if (W >= 22 && n > 6) { const half = Math.ceil(n / 2); fs = Math.min(W * 0.4, 15, L / (half * 1.1)); if (fs >= minF) return { zh: true, lines: [ch.slice(0, half).join(''), ch.slice(half).join('')], fs, top: H * top, L: H * lf }; }
+  if (W >= 22 && n > 6) { let half = Math.ceil(n / 2); const ob = ch.findIndex((c) => '︵﹁﹃︽︿︻'.includes(c)); if (ob > 1 && ob < n - 1) half = ob; /* split before a bracketed volume/subtitle */ fs = Math.min(W * 0.4, 15, L / (Math.max(half, n - half) * 1.1)); if (fs >= minF) return { zh: true, lines: [ch.slice(0, half).join(''), ch.slice(half).join('')], fs, top: H * top, L: H * lf }; }
   return null;
 }
 function spineFitFor(b, base, style) {
