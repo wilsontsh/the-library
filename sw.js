@@ -1,7 +1,7 @@
 /* The Library — service worker.
  * Bump VERSION on every deploy that changes any precached file, so clients pick up the new shell.
  */
-const VERSION = 'lib-v23';
+const VERSION = 'lib-v25';
 
 const SHELL_CACHE = 'shell-' + VERSION;
 const COVERS_CACHE = 'covers';          // shared across versions, capped below

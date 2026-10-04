@@ -1294,7 +1294,7 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
   const g = new Map();
   for (const b of S.books) {
     if (b.display === 'face') continue;
-    const k = b.series ? 's:' + b.series : isZh(b.title) && b.author ? 'z:' + b.author + '|' + [...b.title].slice(0, 2).join('') : '';
+    const k = b.series ? 's:' + b.series : isZh(b.title) && b.author ? 'z:' + b.author + '|' + [...b.title].slice(0, 2).join('') : b.author ? 'a:' + styleKey(b) : '';
     if (k) (g.get(k) || g.set(k, []).get(k)).push(b);
   }
   for (const list of g.values()) {
@@ -1305,7 +1305,8 @@ function seriesGroups() { // books of one series (or one Chinese author's title 
     const inl = rows.filter((r) => !med || !r.pg || (r.pg <= med * 1.6 && r.pg >= med / 1.6)); // a far thicker or thinner volume keeps its own width
     if (inl.length < 2) continue;
     const w = Math.max(...inl.map((r) => r.d.w)), fs = Math.min(...inl.map((r) => r.d.fit.fs));
-    for (const r of inl) grpMemo.set(r.b.id, { w, fs });
+    const byAuthor = inl[0].b.series ? false : !isZh(inl[0].b.title); // same author, no series: match widths only
+    for (const r of inl) grpMemo.set(r.b.id, { w, fs: byAuthor ? 99 : fs });
   }
   return grpMemo;
 }
@@ -1540,6 +1541,9 @@ function spineFitFor(b, base, style) {
   for (const [minF, track] of zh ? [[9, 0], [7.5, 0]] : [[8.2, 0.01], [7.4, 0]]) {
     for (let boost = 0; boost <= maxBoost; boost++) { const f = fit(base.w + boost, minF, track); if (f) { r = { boost, f }; break; } }
     if (r) break;
+  }
+  if (!r && !zh) { // long title: let the spine grow wider and set it on two lines before ever truncating
+    for (let boost = maxBoost + 1; boost <= 14 && !r; boost++) { const f = fitLatin(b, base.w + boost, base.h, style, 6.8, 0); if (f) r = { boost, f }; }
   }
   if (!r) { // last resort: end at a word boundary, never mid-word
     const W = base.w + maxBoost; const [top, lf] = SPINE_WIN[style] || SPINE_WIN.smooth; const L = base.h * lf * 0.94; const fs = 7;
