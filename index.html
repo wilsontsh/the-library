@@ -1963,7 +1963,7 @@ function atmosphereHTML() {
   let h = '<div class="atmos" aria-hidden="true">';
   hoodsNow().forEach(([x, y], i) => { h += `<i class="cone" style="left:${(x - 160).toFixed(1)}px;top:${(y + 10).toFixed(1)}px;animation-delay:${-i * 3.1}s"></i>`; });
   flamesNow().forEach(([x, y], i) => { h += `<i class="halo" style="left:${(x - 110).toFixed(1)}px;top:${(y - 110).toFixed(1)}px;animation-delay:${-i * 1.7}s"></i><i class="flame" style="left:${(x - 3).toFixed(1)}px;top:${(y - 9).toFixed(1)}px;animation-delay:${-i * 2.3}s,${-i * 1.1}s"></i>`; });
-  if (GEO.sun) h += `<i class="dapple" style="clip-path:polygon(${GEO.sun.map(([x, y]) => x + 'px ' + y + 'px').join(',')})"><b></b></i>`; // Sage: leaf shadow in the window light
+  if (false && GEO.sun) h += `<i class="dapple" style="clip-path:polygon(${GEO.sun.map(([x, y]) => x + 'px ' + y + 'px').join(',')})"><b></b></i>`; // Sage: leaf shadow in the window light
   h += `<canvas class="dust" id="dust" width="10" height="10"></canvas></div>`;
   return h;
 }
