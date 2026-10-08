@@ -1956,7 +1956,8 @@ function hi(text, q) { // the matched part in gilt
 
 /* ================= the room is alive: candles, light, dust, ladder, props, seals, letters, sound ================= */
 const FLAMES0 = [[402.1, 287.5], [777.9, 287.5]], HOODS0 = [[212, 61.7], [590, 61.7], [968, 61.7]];
-const flamesNow = () => GEO.flames || FLAMES0, hoodsNow = () => GEO.hoods || HOODS0; // per theme (Sage: sconces, no hoods)
+const flamesNow = () => GEO.flames || FLAMES0, hoodsNow = () => GEO.hoods || HOODS0;
+const dustSrc = () => (hoodsNow().length ? hoodsNow() : [[150, 0], [300, 0], [450, 0]]); // dust drifts in the lamp light, or in Sage's window shaft // per theme (Sage: sconces, no hoods)
 const PILS = GEO.pils || [34.3, 404.8, 775.2, 1145.7];
 function atmosphereHTML() {
   let h = '<div class="atmos" aria-hidden="true">';
@@ -2076,7 +2077,7 @@ const Atmos = {
     const W = 1180, H = 460, Y0 = 60;
     c.width = Math.round(W * k); c.height = Math.round(H * k); c.style.cssText = `left:0;top:${Y0}px;width:${W}px;height:${H}px`;
     const g = c.getContext('2d');
-    if (!this.parts) this.parts = Array.from({ length: 45 }, (_, i) => { const h = HOODS[i % 3]; return { x: h[0] + (Math.random() - 0.5) * 200, y: Math.random() * H, r: 0.5 + Math.random() * 1.1, a: 0.06 + Math.random() * 0.26, s: Math.random() * 1000, tw: 0 }; });
+    if (!this.parts) this.parts = Array.from({ length: 45 }, (_, i) => { const h = dustSrc()[i % 3]; return { x: h[0] + (Math.random() - 0.5) * 200, y: Math.random() * H, r: 0.5 + Math.random() * 1.1, a: 0.06 + Math.random() * 0.26, s: Math.random() * 1000, tw: 0 }; });
     const P = this.parts;
     const tick = (t) => {
       if (!c.isConnected || S.view !== 'wall' || document.hidden) { this.raf = 0; return; }
@@ -2085,11 +2086,11 @@ const Atmos = {
       if (!S.zoom) for (const p of P) {
         const n = Math.sin(p.s + t * 0.00031) + Math.sin(p.s * 1.7 + t * 0.00017);
         p.x += (n * 4) * dt; p.y += (-6 + Math.cos(p.s + t * 0.00023) * 5) * dt;
-        if (p.y < -4) { p.y = H + 4; const h = HOODS[Math.floor(Math.random() * 3)]; p.x = h[0] + (Math.random() - 0.5) * 220; }
+        if (p.y < -4) { p.y = H + 4; const h = dustSrc()[Math.floor(Math.random() * 3)]; p.x = h[0] + (Math.random() - 0.5) * 220; }
         if (Math.random() < 0.0004) p.tw = 0.3;
         if (p.tw > 0) p.tw -= dt;
         // brightness from the nearest lamp cone
-        let m = 0; for (const h of HOODS) { const wy = 60 + (p.y / H) * 150; const d = Math.abs(p.x - h[0]) / wy; m = Math.max(m, Math.max(0, 1 - d * d) * (1 - p.y / H * 0.6)); }
+        let m = 0; for (const h of dustSrc()) { const wy = 60 + (p.y / H) * 150; const d = Math.abs(p.x - h[0]) / wy; m = Math.max(m, Math.max(0, 1 - d * d) * (1 - p.y / H * 0.6)); }
         const al = p.a * m * (p.tw > 0 ? 1.6 : 1);
         if (al < 0.01) continue;
         g.fillStyle = `rgba(255,232,190,${al.toFixed(3)})`; g.beginPath(); g.arc(p.x, p.y, p.r, 0, 6.283); g.fill();
