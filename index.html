@@ -953,13 +953,15 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 :root[data-theme=sage] .shelf::after{background:url(themes/sage/shade.webp) no-repeat;background-size:1180px 820px;background-position:var(--sx) var(--sy);mix-blend-mode:multiply;opacity:1}
 :root[data-theme=sage] .spine{box-shadow:inset 2px 0 2px -1px rgba(0,0,0,.22),inset -3px 0 3px -1px rgba(0,0,0,.32),1px 0 2px rgba(0,0,0,.40)}
 :root[data-theme=sage] .shelf::before{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:linear-gradient(0deg,rgba(0,0,0,.30),transparent);pointer-events:none;z-index:2}
-:root[data-theme=sage] .spine .t{color:#CEC8B8;text-shadow:0 .05em 0 rgba(0,0,0,.45)}
-:root[data-theme=sage] .spine.light .t{color:#35332E;text-shadow:none}
-:root[data-theme=sage] .spine.plabel .t{color:#2E2C27;text-shadow:none}
+:root[data-theme=sage] .spine .t{color:#E6E0D1;text-shadow:0 .06em .03em rgba(0,0,0,.7),0 0 .25em rgba(0,0,0,.25)}
+:root[data-theme=sage] .spine.light .t{color:#22201C;text-shadow:none}
+:root[data-theme=sage] .spine.plabel .t{color:#1F1D1A;text-shadow:none}
 :root[data-theme=sage] .shelf .genre-tag,:root[data-theme=sage] .shelf .range-tag{background:linear-gradient(#CFC6B2,#B9B09B);color:#2B2A26;box-shadow:0 0 0 1px #5F5C55,inset 0 1px 0 rgba(255,255,255,.25),0 1px 1px rgba(0,0,0,.30);font-size:8.5px}
 :root[data-theme=sage] .spine .slip{background:linear-gradient(#D3C8B0,#BCB199)}
 :root[data-theme=sage] .spine .lent{background-color:#D9D2C2}
 :root[data-theme=sage] .spine .sno{color:#CEC8B8;text-shadow:0 .5px 0 rgba(0,0,0,.45)}
+/* the zoomed shelf is lifted into its own stacking context, where a multiply layer has nothing beneath it: drop the light map there */
+:root[data-theme=sage] .wall.zoomed .shelf.z::after{background:linear-gradient(180deg,rgba(0,0,0,.22) 0,rgba(0,0,0,.05) 25%,transparent 50%);mix-blend-mode:normal}
 
 </style>
 </head>
@@ -992,7 +994,7 @@ const FORMATS = ['Hardback', 'Paperback', 'Ebook', 'Audiobook', 'Library loan', 
 const COLORS = SPR.colors;          // binding colours, same order as the sprite atlas columns
 const STYLES = SPR.styles;          // antique | smooth | label
 /* ---------- colour themes: the classic mahogany room plus recoloured sets under themes/<id>/ ---------- */
-const THEMES = {"classic": {"name": "Classic Mahogany", "blurb": "The original \u2014 polished mahogany, brass lamps, candlelight", "swatch": ["#4a2616", "#c9a45a", "#e9dcc0"], "colors": [], "chrome": "#0b0c0c"}, "sage": {"name": "Sage", "blurb": "Painted sage joinery, limed oak, pewter and afternoon light", "swatch": ["#8E9A88", "#CFCABB", "#EEE8DA"], "colors": ["#4a392d", "#6c5c4b", "#6f685f", "#292520", "#65463d", "#655f58", "#413336", "#3e4030", "#2f3a32", "#2a2e3a", "#41484c", "#60372e", "VELLUM"], "chrome": "#0b0c0c", "light": [1, 2, 5, 12], "weights": [9, 5, 6, 8, 8, 4, 8, 9, 8, 9, 8, 7, 6], "variants": 2, "geo": {"flames": [[402.1, 316.0], [777.9, 316.0]], "hoods": [], "sun": [[0, 0], [760, 0], [520, 820], [0, 820]], "ladder": {"x": 847.5, "y": 117.5, "x1": 966.0, "y1": 820.0, "cx": 885.5}}}};
+const THEMES = {"classic": {"name": "Classic Mahogany", "blurb": "The original \u2014 polished mahogany, brass lamps, candlelight", "swatch": ["#4a2616", "#c9a45a", "#e9dcc0"], "colors": [], "chrome": "#0b0c0c"}, "sage": {"name": "Sage", "blurb": "Painted sage joinery, limed oak, pewter and afternoon light", "swatch": ["#8E9A88", "#CFCABB", "#EEE8DA"], "colors": ["#4d382a", "#6e5c47", "#70675e", "#2a251f", "#69453b", "#665f57", "#433336", "#3e402d", "#2d3b31", "#292e3c", "#41484d", "#66362a", "VELLUM"], "chrome": "#0b0c0c", "light": [1, 2, 5, 12], "weights": [9, 5, 6, 8, 8, 4, 8, 9, 8, 9, 8, 7, 6], "variants": 2, "geo": {"flames": [[402.1, 316.0], [777.9, 316.0]], "hoods": [], "sun": [[0, 0], [760, 0], [520, 820], [0, 820]], "ladder": {"x": 847.5, "y": 117.5, "x1": 966.0, "y1": 820.0, "cx": 885.5}}}};
 const CLASSIC_COLORS = COLORS.slice();
 const GEO_THEMED = ['flames', 'hoods', 'ladder', 'sun'], GEO_CLASSIC = Object.fromEntries(GEO_THEMED.map((k) => [k, GEO[k]]));
 function lightBinding(ci) { const t = THEMES[themeId()]; return t && t.light ? t.light.includes(ci) : COLORS[ci] === 'VELLUM'; } // bindings lettered in ink rather than foil
@@ -1593,7 +1595,7 @@ let FORCEW = 0; // minimum spine width while re-fitting a group to its shared wi
 let NOCAPS = false; // set while re-fitting a group whose neighbours cannot all be set in capitals
 function textW(s, font) { const k = font + '|' + s; let w = mCache.get(k); if (w == null) { measureCtx.font = font; w = measureCtx.measureText(s).width; mCache.set(k, w); } return w; }
 const SPINE_WIN = { smooth: [0.13, 0.74], label: [0.16, 0.68], antique: [0.2, 0.64] }; // [top, length] as a share of the spine height
-const SPINE_WIN_SAGE = { smooth: [0.13, 0.74], label: [0.22, 0.44], antique: [0.2, 0.64] }; // Sage: the paper label is shorter
+const SPINE_WIN_SAGE = { smooth: [0.13, 0.74], label: [0.225, 0.51], antique: [0.2, 0.64] }; // Sage: the paper label is shorter
 const spineWin = () => (themeId() === 'sage' ? SPINE_WIN_SAGE : SPINE_WIN);
 function atlasCol(b, ci) { const V = (THEMES[themeId()] || {}).variants || 1; return { col: ci * V + (V > 1 ? Math.min(V - 1, Math.floor(rnd(b.id, 'v') * V)) : 0), cols: SPR.cols * V }; } // Sage atlas: two seeds per binding
 const famFor = (fs) => (fs >= 11 ? 'cg' : 'eb');
@@ -1717,7 +1719,7 @@ function spineHTML(b, d, extraCls, lean) {
   const leanCss = lean ? `transform:rotate(${lean}deg);margin-left:9px;` : tilt ? `transform:rotate(${tilt.toFixed(2)}deg);` : '';
   const label = `${b.title}${b.author ? ', ' + b.author : ''}${status(b) === 'want' ? ', want to read' : ''}${b.lentTo ? ', lent to ' + b.lentTo : ''}`;
   const AC = atlasCol(b, col);
-  const jit = sage ? `filter:brightness(${(0.94 + rnd(b.id, 'jb') * 0.11).toFixed(3)}) saturate(${(0.92 + rnd(b.id, 'js') * 0.14).toFixed(3)});` : '';
+  const jit = sage ? `filter:brightness(${(0.94 + rnd(b.id, 'jb') * 0.11).toFixed(3)}) saturate(${(0.98 + rnd(b.id, 'js') * 0.14).toFixed(3)});` : '';
   return `<button class="spine ${extraCls || ''} ${lean ? 'lean' : ''} ${light ? 'light' : ''} ${tint ? 'tinted' : ''} ${vellum && style === 'label' ? 'vlabel' : ''} ${plabel ? 'plabel' : ''}" ${tint ? `data-tint="${tint}"` : ''} data-act="spine" data-id="${esc(b.id)}" aria-label="${esc(label)}" style="width:${d.w}px;height:${d.h}px;background-image:url(${T('spines.webp')});background-size:${(AC.cols * cw * kx).toFixed(1)}px ${(SPR.rows * ch * ky).toFixed(1)}px;background-position:-${(AC.col * cw * kx).toFixed(1)}px -${(row * ch * ky).toFixed(1)}px;${leanCss}${jit}">${t}${marks}</button>`;
 }
 
