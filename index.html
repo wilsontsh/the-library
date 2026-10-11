@@ -4110,7 +4110,17 @@ async function searchGB(q) {
     subjects: v.categories || [], coverUrl: gbCover(v), language: v.language || null, synopsis: clip(stripHtml(v.description), 700)
   }; });
 }
+// pasted bookshop blurbs ("Title / by / Author / Published: … / ISBN: …"): an ISBN wins, else the first line + author
+function cleanQuery(q) {
+  const t = String(q || '').trim();
+  if (!/[\n\r]|ISBN|Published/i.test(t)) return t;
+  const m = /(?:97[89][\s-]?(?:\d[\s-]?){9}\d|\b\d{9}[\dXx]\b)/.exec(t);
+  if (m) return m[0].replace(/[\s-]/g, '');
+  const lines = t.split(/\r?\n/).map((x) => x.trim()).filter((x) => x && !/^(by|published|isbn|\*)\b/i.test(x) && !/^\W*$/.test(x));
+  return lines.slice(0, 2).join(' ');
+}
 async function findBooks(q) {
+  q = cleanQuery(q);
   const zh = isZh(q);
   const [a, b] = await Promise.allSettled([searchOL(q), searchGB(q)]);
   const ol = a.status === 'fulfilled' ? a.value : [], gb = b.status === 'fulfilled' ? b.value : [];
