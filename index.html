@@ -1052,10 +1052,10 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 :root[data-theme=toon]{--surround:#3763A0;--text:#FFFFFF;--muted:#DEE7F6;--faint:#B6C6E2;--gilt:#F7D259;--gilt-deep:#D79C44;--line:rgba(255,210,63,.38);--glass:rgba(32,60,118,.84);--glass-hi:rgba(48,84,152,.92);--ink:#2E2328;--ink-muted:#685F63;--ink-red:#D25643;--ink-line:rgba(46,35,40,.28);
   --f-ui:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold","LibZH","PingFang TC",sans-serif;--f-book:"Hiragino Maru Gothic ProN","LibZH","PingFang TC",sans-serif;--f-display:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN","LibZH","PingFang TC",sans-serif;--f-zhserif:"Hiragino Maru Gothic ProN","PingFang TC",sans-serif}
 :root[data-theme=toon] .stage{background:#3763A0}
-:root[data-theme=toon] .topbar{background:linear-gradient(180deg,rgba(47,100,174,.55),rgba(47,100,174,0))}
+:root[data-theme=toon] .topbar{background:none}
 :root[data-theme=toon] .bottombar{background:linear-gradient(0deg,rgba(47,100,174,.55),rgba(47,100,174,0))}
-:root[data-theme=toon] .primary{border:2px solid #2E2328;border-radius:22px;background:linear-gradient(180deg,#F7D259 0 64%,#E7B444 64% 100%);color:#2E2328;box-shadow:inset 0 2px 0 #FCF1B5,0 3px 0 #2E2328;text-shadow:none;font-weight:400}
-:root[data-theme=toon] .primary:active{transform:translateY(2px);box-shadow:inset 0 2px 0 rgba(255,255,255,.5),0 1px 0 #2E2328}
+:root[data-theme=toon] .primary{border:2px solid #2E2328;border-image:none;border-radius:22px;background:#F7D259;color:#2E2328;box-shadow:none;text-shadow:none;font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN",sans-serif;font-weight:400}
+:root[data-theme=toon] .primary:active{filter:brightness(.94)}
 :root[data-theme=toon] .primary[disabled]{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.45);box-shadow:none}
 :root[data-theme=toon] .plate{color:#2E2328;text-shadow:none;font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN",sans-serif;font-weight:400;letter-spacing:.06em}
 :root[data-theme=toon] .divider{background:linear-gradient(90deg,#FCF1BB,#F7D259 45%,#D9A73E);box-shadow:0 0 0 1.2px #2E2328;border-radius:3px}
@@ -1090,10 +1090,13 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 :root[data-theme=toon] .wordmark,:root[data-theme=toon] .pager .where,:root[data-theme=toon] .bayname{background:#4A8DCF;border-radius:16px;padding:5px 14px 7px;box-shadow:0 0 0 2px #2E2328,0 3px 0 #2E2328}
 :root[data-theme=toon] .wordmark b{text-shadow:1px 0 0 #2E2328,-1px 0 0 #2E2328,0 1px 0 #2E2328,0 -1px 0 #2E2328,.7px .7px 0 #2E2328,-.7px .7px 0 #2E2328,.7px -.7px 0 #2E2328,-.7px -.7px 0 #2E2328}
 :root[data-theme=toon] .wordmark span,:root[data-theme=toon] .pager .where,:root[data-theme=toon] .pager .where small,:root[data-theme=toon] .bayname,:root[data-theme=toon] .syncbtn{color:#FFFFFF;text-shadow:0 1px 0 rgba(46,35,40,.45)}
-:root[data-theme=toon] .search,:root[data-theme=toon] .icon-btn{background:#4A8DCF;border:2px solid #2E2328;box-shadow:0 3px 0 #2E2328;color:#FFFFFF}
+:root[data-theme=toon] .search,:root[data-theme=toon] .icon-btn{background:#4A8DCF;border:2px solid #2E2328;box-shadow:none;color:#FFFFFF}
+:root[data-theme=toon] .icon-btn,:root[data-theme=toon] .icon-btn .lbl,:root[data-theme=toon] .search input{font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN",sans-serif;font-weight:400}
+:root[data-theme=toon] .topbar .icon-btn,:root[data-theme=toon] .topbar .primary,:root[data-theme=toon] .search input{font-size:16px}
+:root[data-theme=toon] body:not(.compact):not(.portrait) .topbar .search{width:340px}
 :root[data-theme=toon] .search input{color:#FFFFFF}
-:root[data-theme=toon] .search input::placeholder{color:#E5EEF8;font-size:14px}
-:root[data-theme=toon] .icon-btn:active{transform:translateY(2px);box-shadow:0 1px 0 #2E2328;filter:none}
+:root[data-theme=toon] .search input::placeholder{color:#E5EEF8;font-size:15px}
+:root[data-theme=toon] .icon-btn:active{filter:brightness(1.12)}
 :root[data-theme=toon] .bayname{padding:4px 16px 6px}
 :root[data-theme=toon] .wordmark b{font-family:"Arial Rounded MT Bold",sans-serif;font-weight:400}
 :root[data-theme=toon] .cover{background-image:none!important;box-shadow:0 0 0 2px #2E2328,4px 5px 0 rgba(46,35,40,.35)!important;border-radius:5px}
