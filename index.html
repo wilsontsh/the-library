@@ -1049,9 +1049,9 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 :root[data-theme=sumi] .wall.zoomed .shelf.z::after{background:linear-gradient(180deg,rgba(0,0,0,.10) 0,rgba(0,0,0,.20) 50%,rgba(0,0,0,.30));mix-blend-mode:normal}
 .prop.sprop{position:absolute;bottom:-3px;pointer-events:none}.prop.sprop img{display:block}
 /* ================= Wonder Shelf (TOON_THEME_SPEC): 2D cel animation - rounded type, navy-sky glass, sunflower accent, ink key lines ================= */
-:root[data-theme=toon]{--surround:#3763A0;--text:#FFFFFF;--muted:#DEE7F6;--faint:#B6C6E2;--gilt:#F7D259;--gilt-deep:#D79C44;--line:rgba(255,210,63,.38);--glass:rgba(32,60,118,.84);--glass-hi:rgba(48,84,152,.92);--ink:#2E2328;--ink-muted:#685F63;--ink-red:#D25643;--ink-line:rgba(46,35,40,.28);
+:root[data-theme=toon]{--surround:#176E97;--text:#FFFFFF;--muted:#DEE7F6;--faint:#B6C6E2;--gilt:#F7D259;--gilt-deep:#D79C44;--line:rgba(255,210,63,.38);--glass:rgba(32,60,118,.84);--glass-hi:rgba(48,84,152,.92);--ink:#2E2328;--ink-muted:#685F63;--ink-red:#D25643;--ink-line:rgba(46,35,40,.28);
   --f-ui:"Hiragino Maru Gothic ProN","Arial Rounded MT Bold","LibZH","PingFang TC",sans-serif;--f-book:"Hiragino Maru Gothic ProN","LibZH","PingFang TC",sans-serif;--f-display:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN","LibZH","PingFang TC",sans-serif;--f-zhserif:"Hiragino Maru Gothic ProN","PingFang TC",sans-serif}
-:root[data-theme=toon] .stage{background:#3763A0}
+:root[data-theme=toon] .stage{background:#176E97}
 :root[data-theme=toon] .topbar{background:none}
 :root[data-theme=toon] .bottombar{background:linear-gradient(0deg,rgba(47,100,174,.55),rgba(47,100,174,0))}
 :root[data-theme=toon] .primary{border:2px solid #2E2328;border-image:none;border-radius:22px;background:#F7D259;color:#2E2328;box-shadow:none;text-shadow:none;font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN",sans-serif;font-weight:400}
@@ -1061,7 +1061,7 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 :root[data-theme=toon] .divider{background:linear-gradient(90deg,#FCF1BB,#F7D259 45%,#D9A73E);box-shadow:0 0 0 1.2px #2E2328;border-radius:3px}
 :root[data-theme=toon] .spine.lift::after,:root[data-theme=toon] .spine.found::after{background:linear-gradient(180deg,transparent 35%,rgba(255,255,255,.6) 50%,transparent 65%)}
 :root[data-theme=toon] .spine .fav{background:#F7D259;box-shadow:0 0 0 1.2px #2E2328}
-:root[data-theme=toon] .ribbon[data-tab=review]{background-color:#D25643!important}:root[data-theme=toon] .ribbon[data-tab=synopsis]{background-color:#4A8DCF!important}:root[data-theme=toon] .ribbon[data-tab=quotes]{background-color:#50A465!important}:root[data-theme=toon] .ribbon[data-tab=notes]{background-color:#F7D259!important;color:#2E2328}
+:root[data-theme=toon] .ribbon[data-tab=review]{background-color:#D25643!important}:root[data-theme=toon] .ribbon[data-tab=synopsis]{background-color:#1A96C3!important}:root[data-theme=toon] .ribbon[data-tab=quotes]{background-color:#50A465!important}:root[data-theme=toon] .ribbon[data-tab=notes]{background-color:#F7D259!important;color:#2E2328}
 :root[data-theme=toon] .sealdot{background:radial-gradient(circle at 40% 35%,#EE8E81,#D25643 60%,#A53A31)}
 :root[data-theme=toon] ::selection{background:rgba(255,210,63,.45)}
 :root[data-theme=toon] .page textarea,:root[data-theme=toon] .pb textarea,:root[data-theme=toon] .writer{caret-color:#D25643}
@@ -1073,7 +1073,7 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 :root[data-theme=toon] .prop.bookend{background:#F7D259;box-shadow:0 0 0 1.5px #2E2328;border-radius:3px}
 :root[data-theme=toon] .prop.bookend::after{background:#D79C44}
 /* books: flat cel colours with an ink key line (in the atlas); a hard cel shadow under every shelf; rounded lettering */
-:root[data-theme=toon] .shelf::after{background:url(themes/toon/shade.webp) no-repeat;background-size:1180px 820px;background-position:var(--sx) var(--sy);mix-blend-mode:multiply;opacity:1}
+:root[data-theme=toon] .shelf::after{display:none}
 :root[data-theme=toon] .spine{box-shadow:none;filter:none!important}
 :root[data-theme=toon] .spine .t.v.eb,:root[data-theme=toon] .spine .t.v.cg{font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN",sans-serif;font-weight:400}
 :root[data-theme=toon] .spine .t.v{transform:scaleY(.86)}
@@ -1087,10 +1087,10 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 :root[data-theme=toon] .spine .lent{background-color:#FFFFFF}
 :root[data-theme=toon] .spine .sno{color:#FFFFFF;text-shadow:1px 0 0 #2E2328,-1px 0 0 #2E2328,0 1px 0 #2E2328,0 -1px 0 #2E2328,.7px .7px 0 #2E2328,-.7px .7px 0 #2E2328,.7px -.7px 0 #2E2328,-.7px -.7px 0 #2E2328}
 :root[data-theme=toon] .wall.zoomed .shelf.z::after{background:linear-gradient(180deg,rgba(80,70,150,.18) 0,rgba(80,70,150,.18) 8%,transparent 8.5%);mix-blend-mode:multiply}
-:root[data-theme=toon] .wordmark,:root[data-theme=toon] .pager .where,:root[data-theme=toon] .bayname{background:#4A8DCF;border-radius:16px;padding:5px 14px 7px;box-shadow:0 0 0 2px #2E2328,0 3px 0 #2E2328}
+:root[data-theme=toon] .wordmark,:root[data-theme=toon] .pager .where,:root[data-theme=toon] .bayname{background:#1A96C3;border-radius:16px;padding:5px 14px 7px;box-shadow:0 0 0 2px #2E2328,0 3px 0 #2E2328}
 :root[data-theme=toon] .wordmark b{text-shadow:1px 0 0 #2E2328,-1px 0 0 #2E2328,0 1px 0 #2E2328,0 -1px 0 #2E2328,.7px .7px 0 #2E2328,-.7px .7px 0 #2E2328,.7px -.7px 0 #2E2328,-.7px -.7px 0 #2E2328}
 :root[data-theme=toon] .wordmark span,:root[data-theme=toon] .pager .where,:root[data-theme=toon] .pager .where small,:root[data-theme=toon] .bayname,:root[data-theme=toon] .syncbtn{color:#FFFFFF;text-shadow:0 1px 0 rgba(46,35,40,.45)}
-:root[data-theme=toon] .search,:root[data-theme=toon] .icon-btn{background:#4A8DCF;border:2px solid #2E2328;box-shadow:none;color:#FFFFFF}
+:root[data-theme=toon] .search,:root[data-theme=toon] .icon-btn{background:#1A96C3;border:2px solid #2E2328;box-shadow:none;color:#FFFFFF}
 :root[data-theme=toon] .icon-btn,:root[data-theme=toon] .icon-btn .lbl,:root[data-theme=toon] .search input{font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN",sans-serif;font-weight:400}
 :root[data-theme=toon] .topbar .icon-btn,:root[data-theme=toon] .topbar .primary,:root[data-theme=toon] .search input{font-size:16px}
 :root[data-theme=toon] body:not(.compact):not(.portrait) .topbar .search{width:340px}
@@ -1103,6 +1103,20 @@ body.portrait:not(.compact) .topbar .lbl{display:none}
 .prop.tprop{position:absolute;bottom:-2px;pointer-events:none}.prop.tprop img{display:block}
 :root[data-theme=toon] .cardcount{color:#FFFFFF;text-shadow:0 1px 0 rgba(46,35,40,.55)}
 :root[data-theme=toon] .spine .sno{font-family:"Arial Rounded MT Bold",sans-serif}
+/* tags: flat cel colours, rounded lettering, no silk gradient */
+:root[data-theme=toon] .ribbon{background-image:none!important;font-family:"Arial Rounded MT Bold","Hiragino Maru Gothic ProN",sans-serif!important;font-weight:400;text-shadow:none!important;color:#FFFFFF;letter-spacing:.02em}
+:root[data-theme=toon] .ribbon[data-tab=synopsis]{background-color:#1A96C3!important}
+/* the toy rocket rocks, the goldfish bowl wobbles and its water sloshes (maybeSway in 32_atmos.js) */
+.tprop .bw{position:relative;display:block;width:60px;height:54px}.tprop .bw>img,.tprop .water{position:absolute;left:0;top:0}
+.tprop .water{width:60px;height:54px;clip-path:circle(21px at 30px 28px)}.tprop .water img{display:block;transform-origin:30px 30px}
+.tprop.rocketprop img,.tprop .bw{transform-origin:50% 100%}
+.tprop.rocketprop.sway img{animation:tRock 1.4s cubic-bezier(.3,.6,.4,1) .12s both}
+.tprop.bowlprop.sway .bw{animation:tWob 1.2s cubic-bezier(.3,.6,.4,1) .12s both}
+.tprop.bowlprop.sway .water img{animation:tSlosh 1.8s cubic-bezier(.3,.6,.4,1) .18s both}
+@keyframes tRock{0%{transform:none}14%{transform:rotate(-6deg)}32%{transform:rotate(4.5deg)}50%{transform:rotate(-2.6deg)}68%{transform:rotate(1.4deg)}84%{transform:rotate(-.5deg)}100%{transform:none}}
+@keyframes tWob{0%{transform:none}16%{transform:rotate(3deg)}36%{transform:rotate(-2deg)}56%{transform:rotate(1deg)}76%{transform:rotate(-.4deg)}100%{transform:none}}
+@keyframes tSlosh{0%{transform:none}14%{transform:rotate(-11deg) translateX(1px)}30%{transform:rotate(8deg) translateX(-1px)}46%{transform:rotate(-5deg)}62%{transform:rotate(3deg)}78%{transform:rotate(-1.2deg)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.tprop.sway img,.tprop.sway .bw,.tprop.sway .water img{animation:none!important}}
 
 </style>
 </head>
@@ -1922,6 +1936,7 @@ function renderWall() {
   chrome.innerHTML = wallChrome(L);
   hydrateCovers(stage);
   swapHires('wall');
+  if (!S.motion) maybeSway(); // a walk calls it once it lands
   applyZoom(false);
   renderResults();
   bindSearch();
@@ -2172,8 +2187,9 @@ function propHTML(sh, x, shelfH) {
     if (P) return `<span class="prop iprop" style="left:${left}px"><img src="${T('prop_' + P[0] + '.webp')}" width="${P[1]}" height="${P[2]}" alt="" decoding="async"></span>`;
   }
   if (themeId() === 'toon') { // drawn in 2D (draw_toon.py): a toy rocket, a crayon drawing in a frame, a goldfish bowl
-    const P = { hourglass: ['rocket', 52, 112], letter: ['frame', 50, 58], candle: ['bowl', 60, 54] }[k];
-    if (P) return `<span class="prop tprop" style="left:${left}px"><img src="${T('prop_' + P[0] + '.webp')}" width="${P[1]}" height="${P[2]}" alt="" decoding="async"></span>`;
+    if (k === 'candle') return `<span class="prop tprop bowlprop" style="left:${left}px"><span class="bw"><img src="${T('prop_bowl_back.webp')}" width="60" height="54" alt="" decoding="async"><span class="water"><img src="${T('prop_bowl_water.webp')}" width="60" height="54" alt="" decoding="async"></span><img src="${T('prop_bowl_front.webp')}" width="60" height="54" alt="" decoding="async"></span></span>`;
+    const P = { hourglass: ['rocket', 52, 112], letter: ['frame', 50, 58] }[k];
+    if (P) return `<span class="prop tprop ${P[0]}prop" style="left:${left}px"><img src="${T('prop_' + P[0] + '.webp')}" width="${P[1]}" height="${P[2]}" alt="" decoding="async"></span>`;
   }
   if (themeId() === 'sumi') { // rendered at dusk (scene_props_ivory.py with LIB_THEME=sumi)
     const P = { hourglass: ['vase', 69, 147], letter: ['frame', 56, 65], candle: ['bowl', 61, 30] }[k];
@@ -2323,6 +2339,16 @@ function sound(kind) {
     else if (kind === 'card') noise(0.08, 3000, 1800, 0.04);
     else if (kind === 'book') { noise(0.22, 900, 400, 0.05); thump(140, 0.1, 0.04); }
   } catch (e) { /* no audio */ }
+}
+
+/* Wonder Shelf: when the room turns to another bookcase, the toy rocket rocks and the goldfish bowl wobbles, its water sloshing.
+   One CSS animation on the compositor, restarted only when the page or bay actually changes. */
+let swayKey = null;
+function maybeSway() {
+  if (themeId() !== 'toon') return;
+  const k = S.page + ':' + S.bay; if (k === swayKey) return;
+  const first = swayKey === null; swayKey = k; if (first) return;
+  requestAnimationFrame(() => document.querySelectorAll('#wall .tprop.rocketprop, #wall .tprop.bowlprop').forEach((el) => { el.classList.remove('sway'); void el.offsetWidth; el.classList.add('sway'); }));
 }
 
 /* ================= the open book ================= */
@@ -3662,6 +3688,7 @@ async function walk(dir, newPage, newBay) {
   await a.finished.catch(() => {});
   old.remove(); a.cancel(); nw.style.transform = '';
   if (bay) { S.bay = newBay; fit(false); chrome.innerHTML = wallChrome(layout()); renderResults(); bindSearch(); renderSync(); }
+  maybeSway();
   void keepBay;
   S.motion = false;
 }
@@ -3796,7 +3823,7 @@ function zoomStep(dir, vertical) {
   if (np !== S.page) { S.page = np; S.bay = nb; S.zoom = z; render(); booksIn(dir); requestAnimationFrame(() => applyZoom(true)); return; }
   const panBay = S.bayMode && nb !== S.bay; S.bay = nb; S.zoom = z;
   if (panBay) fit(true);
-  applyZoom(true); chrome.innerHTML = wallChrome(L); renderResults(); bindSearch(); renderSync();
+  applyZoom(true); chrome.innerHTML = wallChrome(L); renderResults(); bindSearch(); renderSync(); maybeSway();
 }
 function bump(dir) { anim(document.getElementById('wall'), [{ translate: '0 0' }, { translate: `${-dir * 14}px 0` }, { translate: '0 0' }], { duration: 340, easing: 'ease-out' }); }
 
